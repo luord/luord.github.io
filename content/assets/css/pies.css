@@ -1,0 +1,24 @@
+.left, .right {
+    width: 50%;
+    text-align: center;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.chart {
+    margin-top: 2em;
+    position: relative;
+}
+
+.chart h4 {
+    position: absolute;
+    top: 33%;
+    width: 100%;
+    text-align: center;
+}
