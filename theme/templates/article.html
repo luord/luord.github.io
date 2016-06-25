@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-
 {% block title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
 {% block ogtitle %}{{ article.title|striptags }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
+{% block ogimg %}{{article.image}}{%endblock%}
 {% block ogtype %}article{%endblock%}
+{% block ogdesc %}{{article.summary}}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
 
 {% block content %}
