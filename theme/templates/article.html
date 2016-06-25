@@ -2,7 +2,7 @@
 {% block title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
 {% block ogtitle %}{{ article.title|striptags }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
-{% block ogimg %}{{article.image}}{%endblock%}
+{% block ogimg %}{{article.image or USER_LOGO_URL}}{%endblock%}
 {% block ogtype %}article{%endblock%}
 {% block ogdesc %}{{article.summary|striptags}}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
