@@ -4,7 +4,7 @@
 {% block ogurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
 {% block ogimg %}{{article.image}}{%endblock%}
 {% block ogtype %}article{%endblock%}
-{% block ogdesc %}{{article.summary}}{% endblock %}
+{% block ogdesc %}{{article.summary|striptags}}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
 
 {% block content %}
