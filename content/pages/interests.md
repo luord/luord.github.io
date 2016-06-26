@@ -10,7 +10,7 @@ I'm a cinephile. I've watched and enjoyed many movies of every genre and differe
 time periods. I tend to gravitate towards contemporary movies while still 
 watching classics from time to time.
 
-Since I also love writing about movies, I'll publish reviews and comments on cinema every once in a while.
+I love cinema so much I have a fairly active [imdb profile][imdb], check it out if you want to see what movies I've watched, reviews, etc.
 
 # Music
 I like music and I listen to many genres, though I generally prefer

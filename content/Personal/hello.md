@@ -17,4 +17,4 @@ to be a *Hello World* page, which I now proceed to write in Python...
 	
 So... that's it for today.
 
-Expect my next post to be about movies, probably. I'll alternate between Software Development and other stuff.
+UPDATE: I decided to dedicate my site mostly to Software after all.
