@@ -10,7 +10,7 @@ I'm a cinephile. I've watched and enjoyed many movies of every genre and differe
 time periods. I tend to gravitate towards contemporary movies while still 
 watching classics from time to time.
 
-I love cinema so much I have a fairly active [imdb profile][imdb], check it out if you want to see what movies I've watched, reviews, etc.
+I love cinema so much I have a fairly active [imdb profile][imdb]{: target="_blank"}, check it out if you want to see what movies I've watched, reviews, etc.
 
 # Music
 I like music and I listen to many genres, though I generally prefer
@@ -27,3 +27,5 @@ planning to read several classics and contemporary novels.
 * I'm not much of a traveler, but I wouldn't say no to visiting London, Berlin, New York, Moscow and Sidney.
 * I want to (re)learn basic vocal technique and learn basic movement.
 * I might write a fantasy novel some day.
+
+[imdb]: //www.imdb.com/user/ur39224109/ "My IMDB profile"
