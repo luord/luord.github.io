@@ -30,19 +30,6 @@
   
     <link rel="icon" type="image/png" href="{{USER_LOGO_URL}}{{ VERSION }}">
     <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_URL}}{{ VERSION }}">
-    
-    {% if SHARETHIS_PUB_KEY %}
-    <script type="text/javascript">var switchTo5x=true;</script>
-    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">
-        stLight.options({
-            publisher: "{{ SHARETHIS_PUB_KEY }}",
-            doNotHash: false,
-            doNotCopy: false,
-            hashAddressBar: false
-        });
-    </script>
-    {% endif %}
 </head>
 
 <body id="index">
@@ -108,6 +95,19 @@
 {% include 'disqus_script.html' %}
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    
+    {% if SHARETHIS_PUB_KEY %}
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "{{ SHARETHIS_PUB_KEY }}",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+    {% endif %}
   {% block extra_files %}{% endblock %}
 </body>
 </html>
