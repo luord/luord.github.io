@@ -48,7 +48,7 @@
                             <li {% if link[1:] == output_file %}class="active"{% endif %}><a href="{{ link }}">{{ title }}</a></li>
                         {% endfor %}
                         {% if DISPLAY_PAGES_ON_MENU %}
-                        {% for pa in PAGES %}
+                        {% for pa in PAGES | sort(attribute=PAGES_SORT_ATTRIBUTE) %}
                             <li {% if pa == page %}class="active"{% endif %}><a href="{{ SITEURL }}/{{ pa.url }}">{{ pa.title }}</a></li>
                         {% endfor %}
                         {% endif %}
