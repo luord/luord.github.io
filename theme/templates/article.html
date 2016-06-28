@@ -5,6 +5,7 @@
 {% block ogimg %}{{article.image or USER_LOGO_URL}}{%endblock%}
 {% block ogtype %}article{%endblock%}
 {% block ogdesc %}{{article.summary|striptags}}{% endblock %}
+{% block metadesc %}{{article.summary|striptags}}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
 
 {% block content %}

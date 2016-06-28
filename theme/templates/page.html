@@ -3,6 +3,7 @@
 {% block ogtitle %}{{ page.title|striptags }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/{{ page.url }}{%endblock%}%}
 {% block ogdesc %}{{page.summary|striptags}}{% endblock %}
+{% block metadesc %}{{page.summary|striptags}}{% endblock %}
 {% block ogimg %}{{page.image or USER_LOGO_URL}}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ page.url }}{%endblock%}
 

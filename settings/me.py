@@ -1,5 +1,6 @@
 AUTHOR = 'Luis Orduz'
 SITENAME = 'Luis Orduz'
+SITESUBTITLE = 'Thoughts on software development... mostly.'
 SITEURL = ''
 USER_LOGO_URL = '/assets/img/site/favicon.png'
 HOSTNAME = 'luord.com'
