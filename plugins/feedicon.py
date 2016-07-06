@@ -8,7 +8,7 @@ def add_icon(path, context, feed):
         handler.startDocument()
         handler.startElement('feed', feed.root_attributes())
         feed.add_root_elements(handler)
-        handler.addQuickElement('icon', 'https:'+context['SITEURL']+context['USER_LOGO_URL'])
+        handler.addQuickElement('icon', context['SITEURL']+context['USER_LOGO_URL'])
         feed.write_items(handler)
         handler.endElement("feed")
 
