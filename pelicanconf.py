@@ -6,10 +6,12 @@ import sys
 sys.path.append(os.curdir)
 
 # SITE INFO
-from settings.me import *
-
-# THEME SETTINGS
-from settings.look import *
+AUTHOR = 'Luis Orduz'
+SITENAME = 'Luis Orduz'
+SITESUBTITLE = 'Thoughts on software development... mostly.'
+SITEURL = ''
+USER_LOGO_URL = '/assets/img/site/favicon.png'
+HOSTNAME = 'luord.com'
 
 # BASIC SETTINGS
 TIMEZONE = 'America/Bogota'
@@ -53,7 +55,29 @@ AUTHOR_FEED_RSS = None
 
 # PLUGINS
 
-# PLUGINS = ['plugins.pelican_javascript']
+PLUGINS = ['plugins.feedicon',]
 
-# SITE VERSION
-VERSION = '?v=1'
+# Blogroll
+LINKS = (('Enter', '//enter.co'),
+         ('Ars Technica', '//arstechnica.com'),
+         ('FayerWayer', '//fayerwayer.com'),
+         ('OSNews', '//osnews.com'),
+         ('Forbes', '//forbes.com/most-popular/'),)
+
+# Social widget
+SOCIAL = (('LinkedIn', '//co.linkedin.com/in/luis-orduz-57a46138'),
+          ('Twitter', '//twitter.com/luord'),
+          ('Facebook', '//facebook.com/luord'),
+          ('IMDB', '//www.imdb.com/user/ur39224109/'),)
+
+# THEME SETTINGS
+DISPLAY_CATEGORIES_ON_MENU = False
+DISPLAY_CATEGORIES_ON_POSTINFO = True
+DISPLAY_CATEGORIES_ON_SUBMENU = False
+TAG_CLOUD_MAX_ITEMS = 20
+
+DISPLAY_SEARCH_FORM = True
+
+PAGES_SORT_ATTRIBUTE = 'order'
+
+THEME = 'theme'
