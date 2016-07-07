@@ -9,15 +9,16 @@ ___
 
 # Overview
 
-Systems Engineer with interest and focus in Software Development, System Administration and Management.
-Follower of good development practices and, as a perfectionist, obsessed with refactoring.
+Systems Engineer, by degree, with interest and focus in Software development and Infrastructure management. Follower of good development practices and, as a perfectionist, keen on refactoring and vying to keep my code maintainable.
 
-Practicer of DevOps, always trying to learn new and better ways to ease the development, testing and deployment proccesses.
+More than three years of experience as a full-stack developer writing web applications, services and their clients. I gravitate toward backend work with REST architectures.
 
-* Frontend web development from existing designs.
-* Backend development, polyglot with a preference for Python with PostgreSQL or MongoDB for data storage.
-* Infrastructure setup, on premise or cloud based.  Maintenance of continuous automatic deployment and testing. Normally using docker, ansible, git hooks and bash scripts.
+Practitioner of DevOps, always trying to learn new and better ways to ease the development, testing and deployment processes.
+
+* Backend development with a strong preference for Python with PostgreSQL or MongoDB for data storage.
+* Infrastructure setup, on premise or cloud based. Maintenance of continuous automatic deployment and testing. Normally using docker, ansible, git hooks and, specially, bash scripts.
 * Consulting for development and infrastructure, as well as integration of both.
+* Frontend web development, if required, from existing designs.
 
 ___
 
@@ -25,7 +26,7 @@ ___
 
 ## [Agreele][agreele]
 
-December 2014 - January 2016
+December 2014 - January 2016 (As full-time Backend developer); February 2016 - Current (as freelance Full-Stack consultant and developer)
 
 * Sole responsible for the backend:
     * Python: Flask+SQLAlchemy
