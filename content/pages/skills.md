@@ -3,7 +3,7 @@ summary: Tools and technologies I prefer working with
 status: published
 order: 2
 scripts: easypiechart.min.js,pies.js
-styles: pies.css
+styles: pies.css?v=1
 
 <div class="flex">
 <div class="chart" data-percent="90" style="order: 1;">
