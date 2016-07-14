@@ -65,7 +65,7 @@ LINKS = (('Enter', '//enter.co'),
          ('Forbes', '//forbes.com/most-popular/'),)
 
 # Social widget
-SOCIAL = (('LinkedIn', '//co.linkedin.com/in/luis-orduz-57a46138'),
+SOCIAL = (('LinkedIn', '//co.linkedin.com/in/luord'),
           ('Twitter', '//twitter.com/luord'),
           ('Facebook', '//facebook.com/luord'),
           ('IMDB', '//www.imdb.com/user/ur39224109/'),)
