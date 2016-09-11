@@ -1,27 +1,25 @@
 .flex {
-    display: -moz-flex;
     display: flex;
-    -moz-flex-wrap: wrap;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
 }
 
 .chart {
-    -moz-flex: 1 0 33.33%;
     flex: 1 0 33.33%;
     text-align: center;
     position: relative;
-    display: -moz-flex;
     display: flex;
-    -moz-flex-direction: column;
     flex-direction: column;
     align-items: center;
 }
 
 .chart > h4 {
+    top: 0;
+    width: 152px;
+    height: 152px;
+    margin: 0;
     position: absolute;
-    width: 100%;
-    top: 23%;
+    padding-top: 54px;
 }
 
 .chart > p {

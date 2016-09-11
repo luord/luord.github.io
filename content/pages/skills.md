@@ -3,7 +3,7 @@ summary: Tools and technologies I prefer working with
 status: published
 order: 2
 scripts: easypiechart.min.js,pies.js
-styles: pies.css?v=1
+styles: pies.css?v=2
 
 <div class="flex">
 <div class="chart" data-percent="90" style="order: 1;">
@@ -22,7 +22,7 @@ styles: pies.css?v=1
 </div>
 
 <div class="chart" data-percent="90" style="order: 5;">
-<h4>Methodologies</h4>
+<h4>Process</h4>
 <p>Scrum, TDD</p>
 </div>
 
