@@ -68,6 +68,11 @@ April 2008 – April 2013
 
 Top bracket in every subject in 2012-2 Saber Pro test, outstanding student.
 
+<style>
+li > ul {
+    margin-bottom: 1em;
+}</style>
+
 [pdf]: {filename}/assets/Luis_Orduz_CV.pdf "My CV"
 [agreele]: //agreele.com "Meeting and note taking application"
 [eximo]: //fastcloud.com "Web development company"
