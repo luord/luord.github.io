@@ -1,7 +1,8 @@
-title: The Not-In-Here syndrome
+title: The Not-Invented-Here syndrome
 tags: process, development, concepts, musings, python, flask
 summary: On creating own solutions versus implementing existing libraries or methods.
 status: published
+date: 2016-06-25
 
 I read a while ago about the NIH syndrome and how it's generally not recommended because it unnecessarily increases the workload and the amount of code that needs to be maintained. Not to mention that using existing libraries or frameworks, specially open source ones, can also eventually involve helping the community and, thus, improving the code for everyone.
 
