@@ -19,17 +19,11 @@
       </header>
       <div class="entry-content">
         {% include 'article_infos.html' %}
+        {% include 'sharethis.html' %}
 
         {{ article.content }}
 
-        {% if SHARETHIS_PUB_KEY %}
-        <div class="sharethis-bottom">
-            <span class='st_linkedin' displayText='LinkedIn'></span>
-            <span class='st_twitter' displayText='Tweet' st_via='luord'></span>
-            <span class='st_facebook' displayText='Facebook'></span>
-            <span class='st_googleplus' displayText='Google +'></span>
-        </div>
-        {% endif %}
+        {% include 'sharethis.html' %}
       </div><!-- /.entry-content -->
       {% if DISQUS_SITENAME %}
       <div class="comments">
