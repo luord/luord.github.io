@@ -28,7 +28,7 @@
     {% if FEED_ALL_RSS %}
     <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
     {% endif %}
-  
+
     <link rel="icon" type="image/png" href="{{USER_LOGO_URL}}{{ VERSION }}">
     <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_URL}}{{ VERSION }}">
 </head>
@@ -81,7 +81,7 @@
                 <address>
                     <div style="font-size: 0.8rem;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />This blog by <a xmlns:cc="http://creativecommons.org/ns#" href="//luord.com" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</div>
                     <div style="font-size: 0.5rem;">
-                        This blog is proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>. | 
+                        This blog is proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>. |
                         <a href="http://github.com/jsliang/pelican-fresh/">Fresh</a> is a responsive theme designed by <a href="http://jsliang.com/">jsliang</a> and <a href="https://github.com/jsliang/pelican-fresh/graphs/contributors">contributors</a>.
                         Special thanks to <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a> and <a href="http://getbootstrap.com/">Twitter Bootstrap</a>.
                     </div>
@@ -95,7 +95,7 @@
 {% include 'disqus_script.html' %}
     <script src="//code.jquery.com/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    
+
     {% if SHARETHIS_PUB_KEY %}
     <script type="text/javascript">var switchTo5x=true;</script>
     <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
@@ -104,7 +104,8 @@
             publisher: "{{ SHARETHIS_PUB_KEY }}",
             doNotHash: false,
             doNotCopy: false,
-            hashAddressBar: false
+            hashAddressBar: false,
+            shorten: false
         });
     </script>
     {% endif %}
