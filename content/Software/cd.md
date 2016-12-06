@@ -2,6 +2,7 @@ title: Continuous delivery with Gitlab
 tags: operations,development,gitlab,docker,google-cloud,guides,tutorials
 summary: A rapid delivery pipeline using containers and gitlab ci for free (thanks to google app engine). Pretty good for development, I believe.
 styles: images.css
+date: 2016-10-20
 status: published
 
 When I worked full-time in unique projects, writing the code and tests before running everything manually and then
@@ -277,5 +278,5 @@ If you have any questions, let me know in the comments.
 [docker]: //www.docker.com
 [docker-compose]: //www.docker.com/products/docker-compose
 [git]: //git-scm.com
-[Flask]: //flask.pocoo.org/
+[Flask]: http://flask.pocoo.org/
 [credit]: //oddbit.se/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125#.67s5jkrv4
