@@ -2,5 +2,7 @@
 {% block title %}{{ SITENAME }} - {{ tag }} | {{ SITENAME }}{% endblock %}
 {% block content_title %}Articles tagged with "{{ tag }}"{% endblock %}
 {% block ogtitle %}{{ SITENAME }} - {{ tag }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/{{ tag.url }}{%endblock%}
-{% block canonicalurl %}{{ SITEURL }}/{{ tag.url }}{%endblock%}
+{% block ogurl %}{{ SITEURL }}/{{ tag.url }}{% endblock %}
+{% block ogdesc %}{{ SITENAME }} - {{ tag }}{% endblock %}
+{% block metadesc %}{{ SITENAME }} - {{ tag }}{% endblock %}
+{% block canonicalurl %}{{ SITEURL }}/{{ tag.url }}{% endblock %}
