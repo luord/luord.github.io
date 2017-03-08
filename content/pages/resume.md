@@ -6,7 +6,7 @@ order: 3
 This is a summary of my experience and education. Download a printable copy [here][pdf]{: download='LuisOrduz_CV.pdf'}.
 ___
 # Profile
-Systems Engineer with strong skills in development, operations and lifecycle management skills. Over three years of experience as a polyglot full-stack developer, implementing best practices like test-driven development and continuous deployment, following good principles like SOLID and DRY, and leveraging different services to avoid NIH syndrome. Equally effective in a team environment or as a lone specialist.
+Systems Engineer with strong skills in development, operations and lifecycle management skills. Over three years of experience as a polyglot full-stack developer, implementing best practices like test-driven development and introducing DevOps techniques such as continuous deployment, following good principles like SOLID and DRY. Equally effective in a team environment or as a lone specialist.
 ___
 # Technical Skills
 * Programming: Python, Javascript, Bash, HTML/CSS, Flask, Django, VueJS,
