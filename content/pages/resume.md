@@ -21,7 +21,7 @@ ___
 ### Software Developer and Operations Manager (remote, contractor) {: .low-margin }
 *Pensemos, Bucaramanga, Colombia, Stable Engagement (10/16 - Present)*
 
-Part of the programming team, sole responsible of set-up of the deployment pipelines and maintainer of the WEB client that handles the periodic timelines of one of the largest cooperativw companies in the country. The application was written from the ground-up using the Django web framework for python, using the VueJS framework for some components, using Oracle as the data layer. Successfully setup devops processes for ease of deployment, such as leveraging the pipelines provided by GitLab CI.
+Part of the programming team, sole responsible of set-up of the deployment pipelines and maintainer of the WEB client that handles the periodic timelines of one of the largest cooperative companies in the country. The application was written from the ground-up using the Django web framework for python, using the VueJS framework for some components, using Oracle as the data layer. Successfully setup devops processes for ease of deployment, such as leveraging the pipelines provided by GitLab CI.
 
 * Key team-member in the development of the web application using Django for Python.
 * Some of the Front-end components were written using VueJS, communicating with a REST API, also built in Django, for efficiency.
