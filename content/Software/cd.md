@@ -275,8 +275,8 @@ If you have any questions, let me know in the comments.
 
 [gitlab]: //gitlab.com
 [google]: //cloud.google.com
-[docker]: //www.docker.com
-[docker-compose]: //www.docker.com/products/docker-compose
+[docker]: //docker.com
+[docker-compose]: //docs.docker.com/compose/
 [git]: //git-scm.com
 [Flask]: http://flask.pocoo.org/
-[credit]: //oddbit.se/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125#.67s5jkrv4
+[credit]: //medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125

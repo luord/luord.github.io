@@ -8,17 +8,17 @@ styles: pies.css?v=2
 <div class="flex">
 <div class="chart" data-percent="90" style="order: 1;">
 <h4>Python</h4>
-<p>Flask, SQLAlchemy, uWSGI, Nose</p>
+<p>Flask, Django, SQLAlchemy, uWSGI, Nose</p>
 </div>
 
 <div class="chart" data-percent="70" style="order: 2;">
 <h4>Operations</h4>
-<p>Bash, Ansible, Docker, Git</p>
+<p>Bash, Ansible, Docker, Git, CI</p>
 </div>
 
 <div class="chart" data-percent="80" style="order: 3;">
 <h4>Frontend</h4>
-<p>jQuery, Karma, AngularJS</p>
+<p>VueJS, jQuery, Karma, AngularJS</p>
 </div>
 
 <div class="chart" data-percent="90" style="order: 5;">
@@ -28,7 +28,7 @@ styles: pies.css?v=2
 
 <div class="chart" data-percent="70" style="order: 4;">
 <h4>Infrastructure</h4>
-<p>PostgreSQL, Nginx, MongoDB, Docker</p>
+<p>PostgreSQL, Nginx, Docker</p>
 </div>
 
 <div class="chart" data-percent="90" style="order: 6;">

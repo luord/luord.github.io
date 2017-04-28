@@ -21,4 +21,4 @@ Thank you for visiting my website!
 [skills]: skills
 [resume]: resume
 [interests]: interests
-[htbah]: //www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"
+[htbah]: http://www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"
