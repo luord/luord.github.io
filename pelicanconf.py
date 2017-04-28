@@ -10,8 +10,8 @@ AUTHOR = 'Luis Orduz'
 SITENAME = 'Luis Orduz'
 SITESUBTITLE = 'Thoughts on software development... mostly.'
 SITEURL = ''
-USER_LOGO_URL = '/assets/img/site/favicon.ico'
-USER_LOGO_IMG = '/assets/img/site/favicon.png'
+USER_LOGO_URL = '/assets/img/site/image.png'
+USER_LOGO_ICON = '/assets/img/site/favicon.png'
 HOSTNAME = 'luord.com'
 
 # BASIC SETTINGS

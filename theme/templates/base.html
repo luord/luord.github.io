@@ -11,7 +11,7 @@
     <meta property="og:type" content="{% block ogtype %}website{%endblock%}"/>
     <meta property="og:description" content="{% block ogdesc %}{{SITESUBTITLE}}{% endblock %}" />
     <meta property="description" content="{% block metadesc %}{{SITESUBTITLE}}{% endblock %}" />
-    <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_IMG }}{% endblock %}" />
+    <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
 
     <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{%endblock%}" />
 
@@ -29,8 +29,8 @@
     <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
     {% endif %}
 
-    <link rel="icon" type="image/x-icon" href="{{USER_LOGO_URL}}{{ VERSION }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{USER_LOGO_URL}}{{ VERSION }}">
+    <link rel="icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}">
+    <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}">
 </head>
 
 <body id="index">
