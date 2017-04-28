@@ -10,7 +10,7 @@ AUTHOR = 'Luis Orduz'
 SITENAME = 'Luis Orduz'
 SITESUBTITLE = 'Thoughts on software development... mostly.'
 SITEURL = ''
-USER_LOGO_URL = '/assets/img/site/favicon.png'
+USER_LOGO_URL = '/assets/img/site/favicon.ico'
 HOSTNAME = 'luord.com'
 
 # BASIC SETTINGS
@@ -52,10 +52,6 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
-
-# PLUGINS
-
-PLUGINS = ['plugins.feedicon',]
 
 # Blogroll
 LINKS = (('Enter', '//enter.co'),
