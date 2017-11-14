@@ -3,6 +3,7 @@ tags: operations,development,oracle,docker,guides,tutorials
 summary: Using the official oracle docker images in development
 image: /assets/img/oracle/dorac.jpg
 date: 2017-11-13
+status: published
 
 A while ago, I had to work in a project that used oracle as its data layer (yeah, I know...).
 When we started, there was no such thing as an Oracle docker image so the development environment
