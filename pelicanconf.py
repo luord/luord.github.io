@@ -56,16 +56,17 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (('Enter', '//enter.co'),
-         ('Ars Technica', '//arstechnica.com'),
+         ('Hacker News', '//news.ycombinator.com/'),
          ('FayerWayer', '//fayerwayer.com'),
          ('OSNews', '//osnews.com'),
          ('Forbes', '//forbes.com/most-popular/'),)
 
 # Social widget
-SOCIAL = (('StackOverflow', 'https://stackoverflow.com/users/4570188/luis-orduz'),
+SOCIAL = (('StackOverflow', '//stackoverflow.com/users/4570188/luis-orduz'),
           ('LinkedIn', '//co.linkedin.com/in/luord'),
           ('Twitter', '//twitter.com/luord'),
           ('Facebook', '//facebook.com/luord'),
+          ('Criticker', '//www.criticker.com/profile/luord/'),
           ('IMDB', '//www.imdb.com/user/ur39224109/'),)
 
 # THEME SETTINGS
