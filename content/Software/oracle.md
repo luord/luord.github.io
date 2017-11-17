@@ -42,7 +42,7 @@ lucky you. They are relatively easy to follow but I'll write the last few comman
 
 To start the image:
 
-    docker run -d -it --name <db-container-name> store/oracle/database-enterprise:12.2.0.1
+    docker run -d --name <db-container-name> store/oracle/database-enterprise:12.2.0.1
 
 To connect to the database using Oracle's sqlplus client:
 
