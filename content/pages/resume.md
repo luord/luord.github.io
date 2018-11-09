@@ -24,7 +24,7 @@ ___
 
 Full-stack developer with a primary focus in the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
 
-* Development of new features and bug fixing in the backend, updating libraries and introducing better practices wherever possible.
+* Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
 * General maintenance of the frontend of a particular interface, written in the React ecosystem.
 
 ## Senior Python Developer {: .low-margin }
