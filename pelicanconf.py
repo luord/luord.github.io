@@ -12,7 +12,7 @@ SITESUBTITLE = 'Thoughts on software development... mostly.'
 SITEURL = ''
 USER_LOGO_URL = '/assets/img/site/image.png'
 USER_LOGO_ICON = '/assets/img/site/favicon.png'
-HOSTNAME = 'luord.com'
+HOSTNAME = ''
 
 # BASIC SETTINGS
 TIMEZONE = 'America/Bogota'

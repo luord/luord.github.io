@@ -10,6 +10,7 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
+HOSTNAME = 'luord.com'
 SITEURL = '//' + HOSTNAME
 RELATIVE_URLS = False
 

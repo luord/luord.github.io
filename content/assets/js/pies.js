@@ -1,4 +1,9 @@
-var elements = document.querySelectorAll('.chart');
+var elements = document.querySelectorAll('.flex > div')
+elements.forEach(el => {
+    el.classList.add('chart')
+    el.classList.remove('desc')
+})
+
 for(var i=0; i<elements.length; i++){
     new EasyPieChart(elements[i], {
             animate:{
@@ -14,3 +19,5 @@ for(var i=0; i<elements.length; i++){
             easing:'easeOutBounce'
     });
 }
+
+document.querySelectorAll('.no-js').forEach(el => el.setAttribute('hidden', true))

@@ -4,6 +4,10 @@
     margin-bottom: 1.5rem;
 }
 
+.desc {
+    border: 1px solid black;
+}
+
 .chart {
     flex: 1 0 33.33%;
     text-align: center;

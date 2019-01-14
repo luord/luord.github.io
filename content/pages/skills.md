@@ -6,33 +6,33 @@ scripts: easypiechart.min.js,pies.js
 styles: pies.css?v=2
 
 <div class="flex">
-<div class="chart" data-percent="90" style="order: 1;">
-<h4>Python</h4>
-<p>Flask, Django, SQLAlchemy, uWSGI, Nose</p>
+<div class="desc" data-percent="90" style="order: 1;">
+<h4>Python <span class="no-js">(90%)</span></h4>
+<p>Flask, Django, SQLAlchemy, Celery, PyTest</p>
 </div>
 
-<div class="chart" data-percent="70" style="order: 2;">
-<h4>Operations</h4>
+<div class="desc" data-percent="70" style="order: 2;">
+<h4>Operations <span class="no-js">(70%)</span></h4>
 <p>Bash, Ansible, Docker, Git, CI</p>
 </div>
 
-<div class="chart" data-percent="80" style="order: 3;">
-<h4>Frontend</h4>
-<p>VueJS, jQuery, Karma, AngularJS</p>
+<div class="desc" data-percent="80" style="order: 3;">
+<h4>Frontend <span class="no-js">(80%)</span></h4>
+<p>VueJS, Jest, Flux, jQuery, React</p>
 </div>
 
-<div class="chart" data-percent="90" style="order: 5;">
-<h4>Process</h4>
-<p>Scrum, TDD</p>
+<div class="desc" data-percent="90" style="order: 5;">
+<h4>Process <span class="no-js">(90%)</span></h4>
+<p>Scrum, TDD, Clean Architecture</p>
 </div>
 
-<div class="chart" data-percent="70" style="order: 4;">
-<h4>Infrastructure</h4>
+<div class="desc" data-percent="70" style="order: 4;">
+<h4>Infrastructure <span class="no-js">(70%)</span></h4>
 <p>PostgreSQL, Nginx, Docker</p>
 </div>
 
-<div class="chart" data-percent="90" style="order: 6;">
-<h4>Presentation</h4>
+<div class="desc" data-percent="90" style="order: 6;">
+<h4>Presentation <span class="no-js">(90%)</span></h4>
 <p>Jinja (HTML Templates), SCSS</p>
 </div>
 </div>
