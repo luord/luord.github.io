@@ -6,19 +6,48 @@ order: 3
 This is a summary of my experience and education. Download a printable copy [here][pdf]{: download='LuisOrduz_CV.pdf'}.
 ___
 # Profile
-Systems Engineer with strong skills in development, operations and lifecycle management. Over three years of experience as a polyglot full-stack developer, implementing best practices like test-driven development and introducing DevOps techniques such as continuous deployment, following good principles like SOLID and DRY. Equally effective in a team environment or as a lone specialist.
+Systems Engineer with strong skills in development, operations and lifecycle management.
+
+Over five years of experience as a polyglot full-stack developer, follower of good principles like SOLID, DRY and TDD in my code and who has
+introduced DevOps techniques such as continuous deployment in different projects .
+
+Equally effective in a team environment or as a lone specialist.
 ___
 # Technical Skills
-* Programming: Python, Javascript, Bash, HTML/CSS, Flask, Django, VueJS, AngularJS, Foundation
-* Infrastructure: Linux (debian-based), PostgreSQL, NGINX
-* Operations/Management: Git, Docker (docker-compose), GitLab-CI, Ansible
+* Programming: Python, Javascript, Bash, HTML/CSS, Flask, Django, VueJS, AngularJS, Foundation, SQLAlchemy, Celery
+* Infrastructure: Linux (debian-based), PostgreSQL, NGINX, Redis, RabbitMQ
+* Operations/Management: Git, Docker (docker-compose), GitLab-CI, Ansible, Click
 ___
 # Employment History
+## Software Developer(Backend) {: .low-margin }
+*BairesDev,    Bogotá,Colombia    11/17-Present*
+
+Full-stack developer with a primary focus in the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
+
+* Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
+* General maintenance of the frontend of a particular interface, written in the React ecosystem.
+
+## Senior Python Developer {: .low-margin }
+*Globant,    Bogotá, Colombia    09/17 - 09/18*
+
+Backend development in python for general projects, primarily focused in projects for National Geographic, primarily in Django.
+
+* In charge of implementing the security guidelines for the [Your Shot project](https://yourshot.nationalgeographic.com), including migration to HTTPS and implementation of better text parsing and restriction techniques.
+* Member of the SWAT team, in charge of providing backend support for other teams.
+
 ## Freelance Software Engineer {: .low-margin }
-*Bucaramanga, Colombia 01/16 - Present*
+*Bucaramanga, Colombia    01/16 - 08/17*
+
+#### Python Developer (remote, contractor) {: .low-margin }
+*Scopic - temporary engagement (06/17 - 08/17)*
+
+Software developer working primarily with Python and some operations work in one of the projects.
+
+* Sole developer for a betting bot application using plain Python and different technologies such as Falcon for creating a RESTFul API and APScheduler for managing the queues with redis.
+* Set up a simple development environment using Docker.
 
 ### Software Developer and Operations Manager (remote, contractor) {: .low-margin }
-*Pensemos - continuous engagement (10/16 - Present)*
+*Pensemos - continuous engagement (10/16 - 05/17)*
 
 Part of the programming team, sole responsible of set-up of the deployment pipelines and maintainer of the WEB client that handles the periodic timelines of one of the largest cooperative companies in the country.
 
