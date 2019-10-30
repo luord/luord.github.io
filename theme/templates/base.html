@@ -4,13 +4,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="author" content="{{ AUTHOR }}" />
   <meta name="robots" content="index, follow" />
+  <meta name="description" content="{% block metadesc %}{{ SITESUBTITLE }}{% endblock %}" />
 
   <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{% endblock %}"/>
   <meta property="og:url" content="https:{% block ogurl %}{{ SITEURL }}{% endblock %}"/>
   <meta property="og:site_name" content="{{ SITENAME }}"/>
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
   <meta property="og:description" content="{% block ogdesc %}{{ SITESUBTITLE }}{% endblock %}" />
-  <meta name="description" content="{% block metadesc %}{{ SITESUBTITLE }}{% endblock %}" />
   <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
 
   <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
