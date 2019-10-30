@@ -78,13 +78,13 @@
     <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
 
     {% if TAG_FEED_ATOM and tag is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(tag.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(slug=tag.slug) }}">Feed</a></li>
     {% elif TAG_FEED_RSS and tag is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(tag.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(slug=tag.slug) }}">Feed</a></li>
     {% elif CATEGORY_FEED_ATOM and category is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(category.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(slug=category.slug) }}">Feed</a></li>
     {% elif CATEGORY_FEED_RSS and category is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(category.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(slug=category.slug) }}">Feed</a></li>
     {% elif FEED_ALL_ATOM %}
       <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}">Feed</a></li>
     {% elif FEED_ALL_RSS %}
