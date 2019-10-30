@@ -1,0 +1,7 @@
+{% if article.author %}
+<address>
+  by <a href="{{ SITEURL }}/{{ article.author.url }}">{{ article.author }}</a>
+
+  in <a href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
+</address>
+{% endif %}

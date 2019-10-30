@@ -40,13 +40,15 @@ client and databases from their website. They require it here too because this i
 At this point you're probably in the instructions page, which is now far more detailed than it was when the images were released,
 lucky you. They are relatively easy to follow but I'll write the last few commands required to use the image here anyway.
 
-To start the image:
+To start the image, run the command:
 
-    docker run -d --name <db-container-name> store/oracle/database-enterprise:12.2.0.1
+    docker run -d --name <db-container-name> \
+      store/oracle/database-enterprise:12.2.0.1
 
-To connect to the database using Oracle's sqlplus client:
+To connect to the database using Oracle's sqlplus client, use the following command:
 
-    docker exec -it <db-container-name> bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
+    docker exec -it <db-container-name> bash -c \
+      "source /home/oracle/.bashrc; sqlplus /nolog"
 
 ## Some options
 
@@ -62,4 +64,4 @@ And that's it for now. If you have any problems or corrections, let me know in t
 
 [oracle]: //www.oracle.com/corporate/pressrelease/docker-oracle-041917.html
 [docker]: //store.docker.com/
-[oradocker]: //store.docker.com/account/confirm-email/abea38b5a9f5c26347324ff39a4b69b17f4e5dcf/?ref=oracle-database-enterprise-edition
+[oradocker]: //hub.docker.com/_/oracle-database-enterprise-edition

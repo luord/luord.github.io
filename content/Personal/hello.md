@@ -9,7 +9,7 @@ to be a *Hello World* page, which I now proceed to write in Python...
 
 	:::python
 	print("Ahoy!")
-    
+
 ... and browser ECMAScript (or JavaScript if you prefer, which I don't).
 
 	:::js

@@ -1,48 +1,41 @@
 {% extends "base.html" %}
 {% block title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
 {% block ogtitle %}{{ article.title|striptags }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
-{% block ogimg %}{{article.image or USER_LOGO_URL}}{%endblock%}
-{% block ogtype %}article{%endblock%}
-{% block ogdesc %}{{article.summary|striptags}}{% endblock %}
-{% block metadesc %}{{article.summary|striptags}}{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{%endblock%}
+{% block ogurl %}{{ SITEURL }}/{{ article.url }}{% endblock %}
+{% block ogimg %}{{ article.image or USER_LOGO_URL }}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block ogdesc %}{{ article.summary|striptags }}{% endblock %}
+{% block metadesc %}{{ article.summary|striptags }}{% endblock %}
+{% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{% endblock %}
 
 {% block content %}
-<div class="span10 offset1">
-  <section>
-    <article>
-      <header>
-        <h1 class="entry-title">
-          <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
-             title="Permalink to {{ article.title|striptags }}">{{ article.title}}</a></h1>
-      </header>
-      <div class="entry-content">
-        {% include 'article_infos.html' %}
-        {% include 'sharethis.html' %}
+<article>
+  <header>
+    <h1>
+      <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
+         title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></h1>
+  </header>
+  {% include 'article_infos.html' %}
+  {% include 'sharethis.html' %}
 
-        {{ article.content }}
+  <section class="content">{{ article.content }}</section>
 
-        {% include 'sharethis.html' %}
-      </div><!-- /.entry-content -->
-      <h3><a href="/pages/contact">Hire Me</a></h3>
-      {% if DISQUS_SITENAME %}
-      <div class="comments">
-        <h2>Comments</h2>
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-          var disqus_identifier = "{{ article.url }}";
-          (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//{{ DISQUS_SITENAME }}.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-        </script>
-      </div>
-      {% endif %}
+  {% include 'sharethis.html' %}
+  <div class="hire_link"><a href="/pages/contact">Hire Me</a></div>
 
-    </article>
+  {% if DISQUS_SITENAME %}
+  <section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_identifier = "{{ article.url }}";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//{{ DISQUS_SITENAME }}.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
   </section>
-</div>
+  {% endif %}
+</article>
 {% endblock %}
-{% block extra_files %}{% include 'extra_files.html' %}{% endblock %}

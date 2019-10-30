@@ -1,7 +1,0 @@
-{% set item = article or page %}
-{% for stylesheet in (item.styles.split(',') if item.styles else []) %}
-    <link rel="stylesheet" href="/assets/css/{{ stylesheet }}{{ VERSION }}" />
-{% endfor %}
-{% for script in (item.scripts.split(',') if item.scripts else []) %}
-    <script type='text/javascript' src="/assets/js/{{ script }}{{ VERSION }}"></script>
-{% endfor %}

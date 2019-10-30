@@ -18,12 +18,9 @@
 }
 
 .chart > h4 {
-    top: 0;
-    width: 152px;
-    height: 152px;
-    margin: 0;
+    top: 25%;
     position: absolute;
-    padding-top: 54px;
+    transform: translateY(-50%);
 }
 
 .chart > p {

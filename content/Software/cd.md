@@ -1,7 +1,6 @@
 title: Continuous delivery with Gitlab
 tags: operations,development,gitlab,docker,google-cloud,guides,tutorials
 summary: A rapid delivery pipeline using containers and gitlab ci for free (thanks to google app engine). Pretty good for development, I believe.
-styles: images.css
 date: 2016-10-20
 status: published
 
@@ -154,10 +153,13 @@ The app we're deploying will be a simple "Hello World" in [Flask][] with the fol
     from app import app
 
     class Test(unittest.TestCase):
-        def test(self):
-            result = app.test_client().get('/')
+      def test(self):
+        result = app.test_client().get('/')
 
-            self.assertEqual(result.data.decode('utf-8'), 'Hello World!')
+        self.assertEqual(
+          result.data.decode('utf-8'),
+          'Hello World!'
+        )
 
 
 `__init__.py` has the GAE path setup:
@@ -165,7 +167,10 @@ The app we're deploying will be a simple "Hello World" in [Flask][] with the fol
     :::python
     import os, sys
 
-    lib_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'lib')
+    lib_path = os.path.join(
+      os.path.abspath(os.path.dirname(__file__)),
+      'lib'
+    )
     sys.path.insert(0, lib_path)
 
     from .app import app
@@ -204,27 +209,32 @@ Now what allows GitLab to perform its magic, the `.gitlab-ci.yml` file:
 
     :::yaml
     back:
-        image: python
-        stage: build
-        script:
-            - pip install -t app/lib -r app/requirements.txt
-            - export PYTHONPATH=$PWD/app/lib:$PYTHONPATH
-            - python -m unittest discover
-        artifacts:
-            paths:
-                - app/lib/
+      image: python
+      stage: build
+      script:
+        - >-
+            pip install -t app/lib
+            -r app/requirements.txt
+        - export PYTHONPATH=$PWD/app/lib:$PYTHONPATH
+        - python -m unittest discover
+      artifacts:
+        paths:
+          - app/lib/
 
     deploy_production:
-        image: google/cloud-sdk
-        stage: deploy
-        environment: production
-        script:
-            - echo $GAE_KEY > /tmp/gae_key.json
-            - gcloud config set project $GAE_PROJECT
-            - gcloud auth activate-service-account --key-file /tmp/gae_key.json
-            - gcloud --quiet app deploy
-        after_script:
-            - rm /tmp/gae_key.json
+      image: google/cloud-sdk
+      stage: deploy
+      environment: production
+      script:
+        - echo $GAE_KEY > /tmp/key.json
+        - gcloud config set project $GAE_PROJECT
+        - >-
+            gcloud
+            auth activate-service-account
+            --key-file /tmp/key.json
+        - gcloud --quiet app deploy
+      after_script:
+        - rm /tmp/key.json
 
 There are a couple things happening here, but nothing overly complicated:
 
@@ -240,8 +250,8 @@ Finally, `app.yaml`, which is specific to GAE:
     threadsafe: true
 
     handlers:
-        -   url: /
-            script: app.app
+      - url: /
+        script: app.app
 
 This uses the module structure so it can use the external libraries (`flask`) in the project.
 
@@ -261,6 +271,13 @@ Things we could do now is setting up automatic local testing on each commit, mul
 
 If you have any questions, let me know in the comments.
 
+<style>
+p > img {
+  width: 100%;
+  display: block;
+}
+</style>
+
 [^gcr]:
   It amazes me how cloud repositories is almost completely isolated
   from all other Google Cloud services. They used to have a Push-to-Deploy feature but that's gone (if it isn't,
@@ -278,5 +295,5 @@ If you have any questions, let me know in the comments.
 [docker]: //docker.com
 [docker-compose]: //docs.docker.com/compose/
 [git]: //git-scm.com
-[Flask]: http://flask.pocoo.org/
+[Flask]: //palletsprojects.com/p/flask/
 [credit]: //medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125

@@ -21,7 +21,7 @@ DEFAULT_LANG = 'en'
 # PAGING SETTINGS
 DEFAULT_PAGINATION = 10
 DEFAULT_DATE = 'fs'
-LOCALE = ('en_US',)
+LOCALE = ('en_US.UTF-8',)
 SUMMARY_MAX_LENGTH = 100
 
 # POST SETTINGS
@@ -54,20 +54,17 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-# Blogroll
-LINKS = (('Enter', '//enter.co'),
-         ('Hacker News', '//news.ycombinator.com/'),
-         ('FayerWayer', '//fayerwayer.com'),
-         ('OSNews', '//osnews.com'),
-         ('Forbes', '//forbes.com/most-popular/'),)
+# Developer Profiles
+PROFILES = (('GitLab', '//gitlab.com/luord'),
+            ('GitHub', '//github.com/luord'),
+            ('StackOverflow', '//stackoverflow.com/users/4570188/luis-orduz'))
 
 # Social widget
-SOCIAL = (('StackOverflow', '//stackoverflow.com/users/4570188/luis-orduz'),
-          ('LinkedIn', '//co.linkedin.com/in/luord'),
+SOCIAL = (('LinkedIn', '//linkedin.com/in/luord'),
           ('Twitter', '//twitter.com/luord'),
           ('Facebook', '//facebook.com/luord'),
-          ('Criticker', '//www.criticker.com/profile/luord/'),
-          ('IMDB', '//www.imdb.com/user/ur39224109/'),)
+          ('Hacker News', '//news.ycombinator.com/user?id=luord'),
+          ('Criticker', '//www.criticker.com/profile/luord/'))
 
 # THEME SETTINGS
 DISPLAY_CATEGORIES_ON_MENU = False

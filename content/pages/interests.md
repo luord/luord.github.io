@@ -7,7 +7,7 @@ Not everything is programming and, thus, this page is about what I like... besid
 
 # Film
 I like cinema. I've watched and enjoyed many movies of every genre and different
-time periods. I don't go out of my way to watch old movies (and this is why I don't consider myself a "cinephile") and prefer contemporary stuff, but I do watch oldies every now and then.
+time periods. I don't go out of my way to watch old movies (and this is why I don't consider myself a "cinephile") because I prefer contemporary stuff, but I do watch oldies every now and then.
 
 I like movies so much I have fairly active profiles in [criticker][criticker]{: target="_blank"} and
 [imdb][imdb]{: target="_blank"}, check them out if you want to see what movies I've watched, reviews, etc.

@@ -1,114 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="author" content="{{ AUTHOR }}" />
-    <meta name="robots" content="index, follow"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="author" content="{{ AUTHOR }}" />
+  <meta name="robots" content="index, follow" />
 
-    <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{%endblock%}"/>
-    <meta property="og:url" content="https:{% block ogurl %}{{ SITEURL }}{%endblock%}"/>
-    <meta property="og:site_name" content="{{ SITENAME }}"/>
-    <meta property="og:type" content="{% block ogtype %}website{%endblock%}"/>
-    <meta property="og:description" content="{% block ogdesc %}{{SITESUBTITLE}}{% endblock %}" />
-    <meta property="description" content="{% block metadesc %}{{SITESUBTITLE}}{% endblock %}" />
-    <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
+  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{% endblock %}"/>
+  <meta property="og:url" content="https:{% block ogurl %}{{ SITEURL }}{% endblock %}"/>
+  <meta property="og:site_name" content="{{ SITENAME }}"/>
+  <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
+  <meta property="og:description" content="{% block ogdesc %}{{ SITESUBTITLE }}{% endblock %}" />
+  <meta property="description" content="{% block metadesc %}{{ SITESUBTITLE }}{% endblock %}" />
+  <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
 
-    <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{%endblock%}" />
+  <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
 
-    <title>{% block title %}{{ SITENAME }}{%endblock%}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+  {% if FEED_ALL_ATOM %}
+  <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
+  {% endif %}
+  {% if FEED_ALL_RSS %}
+  <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
+  {% endif %}
 
-    <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/main.css" />
-    {% if FEED_ALL_ATOM %}
-    <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
-    {% endif %}
-    {% if FEED_ALL_RSS %}
-    <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
-    {% endif %}
-
-    <link rel="icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}">
-    <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}">
+  <link rel="icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}" />
+  <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}" />
+  <link href="//fonts.googleapis.com/css?family=Overlock&display=swap" rel="stylesheet" />
+  <link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css" />
 </head>
 
-<body id="index">
-{% include 'github.html' %}
-    <div class="row-fluid">
-        <div class="span10 offset1">
-            <header id="banner" >
-                <h1>
-                    <a href="{{ SITEURL }}/">{{ SITENAME }}</a>
-                </h1>
-                <nav class="navbar">
-                    <div class="navbar-inner">
-                        <ul class="nav">
-                        {% for title, link in MENUITEMS %}
-                            <li {% if link[1:] == output_file %}class="active"{% endif %}><a href="{{ link }}">{{ title }}</a></li>
-                        {% endfor %}
-                        {% if DISPLAY_PAGES_ON_MENU %}
-                        {% for pa in pages %}
-                            <li {% if pa == page %}class="active"{% endif %}><a href="{{ SITEURL }}/{{ pa.url }}">{{ pa.title }}</a></li>
-                        {% endfor %}
-                        {% endif %}
-                        {% if DISPLAY_CATEGORIES_ON_MENU %}
-                        {% for cat, null in categories %}
-                            <li {% if cat == category %}class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
-                        {% endfor %}
-                        {% endif %}
-                        </ul>
+<body>
+<header>
+  <h1>
+    <a href="{{ SITEURL }}/">{{ SITENAME }}</a>
+  </h1>
+  <nav>
+    <ul>
+      {% for title, link in MENUITEMS %}
+        <li><a href="{{ link }}">{{ title }}</a></li>
+      {% endfor %}
+      {% if DISPLAY_PAGES_ON_MENU %}
+      {% for pa in pages %}
+        <li><a href="{{ SITEURL }}/{{ pa.url }}">{{ pa.title }}</a></li>
+      {% endfor %}
+      {% endif %}
+      {% if DISPLAY_CATEGORIES_ON_MENU %}
+      {% for cat, null in categories %}
+        <li><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+      {% endfor %}
+      {% endif %}
+    </ul>
+  </nav>
+</header>
+<main>
+  {% block content %}{% endblock %}
+  {% block sidebar %}{% endblock %}
+</main>
 
-                        {% include 'google_custom_search.html' %}
-                    </div>
-                </nav>
-            </header><!-- /#banner -->
-        </div>
-    </div>
-
-    <div class="row-fluid">
-        <div class="span10 offset1">
-            <div class="row-fluid">
-                {% block content %}{% endblock %}
-                {% block sidebar %}{% endblock %}
-            </div>
-        </div>
-    </div>
-
-    <footer id="site-footer">
-        <div class="row-fluid">
-            <div class="span10 offset1">
-                <address>
-                    <div style="font-size: 0.8rem;"><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />This blog by <a xmlns:cc="http://creativecommons.org/ns#" href="//luord.com" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</div>
-                    <div style="font-size: 0.5rem;">
-                        This blog is proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>. |
-                        <a href="http://github.com/jsliang/pelican-fresh/">Fresh</a> is a responsive theme designed by <a href="http://jsliang.com/">jsliang</a> and <a href="https://github.com/jsliang/pelican-fresh/graphs/contributors">contributors</a>.
-                        Special thanks to <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a> and <a href="http://getbootstrap.com/">Twitter Bootstrap</a>.
-                    </div>
-                </address>
-            </div>
-        </div>
-    </footer>
+<footer>
+  <p><a rel="license" href="//creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="//i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
+  <p><small>This blog by <a xmlns:cc="//creativecommons.org/ns#" href="//luord.com" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="//creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
 
 {% include 'analytics.html' %}
-{% include 'piwik.html' %}
 {% include 'disqus_script.html' %}
-    <script src="//code.jquery.com/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-
-    {% if SHARETHIS_PUB_KEY %}
-    <script type="text/javascript">var switchTo5x=true;</script>
-    <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">
-        stLight.options({
-            publisher: "{{ SHARETHIS_PUB_KEY }}",
-            doNotHash: false,
-            doNotCopy: false,
-            hashAddressBar: false,
-            shorten: false
-        });
-    </script>
-    {% endif %}
-  {% block extra_files %}{% endblock %}
+{% if SHARETHIS_PUB_KEY %}
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">
+  stLight.options({
+    publisher: "{{ SHARETHIS_PUB_KEY }}",
+    doNotHash: false,
+    doNotCopy: false,
+    hashAddressBar: false,
+    shorten: false
+  });
+</script>
+{% endif %}
 </body>
 </html>

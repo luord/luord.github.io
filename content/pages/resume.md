@@ -9,7 +9,7 @@ ___
 Systems Engineer with strong skills in development, operations and lifecycle management.
 
 Over five years of experience as a polyglot full-stack developer, follower of good principles like SOLID, DRY and TDD in my code and who has
-introduced DevOps techniques such as continuous deployment in different projects .
+introduced DevOps techniques such as continuous integration in different projects.
 
 Equally effective in a team environment or as a lone specialist.
 ___
@@ -19,8 +19,17 @@ ___
 * Operations/Management: Git, Docker (docker-compose), GitLab-CI, Ansible, Click
 ___
 # Employment History
+## Software Engineer {: .low-margin }
+*Analytics Fire,    Bogotá, Colombia     03/19-09/19*
+
+Designing, building, delivering, integration and system testing, data migration, acceptance testing support, launch and post-launch support for the different software systems.
+
+* Development of new features and bug fixing in the back-end and front-end of different software systems.
+* Python development in Flask for a solar energy structure calculator tool. Also work on developing and managing Celery tasks.
+* Front-End development for different single page applications, all of them using the framework React and add-ons such as Redux.
+
 ## Software Developer(Backend) {: .low-margin }
-*BairesDev,    Bogotá,Colombia    11/17-Present*
+*BairesDev,    Bogotá,Colombia    11/17-01/19*
 
 Full-stack developer with a primary focus in the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
 
@@ -107,5 +116,5 @@ li > ul {
 }
 </style>
 
-[pdf]: {filename}/assets/Luis_Orduz_CV.pdf "My CV"
+[pdf]: {static}/assets/Luis_Orduz_CV.pdf "My CV"
 [uis]: //uis.edu.co "My Alma Mater's home page"
