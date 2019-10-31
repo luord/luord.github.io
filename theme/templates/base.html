@@ -68,18 +68,8 @@
 
 {% include 'analytics.html' %}
 {% include 'disqus_script.html' %}
-{% if SHARETHIS_PUB_KEY %}
-<script type="text/javascript">var switchTo5x=true;</script>
-<script type="text/javascript" src="//ws.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">
-  stLight.options({
-    publisher: "{{ SHARETHIS_PUB_KEY }}",
-    doNotHash: false,
-    doNotCopy: false,
-    hashAddressBar: false,
-    shorten: false
-  });
-</script>
+{% if SHARETHIS_ID %}
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property={{ SHARETHIS_ID }}&product=image-share-buttons' async='async'></script>
 {% endif %}
 </body>
 </html>
