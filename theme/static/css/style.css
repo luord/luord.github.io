@@ -5,26 +5,27 @@ body {
   align-items: center;
   background-color: #444;
   color: #e4e4e4;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 main {
   display: flex;
   max-width: 140ch;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
+  width: 100%;
 }
 
 body > header, body > footer, main > section {
   max-width: 70ch;
-  padding: 2ch;
-}
-
-article {
-  max-width: 70ch;
+  padding: 1.5ch;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 aside {
-  margin-left: 10ch;
   width: 30ch;
   padding: 2ch;
 }
@@ -36,6 +37,11 @@ footer {
 body > header {
   align-self: center;
   text-align: center;
+}
+
+pre {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 aside li, #main li, body > header li {
