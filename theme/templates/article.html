@@ -21,8 +21,20 @@
 
   <section class="content">{{ article.content }}</section>
 
-  {% include 'sharethis.html' %}
   <div class="hire_link"><a href="/pages/contact">Hire Me</a></div>
+
+  <ul class="navigator">
+  {% if article.prev_article %}
+    <li><a href="{{ SITEURL }}/{{ article.prev_article.url}}">
+      Previous: {{ article.prev_article.title }}
+    </a></li>
+  {% endif %}
+  {% if article.next_article %}
+    <li><a href="{{ SITEURL }}/{{ article.next_article.url}}">
+      Next: {{ article.next_article.title }}
+    </a></li>
+  {% endif %}
+</ul>
 
   {% if DISQUS_SITENAME %}
   <section class="comments">

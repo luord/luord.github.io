@@ -1,5 +1,5 @@
 body {
-  font-family: overlock;
+  font: 16px/1.5em overlock, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,7 +44,7 @@ pre {
   text-overflow: ellipsis;
 }
 
-aside li, #main li, body > header li {
+aside li, #main li, body > header li, .navigator {
   list-style: none;
 }
 
@@ -76,10 +76,6 @@ img {
 
 .summary {
   border-bottom: 1px solid;
-}
-
-aside li {
-  line-height: 20px;
 }
 
 aside li a:before {
@@ -127,4 +123,15 @@ code {
 
 #dates h4 {
   margin-left: 6ch;
+}
+
+.sharethis-top, .hire_link {
+  margin-top: 1ch;
+}
+
+.navigator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
 }

@@ -76,3 +76,6 @@ DISPLAY_SEARCH_FORM = True
 PAGE_ORDER_BY = 'order'
 
 THEME = 'theme'
+
+PLUGIN_PATHS = ['plugins']
+PLUGINS = ['feedicon', 'neighbors']
