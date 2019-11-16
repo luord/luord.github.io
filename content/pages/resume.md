@@ -8,13 +8,13 @@ ___
 # Profile
 Systems Engineer with strong skills in development, operations and lifecycle management.
 
-Over five years of experience as a polyglot full-stack developer, follower of good principles like SOLID, DRY and TDD in my code and who has
+Working since 2013 as a polyglot full-stack developer, follower of good principles like SOLID, DRY and TDD in my code and who has
 introduced DevOps techniques such as continuous integration in different projects.
 
 Equally effective in a team environment or as a lone specialist.
 ___
 # Technical Skills
-* Programming: Python, Javascript, Bash, HTML/CSS, Flask, Django, VueJS, AngularJS, Foundation, SQLAlchemy, Celery
+* Programming: Python, Javascript, Go, Bash, HTML/CSS, Flask, Django, VueJS, React, SQLAlchemy, Celery, PyTest, Jest
 * Infrastructure: Linux (debian-based), PostgreSQL, NGINX, Redis, RabbitMQ
 * Operations/Management: Git, Docker (docker-compose), GitLab-CI, Ansible, Click
 ___
@@ -22,11 +22,12 @@ ___
 ## Software Engineer {: .low-margin }
 *Analytics Fire,    Bogotá, Colombia     03/19-09/19*
 
-Designing, building, delivering, integration and system testing, data migration, acceptance testing support, launch and post-launch support for the different software systems.
+Full-stack developer for multiple clients, including a medical device supply company and a solar energy company, using python mainly with Flask, SQLAlchemy and Celery, or Javascript with node, express, TypeScript, Webpack and React. The infrastructure is primarily handled with Docker, circleci and task runners such as Invoke.
 
-* Development of new features and bug fixing in the back-end and front-end of different software systems.
-* Python development in Flask for a solar energy structure calculator tool. Also work on developing and managing Celery tasks.
-* Front-End development for different single page applications, all of them using the framework React and add-ons such as Redux.
+* Development of new features and bug fixing in the back-end of multiple applications, both in node and in python, updating libraries and deployments.
+* General maintenance of the front-end of multiple applications, primarily react or angular based.
+* Database administration, including handling migrations and automating the edition and creation of records as well as moving and maintaining the databases. PostgreSQL.
+* Set-up and update of local development environments, primarily using docker and task handling tools.
 
 ## Software Developer(Backend) {: .low-margin }
 *BairesDev,    Bogotá,Colombia    11/17-01/19*
@@ -34,15 +35,18 @@ Designing, building, delivering, integration and system testing, data migration,
 Full-stack developer with a primary focus in the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
 
 * Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
-* General maintenance of the frontend of a particular interface, written in the React ecosystem.
+* General maintenance of the front-end of a particular interface, written in React.
+* Limited database administration, using psql to monitor the database and update possible errors.
+* Complete overhauling of the tests for cleanup and better maintenance, including the removal of existence boilerplate, replaced for mocking libraries.
 
 ## Senior Python Developer {: .low-margin }
 *Globant,    Bogotá, Colombia    09/17 - 09/18*
 
-Backend development in python for general projects, primarily focused in projects for National Geographic, primarily in Django.
+Backend development in python for general projects, currently focused in projects for  National Geographic, primarily in Django.
 
-* In charge of implementing the security guidelines for the [Your Shot project](https://yourshot.nationalgeographic.com), including migration to HTTPS and implementation of better text parsing and restriction techniques.
+* In charge of implementing the security guidelines for the Your Shot project, including migration to HTTPS and implementation of better text parsing and restriction techniques.
 * Member of the SWAT team, in charge of providing backend support for other teams.
+* General bug fixing and maintenance of both the code and the development environment.
 
 ## Freelance Software Engineer {: .low-margin }
 *Bucaramanga, Colombia    01/16 - 08/17*
@@ -72,7 +76,7 @@ Sole responsible of maintenance, bug fixing and development of a note-taking and
 
 * Python and JavaScript Development.
 * PostgreSQL Database administration.
-* Linux servers administration in Digital Ocean, provisioned with Bash and Docker.
+* Linux server administration in Digital Ocean, provisioned with Bash and Docker.
 * Fine-tuning of the provisioning process with Ansible planned.
 
 ## Software Developer and Operations Manager {: .low-margin }
@@ -106,6 +110,11 @@ April 2008 – April 2013
 4.28 final GPA
 
 Top bracket in every subject in 2012-2 Saber Pro test, outstanding student.
+
+## Courses
+
+* *Web Development w/ Google's Go (golang) Programming Language*  
+July - 2017
 
 <style>
 li > ul {
