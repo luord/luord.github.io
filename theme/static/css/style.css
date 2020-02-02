@@ -58,12 +58,12 @@ body > header li {
 }
 
 a {
-  color: #8dcfff;
+  color: #21a3ff;
   text-decoration: none;
 }
 
 a:visited {
-  color: #d1ecff;
+  color: #7fcaff;
 }
 
 a:hover {
@@ -87,6 +87,11 @@ aside li a:before {
 code {
   color: #f8f8f2;
   background: #272822;
+}
+
+dt {
+  text-decoration: underline;
+  margin-top: 0.5em;
 }
 
 #dev-profiles a:before {
