@@ -38,7 +38,7 @@ Create User from email
 : Create a view[^web] that allows the user to submit this data to the adapter.[^server]
 
 Create User from third party
-: Create an interface adapter that gathers data (including email) about an user sent from third parties[^dance], without polluting the business rules or the entities with data or steps specific to any third party. It passes this data to the create user Use Case and submits the returned model to the database repository.
+: Create an interface adapter that gathers data (including email) about an user sent from third parties[^dance]. It passes this data to the create user Use Case and submits the returned model to the database repository.[^clean]
 
 : This use case creates an instance of the User domain model using this data and returns it to the adapter.
 
@@ -67,6 +67,7 @@ This is going to be part of a series, an idea born from a [great article on blog
 [^web]: I've worked as a full stack web developer almost exclusively, so in here I'm thinking of a form, created either from a JS framework or just a simple web form.
 [^server]: Of course, nobody is forced to use a client-server system, but it's what I'll use.
 [^dance]: Probably something like [flask-dance][].
+[^clean]: Remember not to pollute the business rules or the entities with data or steps specific to any third party.
 [^celery]: Probably rabbitmq through Celery.
 [^flow]: Remember not to break flow of control, this business rule doesn't care how the database signals or how the queue sends the message. But that's an implementation detail that should be discussed in review.
 [^caveat]: Everything beyond that (meaning *how* the stack is used) is outside the scope of the story. That's for tests and reviews.
