@@ -31,25 +31,23 @@ As mentioned, my goal with the stories is knowing what to do and how to do it, f
 With that rough outline, we have an idea for three stories, because at this stage is better to restrict stories to use cases[^cases]. The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.
 
 Create User from email
-: Create an interface adapter[^flask] that receives an email and triggers the Use case Create User from email, it should then pass the instance of the User domain model returned to the database repository.[^postgres]
+: Create an Use Case that accepts raw data as well as a data repository[^postgres] and creates an instance of the User domain model using the raw data. It then passes this data to the repository for creation.
 
-: This use case creates an instance of the User domain model using this email and returns it to the adapter.
+: Create an interface adapter[^flask] that receives data (including email) submitted by an user and passes it to the aforementioned Use Case, alongside the database repository.
 
 : Create a view[^web] that allows the user to submit this data to the adapter.[^server]
 
 Create User from third party
-: Create an interface adapter that gathers data (including email) about an user sent from third parties[^dance]. It passes this data to the create user Use Case and submits the returned model to the database repository.[^clean]
-
-: This use case creates an instance of the User domain model using this data and returns it to the adapter.
+: Create an interface adapter that gathers data (including email) about an user sent from third parties[^dance]. It passes this data to the create user Use Case alongside the database repository.[^clean]
 
 : Create a view that allows the user to go through the third party communication cycle.
 
 Send email on user creation
-: Edit use creation adapters so that they continue upon successful user creation (from signal returned by the database repository) and then trigger a new Use Case "Send Confirmation Email".
+: Edit Create User Use case so that, upon successful storage, calls a new Use Case.
 
-: This Use Case is in charge of returning an email (or a template), as well as the data needed to send it (in this case the User email).
+: This new Use Case is in charge of sending the body and addressee of an email to an email sender interface adapter.[^flow]
 
-: Create an interface adapter that uses the data produced by the  use case and sends it to an external queue[^celery], in the form of a message, that should send the email.[^flow]
+: Create an interface adapter that uses the data produced by the  use case and sends it to an external queue[^celery], in the form of a message, that should send the email.
 
 These stories are somewhat vague, and that is deliberate. I don't want to restrict—and not only because I would be restricting myself—and details of implementation are what code reviews and tests are for. The one exception I make on not specifying implementation is regarding the tech stack itself: it's such a big decision that all developers are benefitted if the stack is clear[^caveat].
 
@@ -62,14 +60,14 @@ This is going to be part of a series, an idea born from a [great article on blog
 [^jira]: Just FYI, I don't hate it, it can be a great tool, as long as it isn't drowned in the bastardization of scrum, which I don't hate either... as long as it's used as a guideline instead of a forced two-week waterfall grind.
 [^arch]: I'm trying to describe this within the terms of the [clean architecture][architecture]. Results may vary.
 [^cases]: And debatably at any stage. I've seen projects where stories are created for everything, even changing the color of a button to a slightly differen shade of blue. YMMV on advantages and disadvantages of that practice.
-[^flask]: Probably a function that would retrieve the data in a given format, create a domain entity object from it that would then pass this object into the database adapter, probably a SQLAlchemy model. This function itself would be called from a [flask][] endpoint.
 [^postgres]: I'm a postgreSQL user.
+[^flask]: Probably a function that would retrieve the data in a given format, create a domain entity object from it that would then pass this object into the database adapter, probably a SQLAlchemy model. This function itself would be called from a [flask][] endpoint.
 [^web]: I've worked as a full stack web developer almost exclusively, so in here I'm thinking of a form, created either from a JS framework or just a simple web form.
 [^server]: Of course, nobody is forced to use a client-server system, but it's what I'll use.
 [^dance]: Probably something like [flask-dance][].
 [^clean]: Remember not to pollute the business rules or the entities with data or steps specific to any third party.
+[^flow]: Remember not to break flow of control, these business rules don't care how the database signals success or how the sender adapter sends the message. But that's an implementation detail that should be discussed in review.
 [^celery]: Probably rabbitmq through Celery.
-[^flow]: Remember not to break flow of control, this business rule doesn't care how the database signals or how the queue sends the message. But that's an implementation detail that should be discussed in review.
 [^caveat]: Everything beyond that (meaning *how* the stack is used) is outside the scope of the story. That's for tests and reviews.
 
 [blogging]: //flaviocopes.com/blog-seo/
