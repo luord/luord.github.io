@@ -23,12 +23,14 @@ As mentioned, my goal with the stories is knowing what to do and how to do it, f
 
 1. The application has a domain, and this domain includes the entity User because that's what we want to create.
 2. The application has some sort of data layer that the application interfaces with to store this User data.
-3. The application has adapters that interface with third parties to retrieve the user data, social networks in this case.
-4. The application has two distinct use cases for creating an user: using email or using the adapters mentioned above.
-5. The application has an interface that the user employs to send the email and other data, or to trigger the retrieval from third parties.
-6. The application has a third use case, which is to send an automated email to the, well, email provided by the user upon successful creation.
+3. The application has adapters that _interface_ with third parties to retrieve the user data, social networks in this case.
+4. The application has the **use case** "create user" that is called in two different ways: using email or using the adapters mentioned above.
+5. The application has an _interface_ that the user employs to send the email and other data, or to trigger the retrieval from third parties.
+6. The application has a second **use case**, which is to send an automated email to the, well, email provided by the user upon successful creation.
 
-With that rough outline, we have an idea for three stories, because at this stage is better to restrict stories to use cases[^cases]. The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.
+With that rough outline, we have an idea for two or three stories, because at this stage is better to restrict stories to the number of use cases, or to the number of times all use cases are instantiated across the application.[^cases] Of course, stories ultimately can involve *editing* use cases too; the point is that we should make the stories about the application business rules whenever possible.
+
+The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.
 
 Create User from email
 : Create an Use Case that accepts raw data as well as a data repository[^postgres] and creates an instance of the User domain model using the raw data. It then passes this data to the repository for creation.
