@@ -28,7 +28,7 @@ As mentioned, my goal with the stories is knowing what to do and how to do it, f
 5. The application has an interface that the user employs to send the email and other data, or to trigger the retrieval from third parties.
 6. The application has a third use case, which is to send an automated email to the, well, email provided by the user upon successful creation.
 
-With that rough outline, we have an idea for three stories, because at this stage is better to restrict stories to use cases[^cases]. The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible. In the stories I'll actually write, I won't omit the tech.
+With that rough outline, we have an idea for three stories, because at this stage is better to restrict stories to use cases[^cases]. The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.
 
 Create User from email
 : Create an interface adapter that receives an email[^server] and triggers the Use case Create User from email.
