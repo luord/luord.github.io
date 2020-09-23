@@ -58,12 +58,12 @@ body > header li {
 }
 
 a {
-  color: #21a3ff;
+  color: #3B8FC0;
   text-decoration: none;
 }
 
 a:visited {
-  color: #7fcaff;
+  color: #3F93C4;
 }
 
 a:hover {
@@ -139,4 +139,19 @@ dt {
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #f1f1f1;
+    color: #212121;
+  }
+
+  a {
+    color: #0072bb;
+  }
+
+  a:visited {
+    color: #00739a;
+  }
 }

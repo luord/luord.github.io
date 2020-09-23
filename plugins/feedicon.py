@@ -1,6 +1,6 @@
 from feedgenerator.django.utils.xmlutils import SimplerXMLGenerator
 
-from pelican.signals import feed_written
+from pelican import signals
 
 def add_icon(path, context, feed):
     with open(path, 'w') as fp:
@@ -14,4 +14,4 @@ def add_icon(path, context, feed):
         handler.endElement("feed")
 
 def register():
-    feed_written.connect(add_icon)
+    signals.feed_written.connect(add_icon)

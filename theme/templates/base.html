@@ -14,9 +14,9 @@
   <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
 
   <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   {% if FEED_ALL_ATOM %}
   <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
