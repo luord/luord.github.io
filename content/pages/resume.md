@@ -3,7 +3,7 @@ summary: My experience and education, why I should be hired.
 status: published
 order: 3
 
-This is a summary of my experience and education. Download a printable copy [here][pdf]{: download='LuisOrduz_CV.pdf'}.
+This is a summary of my experience and education. Download a printable copy [here][pdf]{: download='Luis_Orduz_CV.pdf'}.
 ___
 # Profile
 Systems Engineer with strong skills in development, operations and lifecycle management.
@@ -19,6 +19,28 @@ ___
 * Operations/Management: Git, Docker (docker-compose), GitLab-CI, Ansible, Click
 ___
 # Employment History
+## Senior Development Consultant {: .low-margin }
+*Freelance,    Bogotá, Colombia     07/20-Present*
+
+Full-stack engineering consulting for multiple clients, creating new functionalities for different products, several different administration and deployment tasks, architecture and design advice and code quality improvement.
+
+* Development of new features and bug fixing in the back-end, primarily Python, of both REST based API services and full applications including templating systems with frameworks like Django and Flask.
+* Development of new features and bug fixing in the front-end, primarily Javascript and TypeScript, for different applications. Mainly Single Page Applications using frameworks like Vue and React.
+* Refactoring of the code to improve quality, where possible, as well as contributing to architecture decisions for multiple applications with the different clients.
+* Setting up continuous testing and deployment of different applications, as well as setting up task runners and dedicated single issue functions.
+* Creation of several different Proofs of Concept and prototypes for new functionalities or new services either for existing applications or for new projects.
+
+## Software Engineer {: .low-margin }
+*BairesDev,    Bogotá, Colombia     10/19-07/20*
+
+Full-stack developer with a primary focus in the backend for one of the clients, a job posting application, using Go mainly with Gin and MongoDB. The infrastructure is primarily handled with Docker, orchestrated through Kubernetes and deployed using Gitlab CI pipelines.
+
+* Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
+* Creation of new APIs as well as improvement of the Object Mappings in Go.
+* Limited database administration, using express to monitor the mongo database and update possible errors.
+* Multiple refactoring and introduction of improved development practices like following some Clean Architecture principles and more unit testing.
+* Work on the different frontend views, written in Vue with Vuex, Vue-Router and Foundation.
+
 ## Software Engineer {: .low-margin }
 *Analytics Fire,    Bogotá, Colombia     03/19-09/19*
 
@@ -42,7 +64,7 @@ Full-stack developer with a primary focus in the backend for one of the clients,
 ## Senior Python Developer {: .low-margin }
 *Globant,    Bogotá, Colombia    09/17 - 09/18*
 
-Backend development in python for general projects, currently focused in projects for  National Geographic, primarily in Django.
+Backend development in python for general projects, currently focused on projects for  National Geographic, primarily in Django.
 
 * In charge of implementing the security guidelines for the Your Shot project, including migration to HTTPS and implementation of better text parsing and restriction techniques.
 * Member of the SWAT team, in charge of providing backend support for other teams.
@@ -62,17 +84,17 @@ Software developer working primarily with Python and some operations work in one
 ### Software Developer and Operations Manager (remote, contractor) {: .low-margin }
 *Pensemos - continuous engagement (10/16 - 05/17)*
 
-Part of the programming team, sole responsible of set-up of the deployment pipelines and maintainer of the WEB client that handles the periodic timelines of one of the largest cooperative companies in the country.
+Part of the programming team, sole responsible for setting up of the deployment pipelines and maintainer of the WEB client that handles the periodic timelines of one of the largest cooperative companies in the country.
 
 * Key team-member in the development of the web application using the Python web framework Django.
 * Wrote front-end components using VueJS, communicating with a REST API, also built in Django, for efficiency.
 * Introduced a continuous deployment process for ease and speed-up of development and deployment using GitLab and Docker through docker-compose.
-* Maintainer and responsible of bug-fixes and feature changes.
+* Maintainer and responsible for bug fixes and feature changes.
 
 ### Software Engineering consultant (remote, contractor) {: .low-margin }
 *Pensemos - continuous engagement (01/16 - Present)*
 
-Sole responsible of maintenance, bug fixing and development of a note-taking and task management application called Agreele.
+Sole responsible for maintenance, bug fixing and development of a note-taking and task management application called Agreele.
 
 * Python and JavaScript Development.
 * PostgreSQL Database administration.
@@ -92,11 +114,11 @@ Took full ownership of backend development, developed the alpha of the frontend 
 ## Software Developer {: .low-margin }
 *Eximo,  Bogotá, Colombia 	07/13 - 11/14*
 
-Full-Stack software developer with responsibilities in maintenance and new features as well as responsible of several proofs-of-concept for a software development company handling different applications for varied clients and an in-house interactive CMS.
+Full-Stack software developer with responsibilities in maintenance and new features as well as responsible for several proofs of concept for a software development company handling different applications for varied clients and an in-house interactive CMS.
 
 * Frontend (javascript) and Backend (java) work on the company's own graphical CMS for website prototyping. New features and bug fixes.
 * Frontend (javascript) and Backend (java) work for a client's CRM. New features and bug fixes.
-* Purchase , setup and maintenance of a proof-of-concept virtualization server, based on virtualbox, for testing deployments in different browsers.
+* Purchase, setup and maintenance of a proof-of-concept virtualization server, based on virtualbox, for testing deployments in different browsers.
 * Initial migration of the version control system from perforce to git.
 ___
 
