@@ -1,7 +1,7 @@
 <div class="post-info">
   {% include 'article_address.html' %}
 
-  on {{ article.date.strftime('%Y-%m-%d') }}
+  on <span class="dt-published">{{ article.date.strftime('%Y-%m-%d') }}</span>
 
   {% if article.tags %}
     |

@@ -1,5 +1,5 @@
 body {
-  font: 15px/1.5em Montserrat, sans-serif;
+  font: 15px/1.6em Montserrat, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,7 @@ aside {
   padding: 2ch;
 }
 
-footer {
+body > footer {
   text-align: right;
 }
 
@@ -48,8 +48,22 @@ aside li, #main li, body > header li, .navigator {
   list-style: none;
 }
 
-aside ul, #main ul, header ul {
+aside li, #main li, body > header li, .navigator, body > footer li {
+  list-style: none;
+}
+
+aside ul, #main ul, header ul, body > footer ul {
   padding: 0;
+}
+
+body > footer li {
+  display: inline-block;
+  margin-right: 2ch;
+}
+
+body > footer li i {
+  font-style: normal;
+  font-size: 1.5em;
 }
 
 body > header li {
@@ -84,6 +98,10 @@ aside li a:before {
   width: 1.3em;
 }
 
+body > footer nav {
+  font-family: FontAwesome;
+}
+
 code {
   color: #f8f8f2;
   background: #272822;
@@ -92,14 +110,6 @@ code {
 dt {
   text-decoration: underline;
   margin-top: 0.5em;
-}
-
-#dev-profiles a:before {
-  content: "\f120";
-}
-
-#soc-profiles a:before {
-  content: "\f007";
 }
 
 .cat-link:before {
@@ -130,7 +140,7 @@ dt {
   margin-left: 6ch;
 }
 
-.sharethis-inline-share-buttons, .hire_link {
+.contact_link {
   margin-top: 1ch;
 }
 

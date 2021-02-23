@@ -5,7 +5,7 @@
 {% block canonicalurl %}{{ SITEURL }}{% endblock %}
 
 {% block content %}
-<section id="main">
+<section id="main" class="h-feed">
 {% if articles %}
 {% for article in articles_page.object_list %}
 {% if loop.length > 0 %}
@@ -13,16 +13,14 @@
   <ul>
 {% endif %}
     <li>
-      <article class="summary">
-        <header>
-          <h1>
-            <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
-                                     {{ article.title }}
-            </a>
-          </h1>
-        </header>
+      <article class="h-entry summary">
+        <h1 class="p-name">
+          <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
+            {{ article.title }}
+          </a>
+        </h1>
         {% include 'article_address.html' %}
-        {{ article.summary }}
+        <p class="p-summary">{{ article.summary | striptags }}</p>
         <p>
           <a href="{{ SITEURL }}/{{ article.url }}">Read more...</a>
         </p>
@@ -47,22 +45,17 @@
 
 {% block sidebar %}
 <aside>
-  {% if PROFILES %}
-    <h2>Developer Profiles</h2>
-    <ul id="dev-profiles">
-    {% for name, link in PROFILES %}
-      <li><a href="{{ link }}">{{ name }}</a></li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-  {% if SOCIAL %}
-    <h2>Social</h2>
-    <ul id="soc-profiles">
-    {% for name, link in SOCIAL %}
-      <li><a href="{{ link }}">{{ name }}</a></li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+  <div class="h-card">
+    <h2>About</h2>
+    <p>
+      I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
+    </p>
+    <p>This blog is mostly tutorials about cool stuff I find or musings/essays on software engineering.</p>
+    <p>
+      If you want to know more about me, go <a class="u-url" href="{{ ABOUT_URL }}">here</a>. To contact me, go
+      <a class="u-url" href="{{ CONTACT_URL }}">here</a>.
+    </p>
+  </div>
   {% if TAG_CLOUD_STEPS %}
     <h2>Tags</h2>
     <ul>

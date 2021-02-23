@@ -3,4 +3,9 @@ status: published
 summary: Get in touch with me here!
 order: 5
 
-<script type="text/javascript" src="//form.jotformz.com/jsform/60737146595666"></script>
+You can reach out to me by:
+
+* Mailing to `lo at this domain`.
+* Sending a [web mention](https://indieweb.org/Webmention) to this site.
+* Using any of the profiles at the bottom (well, the ones that allow contacting people anyway).
+* Using [this form](https://form.jotformz.com/60737146595666).

@@ -7,7 +7,7 @@
 {% block canonicalurl %}{{ SITEURL }}/archives{% endblock %}
 
 {% block content %}
-<section id="dates">
+<section class="h-feed" id="dates">
   <h1>{% block content_title %}Archives for {{ SITENAME }}{% endblock %}</h1>
 
   {% for article in dates %}
@@ -23,7 +23,7 @@
     {% if this_month != prev_month or this_day != prev_day %}
     <h4>{{ this_day }}</h4>
     {% endif %}
-    <p><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></p>
+    <p class="h-entry"><a class="u-url" href="{{ SITEURL }}/{{ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
     {% set prev_year = this_year %}
     {% set prev_month = this_month %}
     {% set prev_day = this_day %}

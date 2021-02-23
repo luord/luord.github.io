@@ -10,18 +10,21 @@
 
 {% block content %}
 <section>
-<article>
+<article class="h-entry">
   <header>
     <h1>
-      <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
-         title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></h1>
+      <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
+         title="Permalink to {{ article.title|striptags }}"><span class="p-name">{{ article.title }}</span></a></h1>
   </header>
   {% include 'article_infos.html' %}
-  {% include 'sharethis.html' %}
 
-  <section class="content">{{ article.content }}</section>
+  <section class="e-content">{{ article.content }}</section>
 
-  <div class="hire_link"><a href="/pages/contact">Hire Me</a></div>
+  <footer>
+  <ul class="navigator">
+    <li><a href="https://www.addtoany.com/share#url=https:{{ SITEURL }}/{{ article.url }}">Share</a></li>
+    <li class="h-card"><a class="u-url" href="{{ CONTACT_URL }}">Say hi</a></li>
+  </ul>
 
   <ul class="navigator">
   {% if article.prev_article %}
@@ -34,22 +37,8 @@
       Next: {{ article.next_article.title }}
     </a></li>
   {% endif %}
-</ul>
-
-  {% if DISQUS_SITENAME %}
-  <section class="comments">
-    <h2>Comments</h2>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-      var disqus_identifier = "{{ article.url }}";
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//{{ DISQUS_SITENAME }}.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  </section>
-  {% endif %}
+  </ul>
+  </footer>
 </article>
 </section>
 {% endblock %}

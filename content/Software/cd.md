@@ -121,6 +121,7 @@ These variables might not be needed if the process to deploy to your vendor does
 
 The app we're deploying will be a simple "Hello World" in [Flask][] with the following structure:
 
+    :::text
     app
     | - app.yaml
     | - docker-compose.yml

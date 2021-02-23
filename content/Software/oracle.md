@@ -42,11 +42,13 @@ lucky you. They are relatively easy to follow but I'll write the last few comman
 
 To start the image, run the command:
 
+    :::bash
     docker run -d --name <db-container-name> \
       store/oracle/database-enterprise:12.2.0.1
 
 To connect to the database using Oracle's sqlplus client, use the following command:
 
+    :::bash
     docker exec -it <db-container-name> bash -c \
       "source /home/oracle/.bashrc; sqlplus /nolog"
 

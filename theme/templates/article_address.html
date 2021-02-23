@@ -1,11 +1,7 @@
 {% if article.author %}
 <address>
-  by <a href="{{ SITEURL }}/{{ article.author.url }}">{{ article.author }}</a>
+  by <a rel="author" class="p-author h-card" href="{{ article.author.url }}">{{ article.author }}</a>
 
-  in <a href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
-
-  {% if DISQUS_SITENAME %}
-  | <a href="{{ SITEURL }}/{{ article.url }}#disqus_thread">comments</a>
-  {% endif %}
+  in <a class="p-category" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
 </address>
 {% endif %}

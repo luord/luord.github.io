@@ -13,7 +13,7 @@
   <meta property="og:description" content="{% block ogdesc %}{{ SITESUBTITLE }}{% endblock %}" />
   <meta property="og:image" content="https:{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
 
-  <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
+  <link rel="canonical" href="https:{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
@@ -31,9 +31,10 @@
   <link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
   <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css" />
-  {% if SHARETHIS_ID %}
-  <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property={{ SHARETHIS_ID }}&product=image-share-buttons' async='async'></script>
-  {% endif %}
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+  <link rel="pingback" href="https://webmention.io/luord.com/xmlrpc" />
 </head>
 
 <body>
@@ -65,11 +66,19 @@
 </main>
 
 <footer>
+  <nav>
+    <ul>
+      <li><a rel="me" href="//github.com/luord" aria-label="GitHub profile"><i aria-hidden="true" class="fab fa-github"></i></a></li>
+      <li><a rel="me" href="//gitlab.com/luord" aria-label="GitLab profile"><i aria-hidden="true" class="fab fa-gitlab"></i></a></li>
+      <li><a rel="me" href="//stackoverflow.com/users/4570188/" aria-label="StackOverflow profile"><i aria-hidden="true" class="fab fa-stack-overflow"></i></a></li>
+      <li><a rel="me" href="//linkedin.com/in/luord" aria-label="LinkedIn profile"><i aria-hidden="true" class="fab fa-linkedin"></i></a></li>
+      <li><a rel="me" href="//twitter.com/luord" aria-label="Twitter profile"><i aria-hidden="true" class="fab fa-twitter"></i></a></li>
+      <li><a rel="me" href="//news.ycombinator.com/user?id=luord" aria-label="Hacker News profile"><i aria-hidden="true" class="fab fa-hacker-news"></i></a></li>
+      <li><a rel="me" href="//www.criticker.com/profile/luord" aria-label="Criticker profile"><i aria-hidden="true" class="fas fa-film"></i></a></li>
+    </ul>
+  </nav>
   <p><a rel="license" href="//creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="//i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
-  <p><small>This blog by <a xmlns:cc="//creativecommons.org/ns#" href="//luord.com" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="//creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+  <p><small>This blog by <a xmlns:cc="//creativecommons.org/ns#" href="https://luord.com" class="h-card" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="//creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
 </footer>
-
-{% include 'analytics.html' %}
-{% include 'disqus_script.html' %}
 </body>
 </html>

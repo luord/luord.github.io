@@ -3,6 +3,7 @@
 
 # SITE INFO
 AUTHOR = 'Luis Orduz'
+AUTHOR_EMAIL = 'lo@luord.com'
 SITENAME = 'Luis Orduz'
 SITESUBTITLE = 'Thoughts on software development... mostly.'
 SITEURL = ''
@@ -29,18 +30,22 @@ FILENAME_METADATA = '(?P<slug>.*)'
 PATH = 'content'
 STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
-  'assets/CNAME': {'path': 'CNAME'}
+  'assets/CNAME': {'path': 'CNAME'},
+  'assets/redirect/resume.html': {'path': 'pages/resume.html'}
 }
 
 # SAVING SETTINGS
 ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}'
 ARTICLE_SAVE_AS= '{date:%Y}/{date:%m}/{date:%d}/{slug}.html'
+ARTICLE_EXCLUDES = ['assets']
 PAGE_URL = 'pages/{slug}'
 CATEGORY_URL='category/{slug}'
 TAG_URL='tag/{slug}'
 AUTHOR_SAVE_AS=''
 AUTHORS_SAVE_AS=''
-AUTHOR_URL='pages/about'
+AUTHOR_URL=f'{SITEURL}/'
+CONTACT_URL=f'{SITEURL}/pages/contact'
+ABOUT_URL=f'{SITEURL}/pages/about'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -48,18 +53,6 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
-
-# Developer Profiles
-PROFILES = (('GitLab', '//gitlab.com/luord'),
-            ('GitHub', '//github.com/luord'),
-            ('StackOverflow', '//stackoverflow.com/users/4570188/luis-orduz'))
-
-# Social widget
-SOCIAL = (('LinkedIn', '//linkedin.com/in/luord'),
-          ('Twitter', '//twitter.com/luord'),
-          ('Facebook', '//facebook.com/luord'),
-          ('Hacker News', '//news.ycombinator.com/user?id=luord'),
-          ('Criticker', '//www.criticker.com/profile/luord/'))
 
 # THEME SETTINGS
 DISPLAY_CATEGORIES_ON_MENU = False
