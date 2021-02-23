@@ -1,0 +1,158 @@
+body {
+  font: 15px/1.6em Montserrat, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #212121;
+  color: #f1f1f1;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  display: flex;
+  max-width: 140ch;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+
+body > header, body > footer, main > section {
+  max-width: 70ch;
+  padding: 1.5ch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+aside {
+  width: 30ch;
+  padding: 2ch;
+}
+
+body > footer {
+  text-align: right;
+}
+
+body > header {
+  align-self: center;
+  text-align: center;
+}
+
+aside li, #main li, body > header li, .navigator, body > footer li {
+  list-style: none;
+}
+
+aside ul, #main ul, header ul, body > footer ul {
+  padding: 0;
+}
+
+body > footer li {
+  display: inline-block;
+  margin-right: 2ch;
+}
+
+body > footer li i {
+  font-style: normal;
+  font-size: 1.5em;
+}
+
+body > header li {
+  display: inline-block;
+  margin-right: 2ch;
+}
+
+a {
+  color: #3B8FC0;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #3F93C4;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  filter: grayscale(30%);
+}
+
+.summary {
+  border-bottom: 1px solid;
+}
+
+aside li a:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  width: 1.3em;
+}
+
+body > footer .h-card {
+  font-family: FontAwesome;
+}
+
+code {
+  color: #f8f8f2;
+  background: #272822;
+}
+
+dt {
+  text-decoration: underline;
+  margin-top: 0.5em;
+}
+
+.cat-link:before {
+  content: "\f02c";
+}
+
+.arc-link:before {
+  content: "\f073";
+}
+
+.tag-link:before {
+  content: "\f02b";
+}
+
+.feed-link:before {
+  content: "\f09e";
+}
+
+#dates h3 {
+  margin-left: 3ch;
+}
+
+#dates h4, #dates p {
+  display: inline-block;
+}
+
+#dates h4 {
+  margin-left: 6ch;
+}
+
+.contact_link {
+  margin-top: 1ch;
+}
+
+.navigator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #f1f1f1;
+    color: #212121;
+  }
+
+  a {
+    color: #0072bb;
+  }
+
+  a:visited {
+    color: #00739a;
+  }
+}

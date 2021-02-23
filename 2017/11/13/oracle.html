@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Using the official oracle docker images in development" />
+
+  <meta property="og:title" content="Oracle in Docker"/>
+  <meta property="og:url" content="https://luord.com/2017/11/13/oracle"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Using the official oracle docker images in development" />
+  <meta property="og:image" content="https://luord.com/assets/img/oracle/dorac.jpg" />
+
+  <link rel="canonical" href="https://luord.com/2017/11/13/oracle" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Oracle in Docker | Luis Orduz</title>
+
+  <link href="//luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="icon" type="image/png" href="/assets/img/site/favicon.png" />
+  <link rel="shortcut icon" type="image/png" href="/assets/img/site/favicon.png" />
+  <link href="//fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css" />
+</head>
+
+<body>
+<header class="h-card">
+  <h1>
+    <a class="p-name u-url" href="//luord.com/">Luis Orduz</a>
+  </h1>
+  <nav>
+    <ul>
+        <li><a href="//luord.com/pages/about">About</a></li>
+        <li><a href="//luord.com/pages/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header>
+    <h1>
+      <a class="p-name" href="//luord.com/2017/11/13/oracle" rel="bookmark"
+         title="Permalink to Oracle in Docker">Oracle in Docker</a></h1>
+  </header>
+<div class="post-info">
+<address class="h-card">
+  by <a class="p-author" href="//luord.com//pages/about">Luis Orduz</a>
+
+  in <a class="p-category" href="//luord.com/category/software">Software</a>
+</address>
+
+  on <span class="dt-published">2017-11-13</span>
+
+    |
+    tags:         <a href="//luord.com/tag/operations">operations</a>
+        <a href="//luord.com/tag/development">development</a>
+        <a href="//luord.com/tag/oracle">oracle</a>
+        <a href="//luord.com/tag/docker">docker</a>
+        <a href="//luord.com/tag/guides">guides</a>
+        <a href="//luord.com/tag/tutorials">tutorials</a>
+
+</div>
+  <section class="e-content"><p>A while ago, I had to work in a project that used oracle as its data layer (yeah, I know...).
+When we started, there was no such thing as an Oracle docker image so the development environment
+was either set-up manually or using bash scripts. I tried to create images but, first, it was hell and, second, I didn't want to
+bother with any license breach. I love bash and I'm often scripting away repetitive stuff
+but I am way too used to docker for my development environments (and also for deploying and in production);
+as such, it can be said that, whenever I had to rebuild the environment from scratch (and since a migration was being
+made towards data warehouses, that was more often than usual), I cursed my days.</p>
+<p>Thankfully, by the time we were finishing and regressions were becoming more and more expected, <a href="//www.oracle.com/corporate/pressrelease/docker-oracle-041917.html">Oracle released
+official images to the docker store</a>. I didn't waste time and, with some effort as the documentation
+was quite sparse, I managed to set them up locally and turned the bash scripts (and some plain
+text instructions) and other requirements into a <code>docker-compose</code> file. This short guide is about duplicating
+the process (well, the Oracle part).</p>
+<h2>Initial steps</h2>
+<p>First of all, create an account in the <a href="//store.docker.com/">docker store</a> if you don't have one already.</p>
+<p>Next, login with your account in the docker console, using the command <code>docker login</code>.</p>
+<h2>Getting Oracle</h2>
+<p>With that set up, head over to the <a href="//hub.docker.com/_/oracle-database-enterprise-edition">oracle enterprise page</a> in the docker store and click in the
+button that says "<em>Proceed to Checkout</em>".</p>
+<p>At this point, fill the information requested and accept the terms, the process is similar to the one Oracle has for downloading the
+client and databases from their website. They require it here too because this is Oracle.</p>
+<p><em>Now</em> you can pull the docker image: <code>docker pull store/oracle/database-enterprise:12.2.0.1</code>. It'll take a while.</p>
+<h2>Using Oracle</h2>
+<p>At this point you're probably in the instructions page, which is now far more detailed than it was when the images were released,
+lucky you. They are relatively easy to follow but I'll write the last few commands required to use the image here anyway.</p>
+<p>To start the image, run the command:</p>
+<div class="highlight"><pre><span></span><code>docker run -d --name &lt;db-container-name&gt; <span class="se">\</span>
+  store/oracle/database-enterprise:12.2.0.1
+</code></pre></div>
+
+<p>To connect to the database using Oracle's sqlplus client, use the following command:</p>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> -it &lt;db-container-name&gt; bash -c <span class="se">\</span>
+  <span class="s2">&quot;source /home/oracle/.bashrc; sqlplus /nolog&quot;</span>
+</code></pre></div>
+
+<h2>Some options</h2>
+<ul>
+<li>Setting the <code>DB_SID</code> environment variable changes the name of the database. Default is <code>ORCLCDB</code>.</li>
+<li>The port <code>1521</code> can be mapped so that the container can be accessed from the host. It can also, of course, be linked or set up in a network with other containers.</li>
+<li>The data can be separated in a volume, the directory to be mapped is <code>/ORCL</code>.</li>
+<li>Remember to change the password of the <code>sys</code> user (default is <code>Oradoc_db1</code>). This probably should be done in a Dockerfile that
+uses this image as base.</li>
+<li>There's a smaller image (<code>store/oracle/database-enterprise:12.2.0.1-slim</code>) whose Oracle installation has fewer options and tools.
+This is what I'd probably use if I have to work with Oracle again.</li>
+</ul>
+<p>And that's it for now. If you have any problems or corrections, let me know in the comments!</p></section>
+
+  <footer>
+  <ul class="navigator">
+    <li><a href="https://www.addtoany.com/share#url=https://luord.com/2017/11/13/oracle">Share</a></li>
+    <li><a class="h-card" href="/pages/contact">Say hi</a></li>
+  </ul>
+
+  <ul class="navigator">
+    <li><a href="//luord.com/2016/10/20/cd">
+      Previous: Continuous delivery with Gitlab
+    </a></li>
+    <li><a href="//luord.com/2020/02/01/stories">
+      Next: Creating stories from requirements
+    </a></li>
+  </ul>
+  </footer>
+</article>
+</section>
+</main>
+
+<footer>
+  <nav class="h-card">
+    <ul>
+      <li><a rel="me" href="//github.com/luord" aria-label="GitHub profile"><i aria-hidden="true" class="fab fa-github"></i></a></li>
+      <li><a rel="me" href="//gitlab.com/luord" aria-label="GitLab profile"><i aria-hidden="true" class="fab fa-gitlab"></i></a></li>
+      <li><a rel="me" href="//stackoverflow.com/users/4570188/" aria-label="StackOverflow profile"><i aria-hidden="true" class="fab fa-stack-overflow"></i></a></li>
+      <li><a rel="me" href="//linkedin.com/in/luord" aria-label="LinkedIn profile"><i aria-hidden="true" class="fab fa-linkedin"></i></a></li>
+      <li><a rel="me" href="//twitter.com/luord" aria-label="Twitter profile"><i aria-hidden="true" class="fab fa-twitter"></i></a></li>
+      <li><a rel="me" href="//news.ycombinator.com/user?id=luord" aria-label="Hacker News profile"><i aria-hidden="true" class="fab fa-hacker-news"></i></a></li>
+      <li><a rel="me" href="//www.criticker.com/profile/luord" aria-label="Criticker profile"><i aria-hidden="true" class="fas fa-film"></i></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="//creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="//i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
+  <p><small>This blog by <a xmlns:cc="//creativecommons.org/ns#" href="https://luord.com" class="h-card" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="//creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

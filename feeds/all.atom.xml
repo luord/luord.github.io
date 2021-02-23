@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Luis Orduz</title><link href="//luord.com/" rel="alternate"></link><link href="//luord.com/feeds/all.atom.xml" rel="self"></link><id>//luord.com/</id><updated>2021-02-22T00:39:40-05:00</updated><subtitle>Thoughts on software development... mostly.</subtitle><icon>https://luord.com/assets/img/site/favicon.png</icon><logo>https://luord.com/assets/img/site/favicon.png</logo><entry><title>Creating stories from requirements</title><link href="//luord.com/2020/02/01/stories" rel="alternate"></link><published>2020-02-01T00:00:00-05:00</published><updated>2020-02-17T08:19:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2020-02-01:/2020/02/01/stories</id><summary type="html">&lt;p&gt;On crafting actionable development stories from requirements&lt;/p&gt;</summary><content type="html">&lt;p&gt;A few weeks ago, one of my best friends came to me with an idea for an application. Unlike most (if not all) of my ideas, this one I actually believe to have potential so I asked him to prepare a list of requirements we could use to at least have a rough goal to aim for with this application. He delivered, and I was presented a good enough list... And I did nothing with it, I've been letting it sit there, all unfulfilled potential. But that changes now!&lt;/p&gt;
+&lt;p&gt;I've been working as a software engineer for a while and that experience, the &lt;a href="//agilemanifesto.org/"&gt;manifesto&lt;/a&gt;, what I remember from my college studies and what I've read regarding system design all point to the same conclusion: Having a fixed list of tasks and dedicating too much time to it is pointless because requirements change like waves in the sea.&lt;/p&gt;
+&lt;p&gt;However, I still feel it's important to have a set of stories to work on, both to have a general idea of what the system is and how it's supposed to work, as well as for documenting progress; nothing kills motivation like the feeling you're not actually advancing towards your goal. Besides, we control the requirements in this case and, even though waves are fickle, &lt;a href="//oceanservice.noaa.gov/facts/conveyor.html"&gt;the global conveyor belt&lt;/a&gt; is still a thing. Much like with that &lt;abbr title="sorry"&gt;overly elaborate metaphor&lt;/abbr&gt;, my goal is not to describe how every single detail in the application is supposed to work, but more a general description of each functionality, and general details on how to implement it.&lt;/p&gt;
+&lt;p&gt;With that in mind, I'll show how I approached turning that requirements list written in the "as a user" format into stories that developers can actually work on. I'll forgo things like "story points" or "acceptance criteria" because not only are those restrictive, I'm doing this as a developer for developers—all two of us—and what I care about is what to do and how to do it. And that's also the reason I won't be using stuff like certain project management tool that most software development teams are familiar with whose name I won't mention, at the risk of summoning giant lizards.&lt;sup id="fnref:jira"&gt;&lt;a class="footnote-ref" href="#fn:jira"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;In fact, this is a good point to mention &lt;a href="//sourcehut.org/"&gt;sourcehut&lt;/a&gt;, Drew DeVault's cool set of tools for creating software that's very reminiscent of how the biggest open source projects are maintained. I'm going to be creating these stories using sourcehut's todo, which is to say: simple issues.&lt;/p&gt;
+&lt;p&gt;Without further ado, let's take one of the requirements as example, one that is universal enough that I can use without risking IP: user accounts. This is an abbreviation of my friend's requirement:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As a user I can create an account in the application, with an email or using social networks (an email should be sent introducing the platform upon registration).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;As mentioned, my goal with the stories is knowing what to do and how to do it, from a developer's perspective. Part by part, this is the architecture&lt;sup id="fnref:arch"&gt;&lt;a class="footnote-ref" href="#fn:arch"&gt;2&lt;/a&gt;&lt;/sup&gt; that this requirement defines:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The &lt;abbr title="excuse me being captain obvious"&gt;application has a domain&lt;/abbr&gt;, and this domain includes the entity User because that's what we want to create.&lt;/li&gt;
+&lt;li&gt;The application has some sort of data layer that the application interfaces with to store this User data.&lt;/li&gt;
+&lt;li&gt;The application has adapters that &lt;em&gt;interface&lt;/em&gt; with third parties to retrieve the user data, social networks in this case.&lt;/li&gt;
+&lt;li&gt;The application has the &lt;strong&gt;use case&lt;/strong&gt; "create user" that is called in two different ways: using email or using the adapters mentioned above.&lt;/li&gt;
+&lt;li&gt;The application has an &lt;em&gt;interface&lt;/em&gt; that the user employs to send the email and other data, or to trigger the retrieval from third parties.&lt;/li&gt;
+&lt;li&gt;The application has a second &lt;strong&gt;use case&lt;/strong&gt;, which is to send an automated email to the, well, email provided by the user upon successful creation.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;With that rough outline, we have an idea for two or three stories, because at this stage is better to restrict stories to the number of use cases, or to the number of times all use cases are instantiated across the application.&lt;sup id="fnref:cases"&gt;&lt;a class="footnote-ref" href="#fn:cases"&gt;3&lt;/a&gt;&lt;/sup&gt; Of course, stories ultimately can involve &lt;em&gt;editing&lt;/em&gt; use cases too; the point is that we should make the stories about the application business rules whenever possible.&lt;/p&gt;
+&lt;p&gt;The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Create User from email&lt;/dt&gt;
+&lt;dd&gt;Create an Use Case that accepts raw data as well as a data repository&lt;sup id="fnref:postgres"&gt;&lt;a class="footnote-ref" href="#fn:postgres"&gt;4&lt;/a&gt;&lt;/sup&gt; and creates an instance of the User domain model using the raw data. It then passes this data to the repository for creation.&lt;/dd&gt;
+&lt;dd&gt;Create an interface adapter&lt;sup id="fnref:flask"&gt;&lt;a class="footnote-ref" href="#fn:flask"&gt;5&lt;/a&gt;&lt;/sup&gt; that receives data (including email) submitted by an user and passes it to the aforementioned Use Case, alongside the database repository.&lt;/dd&gt;
+&lt;dd&gt;Create a view&lt;sup id="fnref:web"&gt;&lt;a class="footnote-ref" href="#fn:web"&gt;6&lt;/a&gt;&lt;/sup&gt; that allows the user to submit this data to the adapter.&lt;sup id="fnref:server"&gt;&lt;a class="footnote-ref" href="#fn:server"&gt;7&lt;/a&gt;&lt;/sup&gt;&lt;/dd&gt;
+&lt;dt&gt;Create User from third party&lt;/dt&gt;
+&lt;dd&gt;Create an interface adapter that gathers data (including email) about an user sent from third parties&lt;sup id="fnref:dance"&gt;&lt;a class="footnote-ref" href="#fn:dance"&gt;8&lt;/a&gt;&lt;/sup&gt;. It passes this data to the create user Use Case alongside the database repository.&lt;sup id="fnref:clean"&gt;&lt;a class="footnote-ref" href="#fn:clean"&gt;9&lt;/a&gt;&lt;/sup&gt;&lt;/dd&gt;
+&lt;dd&gt;Create a view that allows the user to go through the third party communication cycle.&lt;/dd&gt;
+&lt;dt&gt;Send email on user creation&lt;/dt&gt;
+&lt;dd&gt;Edit Create User Use case so that, upon successful storage, calls a new Use Case.&lt;/dd&gt;
+&lt;dd&gt;This new Use Case is in charge of sending the body and addressee of an email to an email sender interface adapter.&lt;sup id="fnref:flow"&gt;&lt;a class="footnote-ref" href="#fn:flow"&gt;10&lt;/a&gt;&lt;/sup&gt;&lt;/dd&gt;
+&lt;dd&gt;Create an interface adapter that uses the data produced by the  use case and sends it to an external queue&lt;sup id="fnref:celery"&gt;&lt;a class="footnote-ref" href="#fn:celery"&gt;11&lt;/a&gt;&lt;/sup&gt;, in the form of a message, that should send the email.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;These stories are somewhat vague, and that is deliberate. I don't want to restrict—and not only because I would be restricting myself—and details of implementation are what code reviews and tests are for. The one exception I make on not specifying implementation is regarding the tech stack itself: it's such a big decision that all developers are benefitted if the stack is clear&lt;sup id="fnref:caveat"&gt;&lt;a class="footnote-ref" href="#fn:caveat"&gt;12&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;The stories should only define a rough end goal, and I believe the ones I wrote here achieve that. Anyhow, I feel that this is a good first step and a general description of how we'll be working on this project.&lt;/p&gt;
+&lt;p&gt;This is going to be part of a series, an idea born from a &lt;a href="//flaviocopes.com/blog-seo/"&gt;great article on blogging&lt;/a&gt; that I read the other day, which inspired me to write more and gave me the idea of how to actually write: I'm going to push myself into working on this application (and refactoring an older one, with another friend) so that I have material to write for this blog, and I can use the will to write for the blog as incentive to work on those projects, killing two birds with one stone.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;IMPORTANT&lt;/strong&gt;: Everything I'm writing in these series is my interpretation and general idea of a good process. Anything (or everything) I write might be entirely wrong and, in such event, I &lt;abbr title="read: beg"&gt;encourage&lt;/abbr&gt; you to correct me in the comments.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:jira"&gt;
+&lt;p&gt;Just FYI, I don't hate it, it can be a great tool, as long as it isn't drowned in the bastardization of scrum, which I don't hate either... as long as it's used as a guideline instead of a forced two-week waterfall grind.&amp;#160;&lt;a class="footnote-backref" href="#fnref:jira" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:arch"&gt;
+&lt;p&gt;I'm trying to describe this within the terms of the &lt;a href="//blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html"&gt;clean architecture&lt;/a&gt;. Results may vary.&amp;#160;&lt;a class="footnote-backref" href="#fnref:arch" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:cases"&gt;
+&lt;p&gt;And debatably at any stage. I've seen projects where stories are created for everything, even changing the color of a button to a slightly differen shade of blue. YMMV on advantages and disadvantages of that practice.&amp;#160;&lt;a class="footnote-backref" href="#fnref:cases" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:postgres"&gt;
+&lt;p&gt;I'm a postgreSQL user.&amp;#160;&lt;a class="footnote-backref" href="#fnref:postgres" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:flask"&gt;
+&lt;p&gt;Probably a function that would retrieve the data in a given format, create a domain entity object from it that would then pass this object into the database adapter, probably a SQLAlchemy model. This function itself would be called from a &lt;a href="//www.palletsprojects.com/p/flask/"&gt;flask&lt;/a&gt; endpoint.&amp;#160;&lt;a class="footnote-backref" href="#fnref:flask" title="Jump back to footnote 5 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:web"&gt;
+&lt;p&gt;I've worked as a full stack web developer almost exclusively, so in here I'm thinking of a form, created either from a JS framework or just a simple web form.&amp;#160;&lt;a class="footnote-backref" href="#fnref:web" title="Jump back to footnote 6 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:server"&gt;
+&lt;p&gt;Of course, nobody is forced to use a client-server system, but it's what I'll use.&amp;#160;&lt;a class="footnote-backref" href="#fnref:server" title="Jump back to footnote 7 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:dance"&gt;
+&lt;p&gt;Probably something like &lt;a href="//flask-dance.readthedocs.io/en/latest/"&gt;flask-dance&lt;/a&gt;.&amp;#160;&lt;a class="footnote-backref" href="#fnref:dance" title="Jump back to footnote 8 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:clean"&gt;
+&lt;p&gt;Remember not to pollute the business rules or the entities with data or steps specific to any third party.&amp;#160;&lt;a class="footnote-backref" href="#fnref:clean" title="Jump back to footnote 9 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:flow"&gt;
+&lt;p&gt;Remember not to break flow of control, these business rules don't care how the database signals success or how the sender adapter sends the message. But that's an implementation detail that should be discussed in review.&amp;#160;&lt;a class="footnote-backref" href="#fnref:flow" title="Jump back to footnote 10 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:celery"&gt;
+&lt;p&gt;Probably rabbitmq through Celery.&amp;#160;&lt;a class="footnote-backref" href="#fnref:celery" title="Jump back to footnote 11 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:caveat"&gt;
+&lt;p&gt;Everything beyond that (meaning &lt;em&gt;how&lt;/em&gt; the stack is used) is outside the scope of the story. That's for tests and reviews.&amp;#160;&lt;a class="footnote-backref" href="#fnref:caveat" title="Jump back to footnote 12 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="Engineering"></category><category term="architecture"></category><category term="design"></category><category term="model"></category><category term="musings"></category><category term="craftsmanship"></category></entry><entry><title>Oracle in Docker</title><link href="//luord.com/2017/11/13/oracle" rel="alternate"></link><published>2017-11-13T00:00:00-05:00</published><updated>2021-02-22T00:39:40-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2017-11-13:/2017/11/13/oracle</id><summary type="html">&lt;p&gt;Using the official oracle docker images in development&lt;/p&gt;</summary><content type="html">&lt;p&gt;A while ago, I had to work in a project that used oracle as its data layer (yeah, I know...).
+When we started, there was no such thing as an Oracle docker image so the development environment
+was either set-up manually or using bash scripts. I tried to create images but, first, it was hell and, second, I didn't want to
+bother with any license breach. I love bash and I'm often scripting away repetitive stuff
+but I am way too used to docker for my development environments (and also for deploying and in production);
+as such, it can be said that, whenever I had to rebuild the environment from scratch (and since a migration was being
+made towards data warehouses, that was more often than usual), I cursed my days.&lt;/p&gt;
+&lt;p&gt;Thankfully, by the time we were finishing and regressions were becoming more and more expected, &lt;a href="//www.oracle.com/corporate/pressrelease/docker-oracle-041917.html"&gt;Oracle released
+official images to the docker store&lt;/a&gt;. I didn't waste time and, with some effort as the documentation
+was quite sparse, I managed to set them up locally and turned the bash scripts (and some plain
+text instructions) and other requirements into a &lt;code&gt;docker-compose&lt;/code&gt; file. This short guide is about duplicating
+the process (well, the Oracle part).&lt;/p&gt;
+&lt;h2&gt;Initial steps&lt;/h2&gt;
+&lt;p&gt;First of all, create an account in the &lt;a href="//store.docker.com/"&gt;docker store&lt;/a&gt; if you don't have one already.&lt;/p&gt;
+&lt;p&gt;Next, login with your account in the docker console, using the command &lt;code&gt;docker login&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Getting Oracle&lt;/h2&gt;
+&lt;p&gt;With that set up, head over to the &lt;a href="//hub.docker.com/_/oracle-database-enterprise-edition"&gt;oracle enterprise page&lt;/a&gt; in the docker store and click in the
+button that says "&lt;em&gt;Proceed to Checkout&lt;/em&gt;".&lt;/p&gt;
+&lt;p&gt;At this point, fill the information requested and accept the terms, the process is similar to the one Oracle has for downloading the
+client and databases from their website. They require it here too because this is Oracle.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Now&lt;/em&gt; you can pull the docker image: &lt;code&gt;docker pull store/oracle/database-enterprise:12.2.0.1&lt;/code&gt;. It'll take a while.&lt;/p&gt;
+&lt;h2&gt;Using Oracle&lt;/h2&gt;
+&lt;p&gt;At this point you're probably in the instructions page, which is now far more detailed than it was when the images were released,
+lucky you. They are relatively easy to follow but I'll write the last few commands required to use the image here anyway.&lt;/p&gt;
+&lt;p&gt;To start the image, run the command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker run -d --name &amp;lt;db-container-name&amp;gt; &lt;span class="se"&gt;\&lt;/span&gt;
+  store/oracle/database-enterprise:12.2.0.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To connect to the database using Oracle's sqlplus client, use the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker &lt;span class="nb"&gt;exec&lt;/span&gt; -it &amp;lt;db-container-name&amp;gt; bash -c &lt;span class="se"&gt;\&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;source /home/oracle/.bashrc; sqlplus /nolog&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Some options&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Setting the &lt;code&gt;DB_SID&lt;/code&gt; environment variable changes the name of the database. Default is &lt;code&gt;ORCLCDB&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;The port &lt;code&gt;1521&lt;/code&gt; can be mapped so that the container can be accessed from the host. It can also, of course, be linked or set up in a network with other containers.&lt;/li&gt;
+&lt;li&gt;The data can be separated in a volume, the directory to be mapped is &lt;code&gt;/ORCL&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Remember to change the password of the &lt;code&gt;sys&lt;/code&gt; user (default is &lt;code&gt;Oradoc_db1&lt;/code&gt;). This probably should be done in a Dockerfile that
+uses this image as base.&lt;/li&gt;
+&lt;li&gt;There's a smaller image (&lt;code&gt;store/oracle/database-enterprise:12.2.0.1-slim&lt;/code&gt;) whose Oracle installation has fewer options and tools.
+This is what I'd probably use if I have to work with Oracle again.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And that's it for now. If you have any problems or corrections, let me know in the comments!&lt;/p&gt;</content><category term="Software"></category><category term="operations"></category><category term="development"></category><category term="oracle"></category><category term="docker"></category><category term="guides"></category><category term="tutorials"></category></entry><entry><title>Continuous delivery with Gitlab</title><link href="//luord.com/2016/10/20/cd" rel="alternate"></link><published>2016-10-20T00:00:00-05:00</published><updated>2021-02-22T00:38:36-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-10-20:/2016/10/20/cd</id><summary type="html">&lt;p&gt;A rapid delivery pipeline using containers and gitlab ci for free (thanks to google app engine). Pretty good for development, I believe.&lt;/p&gt;</summary><content type="html">&lt;p&gt;When I worked full-time in unique projects, writing the code and tests before running everything manually and then
+deploying to staging or production, also manually, was good enough. Now, however, with the potential
+to work in several and vastly different projects and environments, this "process" has become increasingly
+tedious; as such, as I've become more interested in operations since I started working with Docker, I tasked myself with automating this.&lt;/p&gt;
+&lt;p&gt;After a while of trying different tools, and the impossibility to work with others due to the limited income of a recent freelancer,
+I've settled in a process that I believe will suit me just fine, thanks to GitLab.com's
+all-around awesomeness. It beats the other offerings I considered by a margin:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Over GitHub, GitLab has private repositories, something clients &lt;em&gt;will&lt;/em&gt; want, in its free tier and their built-in CI.&lt;/li&gt;
+&lt;li&gt;Over Google Cloud Repositories, GitLab has their integrated CI.&lt;sup id="fnref:gcr"&gt;&lt;a class="footnote-ref" href="#fn:gcr"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;Over Heroku (which I was reticent about anyway for different reasons), GitLab CI is far less opinionated and
+offers more freedom in setting up the delivery process while allowing itself to deploy different types of applications more easily.&lt;/li&gt;
+&lt;li&gt;Over dedicated automation tools such as Jenkins or Buildbot, GitLab CI has the advantage of being simpler and straightforward.
+It might not be as maneuverable, but I believe what it offers is more than I need.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, GitLab has the advantage that its CI service is fully integrated and out-of-the-box with the git repositories, along with other useful
+or potentially useful features. One of these is that it works extremely well with docker, which I already use for local development.&lt;/p&gt;
+&lt;p&gt;My development process is now, roughly:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Running docker containers locally.&lt;/li&gt;
+&lt;li&gt;Using git hooks (set in place using bash scripts) to trigger tests.&lt;/li&gt;
+&lt;li&gt;Pushing to GitLab, where their CI will take charge of running tests again and, on success, pushing to the defined destination.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Right now, I'm pushing to Google App Engine, whose free tier, despite their lacking repositories&lt;sup id="fnref:rant"&gt;&lt;a class="footnote-ref" href="#fn:rant"&gt;2&lt;/a&gt;&lt;/sup&gt;, is still the best option for me.&lt;/p&gt;
+&lt;p&gt;But enough of introduction, let's get on with the guide:&lt;/p&gt;
+&lt;h2&gt;Preparation&lt;/h2&gt;
+&lt;p&gt;We need:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An account in &lt;a href="//gitlab.com"&gt;GitLab.com&lt;/a&gt; or one's own GitLab server. I believe a private GitLab server would work too but I've only tested this
+on the website.&lt;/li&gt;
+&lt;li&gt;An account in &lt;a href="//cloud.google.com"&gt;Google Cloud&lt;/a&gt;. Or adjust the &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;-specific steps to your vendor of choice.&lt;/li&gt;
+&lt;li&gt;&lt;a href="//docker.com"&gt;Docker&lt;/a&gt;, &lt;a href="//docs.docker.com/compose/"&gt;docker-compose&lt;/a&gt;, and &lt;a href="//git-scm.com"&gt;git&lt;/a&gt; installed locally. Some familiarity with git might be required.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;&lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; Setup&lt;/h2&gt;
+&lt;p&gt;(If you're already familiar with creating a project in Google App Engine or use a different vendor, skip ahead to &lt;a href="#gitlab-setup"&gt;GitLab setup&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In the cloud console, create a project:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE create project" src="/assets/img/gae/create_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Fill in the name you want (I called mine "gitlab-test").&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE project name" src="/assets/img/gae/project_name.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;For all of the following steps, remember the project ID that was returned upon creation.&lt;/p&gt;
+&lt;p&gt;Afterwards, go to IAM &amp;amp; Admin:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE IAM" src="/assets/img/gae/gae_iam.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once there, click on "Service Accounts":&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE IAM Services" src="/assets/img/gae/gae_services.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Then click on "CREATE SERVICE ACCOUNT" and fill in the form that pops up like so:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Gitlab Service" src="/assets/img/gae/create_service.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Gitlab Service" src="/assets/img/gae/gitlab_service.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;After clicking "CREATE", this will download a json file that contains the key that GitLab CI needs to connect to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;.&lt;/p&gt;
+&lt;p&gt;Now we need to enable the two APIs required to deploy to app engine remotely. There's a straightforward way that is merely clicking a link
+but, since I wouldn't trust it myself if I didn't see it firsthand, I won't expect you to trust it either. So the slightly longer way it is:&lt;/p&gt;
+&lt;p&gt;In the google cloud console sidebar, click on API manager:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API Manager" src="/assets/img/gae/api_manager.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once in the API manager, click in "ENABLE API".&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Enable API" src="/assets/img/gae/enable_api.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;In the library that opens there's a search box, type "app engine admin api" there and click in the first result.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API search" src="/assets/img/gae/api_search.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once there, click in "ENABLE".&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API Enable" src="/assets/img/gae/api_enable.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now just repeat this process (API Manager &amp;gt; Enable API &amp;gt; Search &amp;gt; Enable) for "Google Cloud Storage".&lt;/p&gt;
+&lt;h2 id="gitlab-setup"&gt;GitLab setup&lt;/h2&gt;
+&lt;p&gt;(If you're already familiar with creating a GitLab project and setting up project variables, go straight to &lt;a href="#code"&gt;Code&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;First of all, create a project by clicking on the "New Project" button:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab New Project" src="/assets/img/gitlab/new_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Fill up the "new project" form using the settings and name you want:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Create Project" src="/assets/img/gitlab/create_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;After sending the form, click on the project settings menu and select "Variables":&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Variables" src="/assets/img/gitlab/project_settings.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Set the &lt;code&gt;GAE_PROJECT&lt;/code&gt; variable with the id of your Google Cloud Project:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Set Variable" src="/assets/img/gitlab/variable.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Afterwards, set a new variable named &lt;code&gt;GAE_KEY&lt;/code&gt;, whose value must be the contents of the json file we downloaded earlier from &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;. Delete the json file as it could be dangerous to have it lying around.&lt;/p&gt;
+&lt;p&gt;These variables might not be needed if the process to deploy to your vendor doesn't require authentication or there are other ways of authenticating.&lt;/p&gt;
+&lt;h2 id="code"&gt;Code&lt;/h2&gt;
+&lt;p&gt;The app we're deploying will be a simple "Hello World" in &lt;a href="//palletsprojects.com/p/flask/"&gt;Flask&lt;/a&gt; with the following structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;app
+| - app.yaml
+| - docker-compose.yml
+| - .gitlab-ci.yml
+| - app
+|   | - __init__.py
+|   | - app.py
+|   | - test.py
+|   | - Dockerfile
+|   | - requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;app.py&lt;/code&gt; is within a module and not in the root folder (which would be simpler) for ease of deployment to Google App Engine. This is its code:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
+
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World!&amp;#39;&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;test.py&lt;/code&gt;, as its name indicates, it's just a very simple unit test for &lt;code&gt;app.py&lt;/code&gt;, as an example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;unittest&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;app&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;unittest&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;TestCase&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_client&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;assertEqual&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+      &lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+      &lt;span class="s1"&gt;&amp;#39;Hello World!&amp;#39;&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;__init__.py&lt;/code&gt; has the &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; path setup:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+
+&lt;span class="n"&gt;lib_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+  &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abspath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__file__&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+  &lt;span class="s1"&gt;&amp;#39;lib&amp;#39;&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;insert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lib_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.app&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The app only has one dependency, &lt;code&gt;flask&lt;/code&gt;, and that single word&lt;sup id="fnref:reqs"&gt;&lt;a class="footnote-ref" href="#fn:reqs"&gt;3&lt;/a&gt;&lt;/sup&gt; is the content of &lt;code&gt;requirements.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now the stuff this guide is meant to be about. First the &lt;code&gt;Dockerfile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="s"&gt;python:latest&lt;/span&gt;
+
+&lt;span class="k"&gt;ADD&lt;/span&gt; requirements.txt /
+
+&lt;span class="k"&gt;RUN&lt;/span&gt; pip install -r requirements.txt
+
+&lt;span class="k"&gt;ADD&lt;/span&gt; . /code
+
+&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="s"&gt; /code&lt;/span&gt;
+
+&lt;span class="k"&gt;CMD&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;unittest&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;discover&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Simple enough: from the python image install the requirements and run the test.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker-compose.yml&lt;/code&gt; is very simple too:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;app&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Build and run what's in the &lt;code&gt;app&lt;/code&gt; folder&lt;/p&gt;
+&lt;p&gt;Now what allows GitLab to perform its magic, the &lt;code&gt;.gitlab-ci.yml&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;back&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;python&lt;/span&gt;
+  &lt;span class="nt"&gt;stage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;build&lt;/span&gt;
+  &lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="p p-Indicator"&gt;&amp;gt;-&lt;/span&gt;
+        &lt;span class="no"&gt;pip install -t app/lib&lt;/span&gt;
+        &lt;span class="no"&gt;-r app/requirements.txt&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;export PYTHONPATH=$PWD/app/lib:$PYTHONPATH&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;python -m unittest discover&lt;/span&gt;
+  &lt;span class="nt"&gt;artifacts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nt"&gt;paths&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+      &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;app/lib/&lt;/span&gt;
+
+&lt;span class="nt"&gt;deploy_production&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;google/cloud-sdk&lt;/span&gt;
+  &lt;span class="nt"&gt;stage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;deploy&lt;/span&gt;
+  &lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;production&lt;/span&gt;
+  &lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;echo $GAE_KEY &amp;gt; /tmp/key.json&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;gcloud config set project $GAE_PROJECT&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="p p-Indicator"&gt;&amp;gt;-&lt;/span&gt;
+        &lt;span class="no"&gt;gcloud&lt;/span&gt;
+        &lt;span class="no"&gt;auth activate-service-account&lt;/span&gt;
+        &lt;span class="no"&gt;--key-file /tmp/key.json&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;gcloud --quiet app deploy&lt;/span&gt;
+  &lt;span class="nt"&gt;after_script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;rm /tmp/key.json&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are a couple things happening here, but nothing overly complicated:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the build stage, run the python docker image, install the requirements locally in a folder called &lt;code&gt;lib&lt;/code&gt;, run the tests and then make the &lt;code&gt;lib&lt;/code&gt; folder available for next stages.&lt;/li&gt;
+&lt;li&gt;In the deployment stage... deploy the app to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; (Adjust the commands for your vendor of choice).&lt;sup id="fnref:credit"&gt;&lt;a class="footnote-ref" href="#fn:credit"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As you can see, to deploy we are using the variables (&lt;code&gt;GAE_KEY&lt;/code&gt; and &lt;code&gt;GAE_PROJECT&lt;/code&gt;) we set in the previous section.&lt;/p&gt;
+&lt;p&gt;Finally, &lt;code&gt;app.yaml&lt;/code&gt;, which is specific to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;runtime&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;python27&lt;/span&gt;
+&lt;span class="nt"&gt;threadsafe&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+
+&lt;span class="nt"&gt;handlers&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="p p-Indicator"&gt;-&lt;/span&gt; &lt;span class="nt"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;/&lt;/span&gt;
+    &lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="l l-Scalar l-Scalar-Plain"&gt;app.app&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This uses the module structure so it can use the external libraries (&lt;code&gt;flask&lt;/code&gt;) in the project.&lt;/p&gt;
+&lt;h2&gt;Deployment&lt;/h2&gt;
+&lt;p&gt;There's not much to this, just run &lt;code&gt;docker-compose up&lt;/code&gt; and wait for the OK or possible errors. If there's nothing wrong, then we're ready to deploy. The &lt;code&gt;Dockerfile&lt;/code&gt; and the &lt;code&gt;docker-compose.yml&lt;/code&gt; file can be tweaked to actually run the server or perform any other task one might need.&lt;/p&gt;
+&lt;p&gt;In the root folder of our app, initialize git and add the repository URL of the gitlab project as remote. Then you only have to push the code
+and, after a few minutes, check the url &lt;code&gt;[your-project-id].appspot.com&lt;/code&gt; and the "Hello World!" should be staring right back at you.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;So that's it! We've deployed our app to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; using GitLab. From then on, you can just dedicate yourself to writing the code and its tests.
+To deploy (to production or staging or any environment you choose), you just need to push and this process will take care testing and delivering the code if there aren't any errors.&lt;/p&gt;
+&lt;p&gt;Things we could do now is setting up automatic local testing on each commit, multiple stages and notifications for failed and successful builds, etc.&lt;/p&gt;
+&lt;p&gt;If you have any questions, let me know in the comments.&lt;/p&gt;
+&lt;style&gt;
+p &gt; img {
+  width: 100%;
+  display: block;
+}
+&lt;/style&gt;
+
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:gcr"&gt;
+&lt;p&gt;It amazes me how cloud repositories is almost completely isolated
+  from all other Google Cloud services. They used to have a Push-to-Deploy feature but that's gone (if it isn't,
+  it must be really well-hidden now because I spent days reading documentation, forums and question threads about this) and now
+  they suggest setting up one's own continuous integration service. I can't imagine why they did that and, again,
+  I'd rather not risk being charged for running their recommended Jenkins setup.&amp;#160;&lt;a class="footnote-backref" href="#fnref:gcr" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:rant"&gt;
+&lt;p&gt;Indeed, if their cloud repositories were integrated with their cloud platform, I might have never bothered to look into GitLab. A good thing in hindsight, all things considered.&amp;#160;&lt;a class="footnote-backref" href="#fnref:rant" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:reqs"&gt;
+&lt;p&gt;Not versioning your dependencies is, of course, not recommended.&amp;#160;&lt;a class="footnote-backref" href="#fnref:reqs" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:credit"&gt;
+&lt;p&gt;The script for the &lt;code&gt;deploy_production&lt;/code&gt; stage in &lt;code&gt;.gitlab-ci.yml&lt;/code&gt; is partly based on the one in &lt;a href="//medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125"&gt;this&lt;/a&gt; cool post by Dennis Alund.&amp;#160;&lt;a class="footnote-backref" href="#fnref:credit" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="Software"></category><category term="operations"></category><category term="development"></category><category term="gitlab"></category><category term="docker"></category><category term="google-cloud"></category><category term="guides"></category><category term="tutorials"></category></entry><entry><title>The Not-Invented-Here syndrome</title><link href="//luord.com/2016/06/25/nih" rel="alternate"></link><published>2016-06-25T00:00:00-05:00</published><updated>2019-10-10T00:10:59-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-06-25:/2016/06/25/nih</id><summary type="html">&lt;p&gt;On creating own solutions versus implementing existing libraries or methods.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I read a while ago about the NIH syndrome and how it's generally not recommended because it unnecessarily increases the workload and the amount of code that needs to be maintained. Not to mention that using existing libraries or frameworks, specially open source ones, can also eventually involve helping the community and, thus, improving the code for everyone.&lt;/p&gt;
+&lt;p&gt;So, the recommendation is generally reusing as much code as possible, hopefully keeping the amount of original code reduced to the actual business logic of the project at hand. I think this is sound, but there's something to be said about producing in-house code and reinventing the wheel a little.&lt;/p&gt;
+&lt;p&gt;In my last official project, where I worked as a backend developer for a startup, we did use frameworks for all of backend, frontend and presentation, as well as several plugins for the frameworks to avoid increasing the workload too much, but we also wrote a lot of code that we might have found in existing libraries if we looked.&lt;/p&gt;
+&lt;p&gt;For a lot of the REST API, for example, I wrote all of the entrypoints and callback logic. I know now that proper usage of &lt;a href="//flask-restful.readthedocs.io/" title="One of the best plugins for Flask"&gt;Flask-Restful&lt;/a&gt; (&lt;a href="//palletsprojects.com/p/flask/" title="Flask Framework"&gt;flask&lt;/a&gt; is, of course, my favorite framework) could have saved me a lot of work in that area... But I don't really regret it, I can say a learned a whole lot because I've always been a bit of a hands-on learner.&lt;/p&gt;
+&lt;p&gt;Of course, I've also seen first-hand that doing everything in-house can and does get out of control and, after a while, it becomes almost impossible for the handful of developers of a startup to maintain all that code.&lt;/p&gt;
+&lt;p&gt;In the project I'm working now, thanks to what I learned from writing a lot of my own code, it's been easier for me to research libraries and decide what would be a better fit as well as recognizing where I really do need to write; part of the reason I didn't reuse as much as I could in that other project was overestimating what was actual business logic and what were mere building blocks.&lt;/p&gt;
+&lt;p&gt;Given the chance, I'll probably refactor all that code and use Flask-Restful or similar to simplify it and make it more easily maintainable; but every learning opportunity is a good opportunity so I'm glad I went more zealous in the first go in that project.&lt;/p&gt;
+&lt;p&gt;What I'm trying to say is yes, one should avoid the NIH syndrome, surf the community, reuse stuff that hundreds if not thousands of people have polished (the more eyes, the better) and prevent getting the codebase from getting out of control due to reinventing the wheel. But one should also tackle at least one project where one writes as much code as possible, it highlights the importance of reusing the code in later projects, one gets first-hand experience on what leads people to write such libraries in the first place and, in general, one learns how the kind of projects one is working on generally work.&lt;/p&gt;
+&lt;p&gt;It goes without saying, of course, that doing such a thing is really only beneficial early in one's career. I see no reason for reinventing the wheel once one is already an experimented developer. Of course, someone more experienced than me could probably tell me otherwise.&lt;/p&gt;
+&lt;p&gt;In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), LESS and CSS (for the themes, although I &lt;em&gt;am&lt;/em&gt; using a theme I found) and plain JavaScript (for some behavior, like the discs in the &lt;a href="/pages/skills"&gt;skills page&lt;/a&gt;).&lt;/p&gt;</content><category term="Software"></category><category term="process"></category><category term="development"></category><category term="concepts"></category><category term="musings"></category><category term="python"></category><category term="flask"></category></entry><entry><title>Hello World!</title><link href="//luord.com/2016/03/14/hello" rel="alternate"></link><published>2016-03-14T00:00:00-05:00</published><updated>2019-10-09T23:41:46-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-03-14:/2016/03/14/hello</id><summary type="html">&lt;p&gt;I, Luis Orduz, hereby start my blog.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I'm a Software Developer and, as such, the first entry of my blog is
+to be a &lt;em&gt;Hello World&lt;/em&gt; page, which I now proceed to write in Python...&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Ahoy!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;... and browser ECMAScript (or JavaScript if you prefer, which I don't).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Good Day.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So... that's it for today.&lt;/p&gt;
+&lt;p&gt;UPDATE: I decided to dedicate my site mostly to Software after all.&lt;/p&gt;</content><category term="Personal"></category><category term="software"></category><category term="python"></category><category term="javascript"></category></entry></feed>
