@@ -39,6 +39,15 @@ body > header {
   text-align: center;
 }
 
+pre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+aside li, #main li, body > header li, .navigator {
+  list-style: none;
+}
+
 aside li, #main li, body > header li, .navigator, body > footer li {
   list-style: none;
 }
