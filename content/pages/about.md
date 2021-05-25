@@ -77,4 +77,4 @@ Thank you for visiting my website!
 [^tv]: This is also why I rarely watch TV.
 
 [cv]: cv
-[htbah]: //www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"
+[htbah]: http://www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"

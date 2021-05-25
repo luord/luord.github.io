@@ -1,5 +1,6 @@
 body {
-  font: 15px/1.6em Montserrat, sans-serif;
+  box-sizing: border-box;
+  font: 16px/1.6em Montserrat, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +23,6 @@ body > header, body > footer, main > section {
   max-width: 70ch;
   padding: 1.5ch;
   width: 100%;
-  box-sizing: border-box;
 }
 
 aside {

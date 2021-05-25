@@ -144,4 +144,4 @@ li > ul {
 </style>
 
 [pdf]: {static}/assets/Luis_Orduz_CV.pdf "My CV"
-[uis]: //uis.edu.co "My Alma Mater's home page"
+[uis]: https://uis.edu.co "My Alma Mater's home page"

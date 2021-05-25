@@ -291,10 +291,10 @@ p > img {
 
 *[GAE]: Google App Engine
 
-[gitlab]: //gitlab.com
-[google]: //cloud.google.com
-[docker]: //docker.com
-[docker-compose]: //docs.docker.com/compose/
-[git]: //git-scm.com
-[Flask]: //palletsprojects.com/p/flask/
-[credit]: //medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125
+[gitlab]: https://gitlab.com
+[google]: https://cloud.google.com
+[docker]: https://docker.com
+[docker-compose]: https://docs.docker.com/compose/
+[git]: https://git-scm.com
+[Flask]: https://palletsprojects.com/p/flask/
+[credit]: https://medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125

@@ -64,6 +64,6 @@ This is what I'd probably use if I have to work with Oracle again.
 
 And that's it for now. If you have any problems or corrections, let me know in the comments!
 
-[oracle]: //www.oracle.com/corporate/pressrelease/docker-oracle-041917.html
-[docker]: //store.docker.com/
-[oradocker]: //hub.docker.com/_/oracle-database-enterprise-edition
+[oracle]: https://www.oracle.com/corporate/pressrelease/docker-oracle-041917.html
+[docker]: https://store.docker.com/
+[oradocker]: https://hub.docker.com/_/oracle-database-enterprise-edition

@@ -24,6 +24,6 @@ It goes without saying, of course, that doing such a thing is really only benefi
 
 In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), LESS and CSS (for the themes, although I *am* using a theme I found) and plain JavaScript (for some behavior, like the discs in the [skills page][skills]).
 
-[Flask-Restful]: //flask-restful.readthedocs.io/ "One of the best plugins for Flask"
-[flask]: //palletsprojects.com/p/flask/ "Flask Framework"
+[Flask-Restful]: https://flask-restful.readthedocs.io/ "One of the best plugins for Flask"
+[flask]: https://palletsprojects.com/p/flask/ "Flask Framework"
 [skills]: /pages/skills

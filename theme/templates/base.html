@@ -27,8 +27,8 @@
 
   <link rel="icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}" />
   <link rel="shortcut icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}" />
-  <link href="//fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-  <link href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
   <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css" />
   <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
@@ -62,23 +62,64 @@
 </header>
 <main>
   {% block content %}{% endblock %}
-  {% block sidebar %}{% endblock %}
 </main>
+
+<aside>
+  <div class="h-card">
+    <h2>About</h2>
+    <p>
+      I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
+    </p>
+    <p>This blog is mostly tutorials about cool stuff I find or musings/essays on software engineering.</p>
+    <p>
+      If you want to know more about me, go <a class="u-url" href="{{ ABOUT_URL }}">here</a>. To contact me, go
+      <a class="u-url" href="{{ CONTACT_URL }}">here</a>.
+    </p>
+  </div>
+  {% if TAG_CLOUD_STEPS %}
+    <h2>Tags</h2>
+    <ul>
+    {% for tag in tag_cloud %}
+      <li><a href="{{ SITEURL }}/{{ tag.0.url }}">{{ tag.0 }}</a></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  <h2>Browse content by</h2>
+  <ul>
+    <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_SAVE_AS|default('categories') }}">Categories</a></li>
+    <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS|default('archives') }}">Dates</a></li>
+    <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
+
+    {% if TAG_FEED_ATOM and tag is defined %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(slug=tag.slug) }}">Feed</a></li>
+    {% elif TAG_FEED_RSS and tag is defined %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(slug=tag.slug) }}">Feed</a></li>
+    {% elif CATEGORY_FEED_ATOM and category is defined %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(slug=category.slug) }}">Feed</a></li>
+    {% elif CATEGORY_FEED_RSS and category is defined %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(slug=category.slug) }}">Feed</a></li>
+    {% elif FEED_ALL_ATOM %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}">Feed</a></li>
+    {% elif FEED_ALL_RSS %}
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}">Feed</a></li>
+    {% endif %}
+  </ul>
+</aside>
 
 <footer>
   <nav>
     <ul>
-      <li><a rel="me" href="//github.com/luord" aria-label="GitHub profile"><i aria-hidden="true" class="fab fa-github"></i></a></li>
-      <li><a rel="me" href="//gitlab.com/luord" aria-label="GitLab profile"><i aria-hidden="true" class="fab fa-gitlab"></i></a></li>
-      <li><a rel="me" href="//stackoverflow.com/users/4570188/" aria-label="StackOverflow profile"><i aria-hidden="true" class="fab fa-stack-overflow"></i></a></li>
-      <li><a rel="me" href="//linkedin.com/in/luord" aria-label="LinkedIn profile"><i aria-hidden="true" class="fab fa-linkedin"></i></a></li>
-      <li><a rel="me" href="//twitter.com/luord" aria-label="Twitter profile"><i aria-hidden="true" class="fab fa-twitter"></i></a></li>
-      <li><a rel="me" href="//news.ycombinator.com/user?id=luord" aria-label="Hacker News profile"><i aria-hidden="true" class="fab fa-hacker-news"></i></a></li>
-      <li><a rel="me" href="//www.criticker.com/profile/luord" aria-label="Criticker profile"><i aria-hidden="true" class="fas fa-film"></i></a></li>
+      <li><a rel="me" href="https://github.com/luord" aria-label="GitHub profile"><i aria-hidden="true" class="fab fa-github"></i></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord" aria-label="GitLab profile"><i aria-hidden="true" class="fab fa-gitlab"></i></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/" aria-label="StackOverflow profile"><i aria-hidden="true" class="fab fa-stack-overflow"></i></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord" aria-label="LinkedIn profile"><i aria-hidden="true" class="fab fa-linkedin"></i></a></li>
+      <li><a rel="me" href="https://twitter.com/luord" aria-label="Twitter profile"><i aria-hidden="true" class="fab fa-twitter"></i></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord" aria-label="Hacker News profile"><i aria-hidden="true" class="fab fa-hacker-news"></i></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord" aria-label="Criticker profile"><i aria-hidden="true" class="fas fa-film"></i></a></li>
     </ul>
   </nav>
-  <p><a rel="license" href="//creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="//i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
-  <p><small>This blog by <a xmlns:cc="//creativecommons.org/ns#" href="https://luord.com" class="h-card" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="//creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a></p>
+  <p><small>This blog by <a xmlns:cc="https://creativecommons.org/ns" href="https://luord.com" class="h-card" property="cc:attributionName" rel="cc:attributionURL">Luis Orduz</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
 </footer>
 </body>
 </html>

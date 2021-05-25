@@ -16,7 +16,22 @@
       <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
          title="Permalink to {{ article.title|striptags }}"><span class="p-name">{{ article.title }}</span></a></h1>
   </header>
-  {% include 'article_infos.html' %}
+  <div class="post-info">
+    {% include 'article_address.html' %}
+
+    on <span class="dt-published">{{ article.date.strftime('%Y-%m-%d') }}</span>
+
+    {% if article.tags %}
+      |
+      tags: {% for tag in article.tags %}
+          <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+      {% endfor %}
+    {% endif %}
+
+    {% if PDF_PROCESSOR %}
+    | <a href="{{ SITEURL }}/pdf/{{ article.slug }}.pdf">Get the pdf</a>
+    {% endif %}
+  </div>
 
   <section class="e-content">{{ article.content }}</section>
 

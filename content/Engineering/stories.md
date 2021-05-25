@@ -72,13 +72,13 @@ This is going to be part of a series, an idea born from a [great article on blog
 [^celery]: Probably rabbitmq through Celery.
 [^caveat]: Everything beyond that (meaning *how* the stack is used) is outside the scope of the story. That's for tests and reviews.
 
-[blogging]: //flaviocopes.com/blog-seo/
-[belt]: //oceanservice.noaa.gov/facts/conveyor.html
-[manifesto]: //agilemanifesto.org/
-[sourcehut]: //sourcehut.org/
-[architecture]: //blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
-[flask]: //www.palletsprojects.com/p/flask/
-[flask-dance]: //flask-dance.readthedocs.io/en/latest/
+[blogging]: https://flaviocopes.com/blog-seo/
+[belt]: https://oceanservice.noaa.gov/facts/conveyor.html
+[manifesto]: https://agilemanifesto.org/
+[sourcehut]: https://sourcehut.org/
+[architecture]: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+[flask]: https://www.palletsprojects.com/p/flask/
+[flask-dance]: https://flask-dance.readthedocs.io/en/latest/
 
 *[overly elaborate metaphor]: sorry
 *[application has a domain]: excuse me being captain obvious
