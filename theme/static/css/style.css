@@ -165,3 +165,25 @@ dt {
     color: #00739a;
   }
 }
+
+@media print {
+  header {
+    display: none;
+  }
+
+  footer {
+    display: none;
+  }
+
+  main > aside {
+    display: none;
+  }
+
+  main:before {
+    content: "Luis Orduz (contact information at: https://luord.com/pages/contact )"
+  }
+
+  a {
+    color: inherit;
+  }
+}
