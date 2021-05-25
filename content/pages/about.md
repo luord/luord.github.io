@@ -60,8 +60,10 @@ piece here and there.
 
 Other stuff
 : I'm not much of a traveler, but I wouldn't say no to visiting London, Berlin, New York and Sidney.
-: I want to learn to carry a tune and to stop having two left feet.
-: I might start practicing self-defense or a martial art some day.
+
+    I want to learn to carry a tune and to stop having two left feet.
+
+    I might start practicing self-defense or a martial art some day.
 
 Well, that's enough about me I guess. To close, I must say that I had a hard
 time deciding whether to carry this blog in Spanish or English.
