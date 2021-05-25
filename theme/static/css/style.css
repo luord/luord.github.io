@@ -15,23 +15,20 @@ body {
   justify-content: space-around;
 }
 
+body > * {
+  width: 100%;
+}
+
 main {
   max-width: 70ch;
-  width: 100%;
   padding: 1ch;
 }
 
 aside {
-  width: 30ch;
+  max-width: 30ch;
 }
 
-body > footer {
-  width: 100%;
-  text-align: center;
-}
-
-body > header {
-  width: 100%;
+body > footer, body > header {
   text-align: center;
 }
 
@@ -51,10 +48,6 @@ pre {
   overflow: auto;
 }
 
-aside li, #main li, body > header li, .navigator {
-  list-style: none;
-}
-
 aside li, #main li, body > header li, .navigator, body > footer li {
   list-style: none;
 }
@@ -63,19 +56,12 @@ aside ul, #main ul, header ul, body > footer ul {
   padding: 0;
 }
 
-body > footer li {
+body > footer li, body > header li, #dates h4, #dates p, aside li a:before {
   display: inline-block;
-  margin-right: 2ch;
 }
 
-body > footer li i {
-  font-style: normal;
-  font-size: 1.5em;
-}
-
-body > header li {
-  display: inline-block;
-  margin-right: 2ch;
+body > footer li + li, body > header li + li {
+  margin-left: 2ch;
 }
 
 a {
@@ -101,12 +87,11 @@ img {
 
 aside li a:before {
   font-family: FontAwesome;
-  display: inline-block;
   width: 1.3em;
 }
 
-body > footer nav {
-  font-family: FontAwesome;
+body > footer li i {
+  font: normal 1.5em FontAwesome;
 }
 
 body > footer img {
@@ -140,10 +125,6 @@ dt {
 
 #dates h3 {
   margin-left: 3ch;
-}
-
-#dates h4, #dates p {
-  display: inline-block;
 }
 
 #dates h4 {
