@@ -42,6 +42,7 @@
   </ul>
 
   <ul class="navigator">
+  {% if article.category not in SKIPPED_CATEGORIES %}
   {% if article.prev_article %}
     <li><a href="{{ SITEURL }}/{{ article.prev_article.url}}">
       Previous: {{ article.prev_article.title }}
@@ -52,8 +53,11 @@
       Next: {{ article.next_article.title }}
     </a></li>
   {% endif %}
+  {% endif %}
   </ul>
   </footer>
+  <a href="https://fed.brid.gy/"></a>
+  <a href="https://brid.gy/publish/twitter"></a>
 </article>
 </section>
 {% endblock %}

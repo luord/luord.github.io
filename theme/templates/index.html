@@ -9,6 +9,7 @@
 {% if loop.first %}
   <ul>
 {% endif %}
+{% if article.category not in SKIPPED_CATEGORIES %}
     <li>
       <article class="h-entry summary">
         <h1 class="p-name">
@@ -23,12 +24,13 @@
         </p>
       </article>
     </li>
-  {% if loop.last %}
+{% endif %}
+{% if loop.last %}
   </ul>
-  {% if articles_page.has_previous() %}
-  {% include 'pagination.html' %}
-  {% endif %}
-  {% endif %}
+{% if articles_page.has_previous() %}
+{% include 'pagination.html' %}
+{% endif %}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% else %}

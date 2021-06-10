@@ -60,11 +60,15 @@ DISPLAY_CATEGORIES_ON_POSTINFO = True
 DISPLAY_CATEGORIES_ON_SUBMENU = False
 TAG_CLOUD_MAX_ITEMS = 20
 
-DISPLAY_SEARCH_FORM = True
-
 PAGE_ORDER_BY = 'order'
 
 THEME = 'theme'
 
+SKIPPED_CATEGORIES = ("Notes",)
+
+MENUITEMS = (
+    ("Notes", "/category/notes"),
+)
+
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['feedicon', 'neighbors']
+PLUGINS = ['feed_extra_root', 'neighbors']

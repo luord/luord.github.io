@@ -44,9 +44,6 @@
   </h1>
   <nav>
     <ul>
-      {% for title, link in MENUITEMS %}
-        <li><a href="{{ link }}">{{ title }}</a></li>
-      {% endfor %}
       {% if DISPLAY_PAGES_ON_MENU %}
       {% for pa in pages %}
         <li><a href="{{ SITEURL }}/{{ pa.url }}">{{ pa.title }}</a></li>
@@ -57,6 +54,9 @@
         <li><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
       {% endfor %}
       {% endif %}
+      {% for title, link in MENUITEMS %}
+        <li><a href="{{ link }}">{{ title }}</a></li>
+      {% endfor %}
     </ul>
   </nav>
 </header>
