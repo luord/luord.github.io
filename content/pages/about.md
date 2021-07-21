@@ -3,7 +3,7 @@ summary: Who I am in general
 status: published
 order: 1
 
-I am Luis Orduz, a software engineer with sysadmin tendencies. Or, to put it
+I am Luis Orduz, a software engineer with operator tendencies. Or, to put it
 another way, I got a degree in Systems Engineering[^syseng] back in 2013 and
 have been working (mostly) as a full-stack web application developer that
 sometimes handles (some) infrastructure management ever since. If you want a
