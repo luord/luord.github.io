@@ -82,6 +82,9 @@ pale at the "cubic" complexity, but this function isn't iterating over the popul
 (let's call it "n") multiple times. It's instead iterating only once over the _total characters_ input
 (let's say "m"). In short: This iteration only visits each character in the population once.
 
+The word list (but not each word) _is_ visited twice because of the `max` function, but since two is a
+constant, it remains of linear complexity.
+
 ---
 
 Anyhow, those "straightfoward" changes are enough to at least being able to tell what the function
