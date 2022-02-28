@@ -51,13 +51,14 @@ via `for` statements.
         # Get the words closest to the target in each half of the population
         winners = WinnerPair()
         for population in (self.population[x::2] for x in range(2)):
-            similarities = []
+            scores = []
             for word in population:
                 similarity = 0
                 for char_word, char_target in zip(word, self.word):
                     similarity += chard_word == char_target
-                similarities.append(similarity)
-            winners.append(max(similarities))
+                scores.append((word, score))
+            winner = max(scores, key=lambda score: score[1])
+            winners.append(winner[0])
         return winners
 
 Looks quite different, doesn't it? It would seem to someone completely unfamiliar with Python that
@@ -69,9 +70,9 @@ the population.
 3. The third function was `sum` which is actually calculating that previous "something": In this case,
 how similar is the current word with the target word.
 
-I then reuse `max` (but it's now clear what maximum value I'm actually picking). I will not lie:
+I then reused `max`, but it's now clearer what maximum value of what it's being picked. I will not lie:
 I hesitated with leaving the `sum` as it was as I felt that with the other replacements it was clear enough,
-but then I saw the opportunity to further clarify that we were comparing current word with target word.
+but then I saw the opportunity to further clarify that we were comparing the current word with the target word.
 On the other hand, I did leave `zip` as it was, as that one **is** clear enough to me.[^craft]
 
 ---
