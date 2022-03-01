@@ -1,4 +1,4 @@
-title: Practical refactoring: "clever" code
+title: Practical refactoring: 'clever' code
 tags: software,development,craftsmanship
 summary: Practical example of the problems with clever code and the benefits of refactoring.
 date: 2022-02-28
