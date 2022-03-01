@@ -64,6 +64,11 @@ body > footer li + li, body > header li + li {
   margin-left: 2ch;
 }
 
+article p > img {
+  width: 100%;
+  display: block;
+}
+
 a {
   color: #3B8FC0;
   text-decoration: none;
