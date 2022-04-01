@@ -100,8 +100,8 @@ bit:
       population: Population[Individual], root: Individual
     ) -> WinnerPair:
         winners = WinnerPair()
-        for half in self.population:
-            winner = max(half, key=lambda ind: ind & self.word)
+        for half in population:
+            winner = max(half, key=lambda ind: ind & root)
             winners.append(winner)
         return winners
 
