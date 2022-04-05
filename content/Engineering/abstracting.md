@@ -55,7 +55,7 @@ Let's give it a try:
 
 For our "model"[^genetic] we know that we need a specific type of string that when compared with another will
 return the number of identical characters. So we do just that: create a `str` subclass that
-can "intersect" with other strings of the same type, and give a numeric number representing how well
+can "intersect" with other strings of the same type, and give a numeric value representing how well
 they match.
 
 With these two abstractions alone, our method improves considerably:

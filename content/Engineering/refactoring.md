@@ -96,9 +96,10 @@ those data types are supposed to represent. We could instead explicitly define o
 those data types and let those abstractions tell us what they can or can't do, or how they should be
 used.
 
-But I feel like that is interesting enough for its own post, so see you in the next part!
+But I feel like that is interesting enough for its own post, so see you [in the next part][abstracting]!
 
 [^class]: Well, a function call wrapped in a class instantiation, but who's nitpicking?
 [^craft]: I firmly think that Software Engineering **is** engineering, and I have no problem calling myself "engineer" over, say, "craftsman", but there _is_ a subjective factor to some decisions.
 
 [proto]: https://gitlab.com/luord/prototype
+[abstracting]: {filename}/Engineering/abstracting.md
