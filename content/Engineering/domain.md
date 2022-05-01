@@ -82,7 +82,7 @@ But now let's look at the code that fulfills the user story:
 Again, this is perfectly fine; I currently work in projects whose code looks like this (with a
 billion more fields and methods, of course), and there aren't problems, usually.
 
-The thing is, while this code can trivially be discused among engineers; it can't be discussed
+The thing is while this code can trivially be discused among engineers, it can't be discussed
 by or with users. By this point, both groups are essentially speaking different languages: The users
 talk about whatever Foo is, how the "jon" group performed this week, when the "baz" could change, etc.;
 the engineers, conversely, are talking about fields, properties, tables, migrations, etc.
@@ -139,7 +139,8 @@ With that understanding, let's rewrite the code to start illustrating why repres
 
 Is the code more verbose? In total, absolutely[^lesscode] but it too became clearer
 about the *what* we're dealing with: We can assume that the signatures of those classes came from discussions with the users,
-and `doe` is still a string, `bar` a floating point value, etcetera, but now the developers can talk about
+where they described what that data means in their business and how it's supposed to behave.
+Sure, `doe` is still a string, `bar` a floating point value, etcetera, but now the developers can talk about
 the code in terms similar to what the users talk about, which also means they'll talk to the *users* in those terms too.
 
 Let's reimage the conversations from the start, but now with the assumption that all the code is like this:
@@ -157,15 +158,15 @@ As for the second,
 
 > Engineer: "Cool, I'll get it done."
 
-Of course, the engineer most likely still doesn't know what the hell these "results" are or what the users use them for, but now at least it might be easier
+Let's be real, it's likely that the engineer still doesn't know what the hell these "results" are or why the users care about them, but now at least it might be easier
 to pinpoint what needs to change without having to find someone who might be more familiar with the domain.
 
-Of course, this approach doesn't solve all communication problems: The engineers will never be domain experts on the users' domain, so there will
+Finally, it bears mentioning that this approach doesn't solve all communication problems: The engineers will never be domain experts on the users' domain, so there will
 always be questions, specially when creating new features as the developers will need to ask what the new classes/types will need for fields and metadata[^terminology];
 as for the users/product owners, the decoupling with the framework and the increasing reliance on native language constructs means that the number of technical details they need
-to have an idea about becomes smaller.
+to have an idea about becomes smaller, but not zero.
 
-Regardless, giving the team (both involved users and developers) a way to more fluidly discuss the product is a huge plus in my book.
+Regardless, giving the team (both involved users and developers) a way to more fluidly discuss the product is a huge step forward in my book.
 
 # A caveat
 
@@ -182,9 +183,9 @@ I've given a lot of thought to such an idea, and maybe it's a pipe dream, but st
 [^form]: Let's say a form in some web site/application.
 [^float]: Or, for that matter "what are strings and floats?" You never know!
 [^class]: Or whatever construct your favorite language uses to group data, if any!
-[^lesscode]: And hey, the code of the `Foo` class itself got simpler.
+[^lesscode]: But hey, the code of the `Foo` class itself got simpler.
 [^clean]: Yay for clean architecture!
-[^terminology]: In other words, some conversations for the developers to get more familiar with the domain, which they then can express in the code!
+[^terminology]: In other words, some conversations for the developers to make the business rules clearer, which they then can express in the code!
 
 [abstracting]: {filename}/Engineering/abstracting.md
 [stories]: {filename}/Engineering/stories.md
