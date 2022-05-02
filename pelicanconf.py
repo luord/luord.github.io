@@ -43,9 +43,9 @@ CATEGORY_URL='category/{slug}'
 TAG_URL='tag/{slug}'
 AUTHOR_SAVE_AS=''
 AUTHORS_SAVE_AS=''
-AUTHOR_URL=f'{SITEURL}/'
-CONTACT_URL=f'{SITEURL}/pages/contact'
-ABOUT_URL=f'{SITEURL}/pages/about'
+AUTHOR_URL='/'
+CONTACT_URL='/pages/contact'
+ABOUT_URL='/pages/about'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None

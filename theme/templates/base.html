@@ -23,13 +23,13 @@
   <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}{% endblock %}" />
   <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
 
-  <link rel="icon" type="image/png" href="{{USER_LOGO_ICON}}{{ VERSION }}" />
+  <link rel="icon" type="image/png" href="{{ SITEURL }}{{ USER_LOGO_ICON }}{{ VERSION }}" />
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="/theme/css/normalize.min.css" />
-  <link rel="stylesheet" type="text/css" href="/theme/css/style.css" />
-  <link rel="stylesheet" type="text/css" href="/theme/css/pygment.css" />
+  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/pygment.css" />
 
   <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
   <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
@@ -56,7 +56,7 @@
       {% endfor %}
       {% endif %}
       {% for title, link in MENUITEMS %}
-        <li><a href="{{ link }}">{{ title }}</a></li>
+        <li><a href="{{ SITEURL }}{{ link }}">{{ title }}</a></li>
       {% endfor %}
     </ul>
   </nav>
