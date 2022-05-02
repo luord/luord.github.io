@@ -27,6 +27,5 @@ LINKEDIN_USERNAME = "luis-orduz"
 TWITTER_USERNAME="luord"
 
 FEED_EXTRA_ROOT_TAGS = [
-    {"name": "link", "attrs": {"rel": "hub", "href": WEBSUB_URL}},
     {"name": "icon", "contents": f"{SITEURL}{USER_LOGO_ICON}"}
 ]
