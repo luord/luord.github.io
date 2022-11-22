@@ -3,7 +3,7 @@ summary: Who I am in general
 status: published
 order: 1
 
-## On work
+## Work
 
 I like helping people to improve their code—including where that code lives and how it's
 written and deployed—and I'm sure I can help you if you're currently facing
@@ -34,7 +34,7 @@ option between a) refactoring a huge controller that is implementing too much do
 that should live in the models, b) writing or updating one of the CI pipelines, or c)
 writing CSS rules to painstakingly recreate a design, I'm more likely to choose a or b.
 
-## On me
+## Me
 
 I am Luis Orduz, a software engineer with operator tendencies. Or, to put it
 another way, I got a degree in Systems Engineering[^syseng] back in 2013 and
