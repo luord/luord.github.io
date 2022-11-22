@@ -2,14 +2,13 @@
 {% block title %}Categories for {{ SITENAME }}{% endblock %}
 {% block ogtitle %}Categories for {{ SITENAME }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/categories{% endblock %}
-{% block ogdesc %}{{ SITESUBTITLE }} - Categories{% endblock %}
-{% block metadesc %}{{ SITESUBTITLE }} - Categories{% endblock %}
+{% block ogdesc %}{{ SITEDESCRIPTION }} — Categories{% endblock %}
+{% block metadesc %}{{ SITEDESCRIPTION }} — Categories{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/categories{% endblock %}
+{% block content_title %}<h1>Categories for {{ SITENAME }}</h1>{% endblock %}
 
 {% block content %}
 <section>
-  <h1>{% block content_title %}Categories for {{ SITENAME }}{% endblock %}</h1>
-
   <dl>
   {% for category, articles in categories %}
       <dd><a href="{{ SITEURL }}/{{ category.url }}">{{ category }} ({{ articles|count }})</a></dd>

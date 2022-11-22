@@ -8,4 +8,4 @@ You can reach out to me by:
 * `lo at this domain`.
 * Using [this form](https://form.jotformz.com/60737146595666).
 * Sending a [Webmention](https://webmention.app) to this site.
-* Using any of the profiles at the bottom (that allow contacting people).
+* Using any of the profiles below (that allow contacting people).

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  <title>{% block title %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}</title>
 
-  <meta name="description" content="{% block metadesc %}{{ SITESUBTITLE }}{% endblock %}" />
+  <meta name="description" content="{% block metadesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
   <meta name="author" content="{{ AUTHOR }}" />
   <meta name="robots" content="index, follow" />
 
-  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{% endblock %}"/>
+  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}"/>
   <meta property="og:url" content="{% block ogurl %}{{ SITEURL }}{% endblock %}"/>
   <meta property="og:site_name" content="{{ SITENAME }}"/>
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
-  <meta property="og:description" content="{% block ogdesc %}{{ SITESUBTITLE }}{% endblock %}" />
+  <meta property="og:description" content="{% block ogdesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
   <meta property="og:locale" content="en_US"/>
   <meta property="og:image" content="{{ SITEURL }}{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
   <meta name="twitter:card" content="summary">
@@ -39,9 +39,12 @@
 
 <body>
 <header>
-  <h1>
-    <a href="{{ SITEURL }}/">{{ SITENAME }}</a>
-  </h1>
+  <a href="{{ SITEURL }}/">
+  <strong>
+    {{ SITENAME }}
+  </strong>
+  <p>{{ SITESUBTITLE }}</p>
+  </a>
   <nav>
     <ul>
       <li><a href="{{ SITEURL }}/">Home</a></li>
@@ -62,6 +65,9 @@
   </nav>
 </header>
 <main>
+  <header>
+    {% block content_title %}<h1>Articles</h1>{% endblock %}
+  </header>
   {% block content %}{% endblock %}
 </main>
 

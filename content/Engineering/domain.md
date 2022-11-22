@@ -9,7 +9,7 @@ I finished [my last post][abstracting] by mentioning how refactoring can help us
 the code and discussing the domain model can be analogous or even entail similar discussions. That's
 a topic that deserves a deeper looking into.
 
-# Experts on different domains
+## Experts on different domains
 
 Imagine this conversation:
 
@@ -41,7 +41,7 @@ The point is that engineers are experts on the domain of software engineering, w
 are experts on *their* own domain, which they're hoping it gets easier to do with the
 application/platform/system they bought/subscribed to, or hired the engineers to create/maintain.
 
-# Code and stories
+## Code and stories
 
 Let's imagine that the user/product owner comes at us with the following requirement:
 
@@ -90,7 +90,7 @@ the engineers, conversely, are talking about fields, properties, tables, migrati
 And this works! Most of my experience has had this kind of separation and the teams work and the product
 is delivered. But what if the language gap could be narrowed?
 
-# A shared language
+## A shared language
 
 Let's rephrase that story:
 
@@ -168,7 +168,7 @@ to have an idea about becomes smaller, but not zero.
 
 Regardless, giving the team (both involved users and developers) a way to more fluidly discuss the product is a huge step forward in my book.
 
-# A caveat
+## A caveat
 
 All of that is pretty nice; however, the boilerplate the users don't care about still needs to exist *somewhere*. Maybe abstracted and hidden away in specific modules or even
 internal libraries that have their own repos, but finding and correcting leaky abstractions is a neverending battle, so those

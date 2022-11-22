@@ -2,14 +2,13 @@
 {% block title %}Tags for {{ SITENAME }}{% endblock %}
 {% block ogtitle %}Tags for {{ SITENAME }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/tags.html{% endblock %}
-{% block ogdesc %}{{ SITENAME }} - Tags{% endblock %}
-{% block metadesc %}{{ SITENAME }} - Tags{% endblock %}
+{% block ogdesc %}{{ SITENAME }} — Tags{% endblock %}
+{% block metadesc %}{{ SITENAME }} — Tags{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/tags.html{% endblock %}
+{% block content_title %}<h1>Tags for {{ SITENAME }}</h1>{% endblock %}
 
 {% block content %}
 <section>
-  <h1>{% block content_title %}Tags for {{ SITENAME }}{% endblock %}</h1>
-
   <dl>
   {% for tag, articles in tags|sort %}
     <dd><a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }} ({{ articles|count }})</a></dd>

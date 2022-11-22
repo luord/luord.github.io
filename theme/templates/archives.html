@@ -2,31 +2,21 @@
 {% block title %}Archives for {{ SITENAME }}{% endblock %}
 {% block ogtitle %}Archives for {{ SITENAME }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/archives{% endblock %}
-{% block ogdesc %}{{ SITENAME }} - Archive{% endblock %}
-{% block metadesc %}{{ SITENAME }} - Archive{% endblock %}
+{% block ogdesc %}{{ SITENAME }} — Archive{% endblock %}
+{% block metadesc %}{{ SITENAME }} — Archive{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/archives{% endblock %}
+{% block content_title %}<h1>Archives for {{ SITENAME }}</h1>{% endblock %}
 
 {% block content %}
 <section class="h-feed" id="dates">
-  <h1>{% block content_title %}Archives for {{ SITENAME }}{% endblock %}</h1>
-
   {% for article in dates %}
-    {% set this_year = article.date.strftime('%Y') %}
-    {% set this_month = article.date.strftime('%b') %}
-    {% set this_day = article.date.strftime('%d') %}
-    {% if this_year != prev_year %}
-    <h2>{{ this_year }}</h2>
+    {% if loop.first or loop.previtem.date.year != article.date.year %}
+    <h2>{{ article.date.year }}</h2>
     {% endif %}
-    {% if this_year != prev_year or this_month != prev_month %}
-    <h3>{{ this_month }}</h3>
+    {% if loop.first or loop.previtem.date.year != article.date.year or loop.previtem.date.month != article.date.month %}
+    <h3>{{ article.date.strftime("%b") }}</h3>
     {% endif %}
-    {% if this_month != prev_month or this_day != prev_day %}
-    <h4>{{ this_day }}</h4>
-    {% endif %}
-    <p class="h-entry"><a class="u-url" href="{{ SITEURL }}/{{ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
-    {% set prev_year = this_year %}
-    {% set prev_month = this_month %}
-    {% set prev_day = this_day %}
+    <p class="h-entry">{{ article.date.day }}: <a class="u-url" href="{{ SITEURL }}/{{ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
   {% endfor %}
 </section>
 {% endblock %}

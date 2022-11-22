@@ -40,7 +40,7 @@ did.
 
 In short, this code is ripe for improvement, which is exactly what I'm gonna do.
 
-# Unclear iterations
+## Unclear iterations
 
 The first thing that jumps at me upon seeing this code is that there are three nested iterations in it,
 but it's very difficult to tell which one is which or where each one ends.

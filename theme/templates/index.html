@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% block content_title %}{% endblock %}
-
 {% block content %}
 <section id="main" class="h-feed">
 {% if articles %}
@@ -12,11 +10,11 @@
 {% if article.category not in SKIPPED_CATEGORIES %}
     <li>
       <article class="h-entry summary">
-        <h1 class="p-name">
+        <h2 class="p-name">
           <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
             {{ article.title }}
           </a>
-        </h1>
+        </h2>
         {% include 'article_address.html' %}
         <p class="p-summary">{{ article.summary | striptags }}</p>
         <p>
@@ -45,9 +43,19 @@
 {% block sidebar %}
 <aside>
   <div class="h-card">
-    <h2>About</h2>
+    <b>About</b>
     <p>
       I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
+    </p>
+    <p>
+      I like helping teams to improve their codebases by implementing Software Engineering best practices and/or making more modern and pragmatic architectural decisions.
+    </p>
+    <p>
+      I can take a look at your code and make suggestions, prototype solutions and, if need be, implement those solutions. Or I can mentor the team and help everyone improve,
+      even if just by doing code reviews or adding a linter to a build step.
+    </p>
+    <p>
+      If you think I can be of help, <a class="u-url" href="{{ SITEURL }}{{ CONTACT_URL }}">hit me up</a>.
     </p>
     <p>This blog is mostly tutorials about cool stuff I find or musings/essays on software engineering.</p>
     <p>
@@ -56,14 +64,14 @@
     </p>
   </div>
   {% if TAG_CLOUD_STEPS %}
-    <h2>Tags</h2>
+    <b>Tags</b>
     <ul>
     {% for tag in tag_cloud %}
       <li><a href="{{ SITEURL }}/{{ tag.0.url }}">{{ tag.0 }}</a></li>
     {% endfor %}
     </ul>
   {% endif %}
-  <h2>Browse content by</h2>
+  <b>Browse content by</b>
   <ul>
     <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_SAVE_AS|default('categories') }}">Categories</a></li>
     <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS|default('archives') }}">Dates</a></li>

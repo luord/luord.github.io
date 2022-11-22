@@ -32,7 +32,16 @@ body > footer, body > header {
   text-align: center;
 }
 
-h1 {
+body > header li a {
+  border: 1px dotted;
+}
+
+body > header strong, body > aside b {
+  margin: 0.67em 0;
+  display: block;
+}
+
+h1, body > header strong {
   font-size: 1.5em;
 }
 
@@ -40,7 +49,7 @@ h2 {
   font-size: 1.3em;
 }
 
-h3 {
+h3, body > aside b {
   font-size: 1.2em;
 }
 
@@ -56,7 +65,7 @@ aside ul, #main ul, header ul, body > footer ul {
   padding: 0;
 }
 
-body > footer li, body > header li, #dates h4, #dates p, aside li a:before {
+body > footer li, body > header li, aside li a:before {
   display: inline-block;
 }
 
@@ -132,7 +141,7 @@ dt {
   margin-left: 3ch;
 }
 
-#dates h4 {
+#dates p {
   margin-left: 6ch;
 }
 
