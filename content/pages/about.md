@@ -5,10 +5,10 @@ order: 1
 
 ## On work
 
-I like helping people improve their code—including where that code lives and how it's
+I like helping people to improve their code—including where that code lives and how it's
 written and deployed—and I'm sure I can help you if you're currently facing
 problems with too much technical debt, a slow or tediously manual development
-cycle, low testing coverage, problems with observability or managament of deployments,
+cycle, low testing coverage, problems with observability or management of deployments,
 difficulty with feedback loops in the process, or most other problems related to
 delivering a functional application.
 
