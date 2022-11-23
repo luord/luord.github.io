@@ -5,7 +5,7 @@
 AUTHOR = 'Luis Orduz'
 AUTHOR_EMAIL = 'lo@luord.com'
 SITENAME = 'Luis Orduz'
-SITESUBTITLE = 'Software Engineering Consultant'
+SITESUBTITLE = 'Software Engineer'
 SITEDESCRIPTION = 'Thoughts on software engineering and architecture.'
 SITEURL = ''
 USER_LOGO_URL = '/assets/img/site/image.png'
