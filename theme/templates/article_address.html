@@ -1,6 +1,7 @@
 {% if article.author %}
 <address>
-  by <a rel="author" class="p-author h-card" href="{{ SITEURL }}{{ article.author.url }}">{{ article.author }}</a>
+  <span class="dt-published">{{ article.date.strftime('%Y-%m-%d') }}</span> |
+  by <a rel="author" class="p-author h-card" href="{{ SITEURL }}/{{ article.author.url }}">{{ article.author }}</a>
 
   in <a class="p-category" href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
 </address>

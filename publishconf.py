@@ -10,12 +10,13 @@ sys.path.append(os.curdir)
 from pelicanconf import *
 
 HOSTNAME = 'luord.com'
-SITEURL = 'https://' + HOSTNAME
+SITEURL = f'https://{HOSTNAME}'
 RELATIVE_URLS = False
 
 FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
-FEED_MAX_ITEMS = 30
+FEED_MAX_ITEMS = 10
+CATEGORY_FEED_ATOM = 'feed/{slug}.atom.xml'
 
 WEBSUB_URL="https://luord.superfeedr.com/"
 
@@ -24,8 +25,8 @@ WEBSUB_URL="https://luord.superfeedr.com/"
 # SOCIAL SETTINGS
 FACEBOOK_USERNAME = "luord"
 LINKEDIN_USERNAME = "luis-orduz"
-TWITTER_USERNAME="luord"
+TWITTER_USERNAME = "luord"
 
 FEED_EXTRA_ROOT_TAGS = [
-    {"name": "icon", "contents": f"{SITEURL}{USER_LOGO_ICON}"}
+    {"name": "icon", "contents": f"{FEED_DOMAIN}/{USER_LOGO_ICON}"}
 ]

@@ -1,8 +1,23 @@
 {% extends "archives.html" %}
 {% block title %}{{ SITENAME }} — {{ category }}{% endblock %}
-{% block content_title %}<h1>Articles in {{ category }}</h1>{% endblock %}
 {% block ogtitle %}{{ SITENAME }} — {{ category }}{% endblock %}
 {% block ogdesc %}{{ SITENAME }} — {{ category }}{% endblock %}
 {% block metadesc %}{{ SITENAME }} — {{ category }}{% endblock %}
 {% block ogurl %}{{ SITEURL }}/{{ category.url }}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ category.url }}{% endblock %}
+{% block alternate %}
+<link href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} {{ category }} Atom Feed" />
+{% endblock %}
+{% block content_header %}
+<header>
+  <h1>Articles in {{ category }}</h1>
+  {% if category.name in CATEGORY_DESCRIPTIONS %}
+  <p>{{ CATEGORY_DESCRIPTIONS[category.name] }}</p>
+  {% endif %}
+</header>
+{% endblock %}
+{% block content_footer %}
+<footer>
+You can subscribe to this category <a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">here</a>.
+</footer>
+{% endblock %}

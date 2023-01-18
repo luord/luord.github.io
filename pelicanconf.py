@@ -8,8 +8,8 @@ SITENAME = 'Luis Orduz'
 SITESUBTITLE = 'Software Engineer'
 SITEDESCRIPTION = 'Thoughts on software engineering and architecture.'
 SITEURL = ''
-USER_LOGO_URL = '/assets/img/site/image.png'
-USER_LOGO_ICON = '/assets/img/site/favicon.png'
+USER_LOGO_URL = 'assets/img/site/image.png'
+USER_LOGO_ICON = 'assets/img/site/favicon.png'
 HOSTNAME = ''
 
 # BASIC SETTINGS
@@ -44,13 +44,13 @@ CATEGORY_URL='category/{slug}'
 TAG_URL='tag/{slug}'
 AUTHOR_SAVE_AS=''
 AUTHORS_SAVE_AS=''
-AUTHOR_URL='/'
-CONTACT_URL='/pages/contact'
-ABOUT_URL='/pages/about'
+AUTHOR_URL=''
+CONTACT_URL='pages/contact'
+ABOUT_URL='pages/about'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
-CATEGORY_FEED_ATOM = None
+FEED_ALL_ATOM = ""
+CATEGORY_FEED_ATOM = ""
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
@@ -67,9 +67,13 @@ THEME = 'theme'
 
 SKIPPED_CATEGORIES = ("Notes",)
 
+CATEGORY_DESCRIPTIONS = {
+    "Notes": "Here I post random thoughts in short format. Excluded from the main feed."
+}
+
 MENUITEMS = (
-    ("Notes", "/category/notes"),
+    ("Notes", "category/notes"),
 )
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['feed_extra_root', 'neighbors']
+PLUGINS = ['category_separator', 'feed_extra_root', 'neighbors']

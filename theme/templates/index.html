@@ -7,22 +7,20 @@
 {% if loop.first %}
   <ul>
 {% endif %}
-{% if article.category not in SKIPPED_CATEGORIES %}
-    <li>
-      <article class="h-entry summary">
-        <h2 class="p-name">
-          <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
-            {{ article.title }}
-          </a>
-        </h2>
-        {% include 'article_address.html' %}
-        <p class="p-summary">{{ article.summary | striptags }}</p>
-        <p>
-          <a href="{{ SITEURL }}/{{ article.url }}">Read more...</a>
-        </p>
-      </article>
-    </li>
-{% endif %}
+  <li>
+    <article class="h-entry summary">
+      <h2 class="p-name">
+        <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
+          {{ article.title }}
+        </a>
+      </h2>
+      {% include 'article_address.html' %}
+      <p class="p-summary">{{ article.summary | striptags }}</p>
+      <p>
+        <a href="{{ SITEURL }}/{{ article.url }}">Read more...</a>
+      </p>
+    </article>
+  </li>
 {% if loop.last %}
   </ul>
 {% if articles_page.has_previous() %}
@@ -45,7 +43,7 @@
   <div class="h-card">
     <b>About</b>
     <p>
-      I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
+      I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}/">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
     </p>
     <p>
       I like helping teams to improve their codebases by implementing Software Engineering best practices and/or making more modern and pragmatic architectural decisions.
@@ -55,12 +53,12 @@
       even if just by doing code reviews or adding a linter to a build step.
     </p>
     <p>
-      If you think I can be of help, <a class="u-url" href="{{ SITEURL }}{{ CONTACT_URL }}">hit me up</a>.
+      If you think I can be of help, <a href="{{ SITEURL }}/{{ CONTACT_URL }}">hit me up</a>.
     </p>
     <p>This blog is mostly tutorials about cool stuff I find or musings/essays on software engineering.</p>
     <p>
-      If you want to know more about me, go <a class="u-url" href="{{ SITEURL }}{{ ABOUT_URL }}">here</a>. To contact me, go
-      <a class="u-url" href="{{ SITEURL }}{{ CONTACT_URL }}">here</a>.
+      If you want to know more about me, go <a href="{{ SITEURL }}/{{ ABOUT_URL }}">here</a>. To contact me, go
+      <a href="{{ SITEURL }}/{{ CONTACT_URL }}">here</a>.
     </p>
   </div>
   {% if TAG_CLOUD_STEPS %}
@@ -78,13 +76,13 @@
     <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
 
     {% if TAG_FEED_ATOM and tag is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM|format(slug=tag.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM.format(slug=tag.slug) }}">Feed</a></li>
     {% elif TAG_FEED_RSS and tag is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS|format(slug=tag.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS.format(slug=tag.slug) }}">Feed</a></li>
     {% elif CATEGORY_FEED_ATOM and category is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM|format(slug=category.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">Feed</a></li>
     {% elif CATEGORY_FEED_RSS and category is defined %}
-      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS|format(slug=category.slug) }}">Feed</a></li>
+      <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS.format(slug=category.slug) }}">Feed</a></li>
     {% elif FEED_ALL_ATOM %}
       <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}">Feed</a></li>
     {% elif FEED_ALL_RSS %}

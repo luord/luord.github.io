@@ -7,60 +7,68 @@
 {% block ogdesc %}{{ article.summary|striptags }}{% endblock %}
 {% block metadesc %}{{ article.summary|striptags }}{% endblock %}
 {% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{% endblock %}
-{% block content_title %}{% endblock %}
+{% block content_header %}{% endblock %}
 
 {% block content %}
 <section>
 <article class="h-entry">
-  <header>
+  <header class="post-info">
     <h1>
       <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
          title="Permalink to {{ article.title|striptags }}"><span class="p-name">{{ article.title }}</span></a></h1>
-  </header>
-  <div class="post-info">
     {% include 'article_address.html' %}
-
-    on <span class="dt-published">{{ article.date.strftime('%Y-%m-%d') }}</span>
-
-    {% if article.tags %}
-      |
-      tags: {% for tag in article.tags %}
-          <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
-      {% endfor %}
-    {% endif %}
 
     {% if PDF_PROCESSOR %}
     | <a href="{{ SITEURL }}/pdf/{{ article.slug }}.pdf">Get the pdf</a>
     {% endif %}
-  </div>
+  </header>
 
   <section class="e-content">
     {{ article.content }}
     <a href="https://fed.brid.gy/"></a>
     <a href="https://brid.gy/publish/twitter"></a>
   </section>
-
+  {% if article.tags %}
   <footer>
-  <ul class="navigator">
-    <li><a href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
-    <li class="h-card"><a class="u-url" href="{{ SITEURL }}{{ CONTACT_URL }}">Would love your feedback!</a></li>
-  </ul>
-
-  <ul class="navigator">
-  {% if article.category not in SKIPPED_CATEGORIES %}
-  {% if article.prev_article %}
-    <li><a href="{{ SITEURL }}/{{ article.prev_article.url}}">
-      Previous: {{ article.prev_article.title }}
-    </a></li>
-  {% endif %}
-  {% if article.next_article %}
-    <li><a href="{{ SITEURL }}/{{ article.next_article.url}}">
-      Next: {{ article.next_article.title }}
-    </a></li>
-  {% endif %}
-  {% endif %}
-  </ul>
+    tags:
+    {% for tag in article.tags %}
+    <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+    {% if not loop.last %}|{% endif %}
+    {% endfor %}
   </footer>
+  {% endif %}
 </article>
 </section>
 {% endblock %}
+{% block content_footer %}
+<footer>
+  <ul class="navigator">
+    <li><a href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
+    <li><a href="{{ SITEURL }}/{{ CONTACT_URL }}">Would love your feedback!</a></li>
+  </ul>
+
+  <ul class="navigator">
+  {% set p_art = article.prev_article
+    if article.category not in SKIPPED_CATEGORIES
+    else article.prev_article_in_category %}
+  {% set n_art = article.next_article
+    if article.category not in SKIPPED_CATEGORIES
+    else article.next_article_in_category %}
+
+  {% if p_art %}
+  <li>
+    <a href="{{ SITEURL }}/{{ p_art.url }}">
+      Previous: {{ p_art.title }}
+    </a>
+  </li>
+  {% endif %}
+  {% if n_art %}
+  <li {% if not p_art %}style="flex-grow: 1; text-align: right;"{% endif %}>
+    <a href="{{ SITEURL }}/{{ n_art.url }}">
+      Next: {{ n_art.title }}
+    </a>
+  </li>
+  {% endif %}
+  </ul>
+</footer>
+{% endblock content_footer %}
