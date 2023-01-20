@@ -2,6 +2,9 @@ from pelican import signals
 
 
 def separate(article_generator):
+    if not article_generator.context.get("SKIPPED_CATEGORIES"):
+        return
+
     article_generator.hidden_articles += [
         article for article in article_generator.articles
         if article.category.name in article_generator.context["SKIPPED_CATEGORIES"]

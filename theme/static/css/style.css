@@ -34,6 +34,7 @@ body > footer, body > header {
 
 body > header li a {
   border: 1px dotted;
+  padding: 1px 2px;
 }
 
 body > header strong, body > aside b {
@@ -141,8 +142,21 @@ dt {
   margin-left: 3ch;
 }
 
-#dates p {
+#dates p.h-entry {
   margin-left: 6ch;
+}
+
+#dates article.h-entry {
+  display: flex;
+  border-bottom: 1px dotted;
+}
+
+#dates article.h-entry header {
+  flex: 1;
+}
+
+#dates article.h-entry .e-content {
+  flex: 4;
 }
 
 .navigator {

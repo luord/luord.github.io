@@ -18,6 +18,10 @@ DEFAULT_LANG = 'en'
 
 # PAGING SETTINGS
 DEFAULT_PAGINATION = 10
+PAGINATION_PATTERNS = (
+    (1, '{url}', '{save_as}'),
+    (2, '{base_name}/p/{number}', '{base_name}/p/{number}.html'),
+)
 DEFAULT_DATE = 'fs'
 SUMMARY_MAX_LENGTH = 100
 
@@ -71,9 +75,11 @@ CATEGORY_DESCRIPTIONS = {
     "Notes": "Here I post random thoughts in short format. Excluded from the main feed."
 }
 
+HASHED_CATEGORIES = ("Notes",)
+
 MENUITEMS = (
     ("Notes", "category/notes"),
 )
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['category_separator', 'feed_extra_root', 'neighbors']
+PLUGINS = ['article_hasher', 'category_separator', 'feed_extra_root', 'neighbors']

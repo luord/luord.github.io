@@ -10,6 +10,7 @@
 {% block content %}
 <section class="h-feed" id="dates">
   {% for article in articles %}
+  {% if category is not defined or category.name not in HASHED_CATEGORIES %}
     {% if loop.first or loop.previtem.date.year != article.date.year %}
     <h2>{{ article.date.year }}</h2>
     {% endif %}
@@ -17,6 +18,15 @@
     <h3>{{ article.date.strftime("%b") }}</h3>
     {% endif %}
     <p class="h-entry">{{ article.date.day }}: <a class="u-url" href="{{ SITEURL }}/{{ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
+  {% else %}
+  <article id="{{ article.ix }}" class="h-entry">
+    <header><a class="u-url" href="{{ SITEURL }}/{{ article.url }}">
+      <p>{{ article.date.strftime("%Y-%m-%d") }}</p>
+      <p>{{ article.date.strftime("%H:%M COT") }}</p>
+    </a></header>
+    <section class="e-content">{{ article.content }}</section>
+  </article>
+  {% endif %}
   {% endfor %}
 </section>
 {% endblock %}
