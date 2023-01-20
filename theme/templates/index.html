@@ -45,20 +45,18 @@
     <p>
       I'm <span class="p-name"><a class="u-url u-uid" href="{{ SITEURL }}/">{{ AUTHOR }}</a></span>, <span class="p-note">a Software Engineer and aspiring writer.</span>
     </p>
-    <p>
-      I like helping teams to improve their codebases by implementing Software Engineering best practices and/or making more modern and pragmatic architectural decisions.
-    </p>
-    <p>
-      I can take a look at your code and make suggestions, prototype solutions and, if need be, implement those solutions. Or I can mentor the team and help everyone improve,
-      even if just by doing code reviews or adding a linter to a build step.
-    </p>
-    <p>
-      If you think I can be of help, <a href="{{ SITEURL }}/{{ CONTACT_URL }}">hit me up</a>.
-    </p>
     <p>This blog is mostly tutorials about cool stuff I find or musings/essays on software engineering.</p>
     <p>
-      If you want to know more about me, go <a href="{{ SITEURL }}/{{ ABOUT_URL }}">here</a>. To contact me, go
+      While I'm generally interested in all things software, I'm more inclined towards software engineering and programming.
+      It's what I studied in college and what my career is focused on.
+    </p>
+    <p>
+      For ways I can be of help, <a href="{{ SITEURL }}/{{ MISSION_URL }}">here's my professional description</a>.
+      If you want to know more about me, go <a href="{{ SITEURL }}/{{ ABOUT_URL }}">here</a>. To contact me,
       <a href="{{ SITEURL }}/{{ CONTACT_URL }}">here</a>.
+    </p>
+    <p>
+      For short posts about more than software, check my <a href="{{ SITEURL }}/category/notes">Notes</a>.
     </p>
   </div>
   {% if TAG_CLOUD_STEPS %}
@@ -69,12 +67,8 @@
     {% endfor %}
     </ul>
   {% endif %}
-  <b>Browse content by</b>
+  <b>Subscribe</b>
   <ul>
-    <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_SAVE_AS|default('categories') }}">Categories</a></li>
-    <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS|default('archives') }}">Dates</a></li>
-    <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
-
     {% if TAG_FEED_ATOM and tag is defined %}
       <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM.format(slug=tag.slug) }}">Feed</a></li>
     {% elif TAG_FEED_RSS and tag is defined %}
@@ -88,6 +82,12 @@
     {% elif FEED_ALL_RSS %}
       <li><a class="feed-link" href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}">Feed</a></li>
     {% endif %}
+  </ul>
+  <b>Browse content by</b>
+  <ul>
+    <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_SAVE_AS|default('categories') }}">Categories</a></li>
+    <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS|default('archives') }}">Dates</a></li>
+    <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
   </ul>
 </aside>
 {% endblock %}

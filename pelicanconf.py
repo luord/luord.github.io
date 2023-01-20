@@ -51,6 +51,7 @@ AUTHORS_SAVE_AS=''
 AUTHOR_URL=''
 CONTACT_URL='pages/contact'
 ABOUT_URL='pages/about'
+MISSION_URL='pages/work'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = ""
@@ -72,7 +73,7 @@ THEME = 'theme'
 SKIPPED_CATEGORIES = ("Notes",)
 
 CATEGORY_DESCRIPTIONS = {
-    "Notes": "Here I post random thoughts in short format. Excluded from the main feed."
+    "Notes": "Random thoughts in short format."
 }
 
 HASHED_CATEGORIES = ("Notes",)

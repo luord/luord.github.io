@@ -3,44 +3,14 @@ summary: Who I am in general
 status: published
 order: 1
 
-## Work
-
-I like helping people to improve their code—including where that code lives and how it's
-written and deployed—and I'm sure I can help you if you're currently facing
-problems with too much technical debt, a slow or tediously manual development
-cycle, low testing coverage, problems with observability or management of deployments,
-difficulty with feedback loops in the process, or most other problems related to
-delivering a functional application.
-
-Working together, I can help you or your team turn those technical liabilities into technical
-assets.
-
-I have ten years of experience (not counting college) primarily with web
-development, and I know a thing or two about writing maintainable code both in
-the backend (mostly Python; Go to a lesser extent) and the frontend in JS/TS.
-I've had responsibilities both updating legacy applications and migrating them
-to more modern stacks _and_ I've also written applications from scratch and taken them to MVP
-status and beyond. This is to say, I have experience with deciding on architecture
-and infrastructure, and I've also led and mentored other developers.
-
-If this sounds like something you need a(n extra) hand with, [hit me up][contact], or if you
-want details on my experience, it's [here][cv].
-
-Small caveat: I'm happy to help any team that comes my way, but I must say that
-I gravitate more towards work that involves the core business logic, the architecture
-and the infrastructure of the application, than work directly related to the
-user interface. That's not to say I don't do UX work, but simply if I have the
-option between a) refactoring a huge controller that is implementing too much domain logic
-that should live in the models, b) writing or updating one of the CI pipelines, or c)
-writing CSS rules to painstakingly recreate a design, I'm more likely to choose a or b.
-
 ## Me
 
-I am Luis Orduz, a software engineer with operator tendencies. Or, to put it
+I am Luis Orduz, a software engineer who also likes operative work. Or, to put it
 another way, I got a degree in Systems Engineering[^syseng] back in 2013 and
 have been working (mostly) as a full-stack web application developer that
 sometimes handles (some) infrastructure management ever since. If you want a
-rundown of my experience, go [here][cv].
+rundown of my experience, go [here][cv]. For a "mission statement" of sorts,
+[here][mission].
 
 Writing code has been my passion ever since I got my first computer as a high
 school graduation present. So much so that I quickly realized that chemical
@@ -109,8 +79,9 @@ Thank you for visiting my website!
 [^ages]: Over here, students usually finish high school and start college at 16/17.
 [^deal]: This actually was a big deal for me. I had been the "little kid" since second grade.
 [^cine]: This is why I don't consider myself a "cinephile".
-[^tv]: This is also why I rarely watch TV.
+[^tv]: This is also why I rarely watch TV series.
 
-[contact]: contact
-[cv]: cv
+[contact]: {filename}/pages/contact.md
+[cv]: {filename}/pages/cv.md
+[mission]: {filename}/pages/work.md
 [htbah]: http://www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"
