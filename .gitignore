@@ -1,6 +1,7 @@
 **__pycache__
 **.pid
 output
+.hypothesis
 
 .env
 *.swp

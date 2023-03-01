@@ -1,5 +1,5 @@
 title: A genetic algorithm implemented in Python
-summary: There are way too many type hints in this code.
+summary: An example of abstraction and analogy.
 tags: software,algorithms,code,examples
 date: 2023-02-05
 status: draft
@@ -127,7 +127,7 @@ the process.
       Individual: type[Individual],
       BasePopulation: type[BasePopulation],
       Population: type[Population]
-    ):
+    ) -> int:
       parent_a = Individual.generate_random()
       parent_b = Individual.generate_random()
 
@@ -176,8 +176,9 @@ string-based implementation of the algorithm, alogn with the function being run.
 ## Appendix (On Implementation)
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
-of completeness I wanted to bring notice to the implementation of the `crossover` and
-`tournament_selection` methods.
+of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
+crossover and tournament selection. Howevever to do that, we can write tests for them instead
+of explaining the implementations line by line![^jokes]
 
     :::python
     # ...
@@ -231,6 +232,7 @@ this something is usually done by measuring how well each given solution actuall
 and purposes of the algorithm, an individual is a collection of "genes".
 [^pool]: If we stick to just the parents' genomes, then the target will never be reached if it has a gene
 that neither of the parents does.
+[^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
 
 [domain]: {filename}/Engineering/domain.md
 [mypy]: https://mypy-lang.org/
