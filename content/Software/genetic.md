@@ -177,54 +177,64 @@ string-based implementation of the algorithm, alogn with the function being run.
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
 of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
-crossover and tournament selection. Howevever to do that, we can write tests for them instead
+crossover and tournament selection. Howevever, we can write tests to do that instead
 of explaining the implementations line by line![^jokes]
 
     :::python
-    # ...
-    class BasePopulation(list[Individual]):
-      SIZE: ClassVar[int] = 10
-      _random: ClassVar[Random] = Random()
+    from hypothesis import given, strategies as st
 
-      @classmethod
-      def crossover(cls, a: IIndividual, b: IIndividual) -> Self:
-        offspring = cls()
+    from implementation import BasePopulation, Individual, Niche, Population
 
-        for _ in range(cls.SIZE):
-          pair = [a, b]
-          cls._random.shuffle(pair)
-          first, second = pair
-          division = cls._random.randint(1, Individual.LENGTH-1)
-          offspring.append(Individual(
-            f if ix < division else s
-            for ix, (f, s) in enumerate(zip(first, second))
-          ))
 
-        return offspring
+    @given(
+      st.data(),
+      st.builds(Individual.generate_random),
+      st.builds(Individual.generate_random)
+    )
+    def test_crossover(data, parent_a: Individual, parent_b: Individual):
+      offspring = BasePopulation.crossover(parent_a, parent_b)
 
-I like to think it's pretty self-explanatory: One approach to doing crossover is taking the
-first random number of "genes" from the first parent and the remaining genes from the second.
-The parents are shuffled too so that their order doesn't actually matter.
+      individual = data.draw(st.sampled_from(offspring))
+
+      shuffle = next(
+        i == b for i, a, b in zip(individual, parent_a, parent_b)
+        if a != b
+      )
+
+      first, second = (parent_b, parent_a) if shuffle else (parent_a, parent_b)
+
+      split = next(
+        ix for ix, a in enumerate(individual)
+        if a != first[ix]
+      )
+
+      assert individual[:split] == first[:split]
+      assert individual[split:] == second[split:]
+
+This is our test for crossover: As you can see, first it finds whether the parents were shuffled
+around, then confirms that all the genes up to a split point come from the parent that was positioned
+first, and that all the genes from that split point on come from the second. In short, it confirms
+that the offspring is indeed the combination of the parents' "genes".
 
     :::python
     # ...
-    @dataclass
-    class Niche:
-      THRESHOLD: ClassVar[int] = 45
+    @given(
+      st.data(),
+      st.builds(Niche),
+      st.builds(
+        Population,
+        st.lists(st.builds(Individual.generate_random), min_size=1)
+      )
+    )
+    def test_tournament_selection(data, niche: Niche, population: Population):
+      winner = niche.tournament_selection(population)
+      other_individual = data.draw(st.sampled_from(list(population)))
 
-      target: Individual = field(default_factory=Individual.generate_random)
+      assert winner in population
+      assert niche._check_fit(winner) >= niche._check_fit(other_individual)
 
-      def tournament_selection(self, population: IPopulation) -> Individual:
-        return cast(
-          Individual,
-          max(population, key=lambda ind: self._check_fit(ind))
-        )
-
-      def _check_fit(self, individual: Iterable) -> int:
-        return sum(a == b for a, b in zip(self.target, individual))
-
-Tournament selection is even simpler: Compares each individual against something. For real genetic algorithms,
-this something is usually done by measuring how well each given solution actually works.
+Tournament selection is even simpler: Confirm that our winner in the population does actually beat
+(or at worst ties) with any other individual in the population according to the rules of the niche.
 
 [^mypy]: You'll notice that the code in every step of this article won't throw [mypy][] errors or
 [pyright][] errors.

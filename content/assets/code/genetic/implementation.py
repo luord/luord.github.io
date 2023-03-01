@@ -13,7 +13,7 @@ from definition import (
 )
 
 
-class Individual(tuple):
+class Individual(tuple[str]):
     LENGTH: ClassVar[int] = 50
     POOL: ClassVar[str] = ascii_lowercase
     _random: ClassVar[Random] = Random()
