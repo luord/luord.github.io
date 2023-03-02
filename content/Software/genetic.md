@@ -173,6 +173,10 @@ the protocols properly.
 [Here's a file][definition] with the complete definition, and [here's a file][implementation] with a
 string-based implementation of the algorithm, along with the function being run.
 
+Now, before finishing, you'll notice that I talked very little about the actual _problems_ that could
+be solved with this type of algorithm... Well that's true, because the point of this post was the
+algorithm itself. That said, I might write a follow up with a practical example.
+
 ## Appendix (On implementation and testing)
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
