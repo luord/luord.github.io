@@ -1,9 +1,9 @@
 title: A genetic algorithm implemented in Python
 summary: An example of abstraction and analogy.
 tags: software,algorithms,code,examples
-date: 2023-02-05
-status: draft
-image: /assets/img/splash/domain.jpg
+date: 2023-03-01
+status: published
+image: /assets/img/genetic/genes.jpg
 
 Natural selection is, roughly, the likelihood of a given individual to survive long
 enough to reproduce, and thus continue its species. Factor in mutations—random changes in the
@@ -34,7 +34,7 @@ start with random data.
 
     class Individual(Collection, Protocol):
       @classmethod
-      def generate_random(self) -> Self:
+      def generate_random(cls) -> Self:
         ...
 
 This is our first step, to keep things simple we start with two parents that represent
@@ -70,13 +70,13 @@ Alright, we have our first pair, which means we can now produce the next "genera
 
     class Population(Collection[Individual], Protocol):
       @classmethod
-      def mutate(self, base: BasePopulation) -> Self:
+      def mutate(cls, base: BasePopulation) -> Self:
         ...
 
 The crossover in genetic algorithms is the operation used to combine the genetic information of
 two parents to produce offspring[^collection]. But we can't just stop there, we need genetic variance to ensure
-the population actually evolves over time. One form of variance is of course that random genes
-are picked from each parent for producing the given offspring, but even that isn't enough as
+the population actually evolves over time. One form of variance is of course that the parents
+are shuffled and a random number of genes is picked from each parent, but even that isn't enough as
 it could leave us stuck[^pool].
 
 Actual variance comes from the key element of **mutation**, the random chance that any given
@@ -171,13 +171,13 @@ enough. That function _should_ work without change as long as it receives argume
 the protocols properly.
 
 [Here's a file][definition] with the complete definition, and [here's a file][implementation] with a
-string-based implementation of the algorithm, alogn with the function being run.
+string-based implementation of the algorithm, along with the function being run.
 
-## Appendix (On Implementation)
+## Appendix (On implementation and testing)
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
 of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
-crossover and tournament selection. Howevever, we can write tests to do that instead
+crossover and tournament selection. However, we can write [tests][] to do that instead
 of explaining the implementations line by line![^jokes]
 
     :::python
@@ -240,7 +240,7 @@ Tournament selection is even simpler: Confirm that our winner in the population 
 [pyright][] errors.
 [^collection]: And this is why our `Individual` implements the `Collection` protocol; for all intents
 and purposes of the algorithm, an individual is a collection of "genes".
-[^pool]: If we stick to just the parents' genomes, then the target will never be reached if it has a gene
+[^pool]: If we stick to just the parents' genomes, then the target will never be reached if it requires a gene
 that neither of the parents does.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
 
@@ -250,3 +250,4 @@ that neither of the parents does.
 [Protocols]: https://peps.python.org/pep-0544/
 [definition]: {static}/assets/code/genetic/definition.py
 [implementation]: {static}/assets/code/genetic/implementation.py
+[tests]: {static}/assets/code/genetic/test.py
