@@ -37,7 +37,7 @@ start with random data.
       def generate_random(cls) -> Self:
         ...
 
-This is our first step, to keep things simple we start with two parents that represent
+To keep things simple, we start with two parents that represent
 our random seed and we'll go from there.
 
 You might have noticed that `Individual` is a `Protocol`, which include no implementation.
