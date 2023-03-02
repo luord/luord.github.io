@@ -3,7 +3,7 @@ summary: An example of abstraction and analogy.
 tags: software,algorithms,code,examples
 date: 2023-03-01
 status: published
-image: /assets/img/genetic/genes.jpg
+image: assets/img/genetic/genes.jpg
 
 Natural selection is, roughly, the likelihood of a given individual to survive long
 enough to reproduce, and thus continue its species. Factor in mutations—random changes in the
