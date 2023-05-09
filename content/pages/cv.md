@@ -23,6 +23,12 @@ ___
 ### Software Engineer {: .low-margin }
 *Lightmatter,       02/21-Present*
 
+Software Engineer (full-stack, primarily backend) working in different projects, primarily Django based with different extensions such as wagtail or oscar, usually using PostgreSQL as the database and deployed to different PaaSs.
+
+* Development of web applications across the full stack. Python in the backend, using Django and the Django ecosystem primarily.
+* Frontend development, primarily using React with Material UI, using both TypeScript and JS.
+* Maintenance of specific parts of the architecture for a couple of different projects.
+
 ### Senior Development Consultant {: .low-margin }
 *Freelance,         07/20-02/21*
 
