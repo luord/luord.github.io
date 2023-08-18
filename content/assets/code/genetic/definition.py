@@ -1,34 +1,39 @@
-from collections.abc import Collection
-from typing import Protocol, Self
+from typing import Protocol, Self, TypeVar
 
 
-class Individual(Collection, Protocol):
+class Individual(Protocol):
     @classmethod
     def generate_random(cls) -> Self:
         ...
 
 
-class BasePopulation(Collection[Individual], Protocol):
+I = TypeVar('I', bound=Individual, contravariant=True)
+
+
+class BasePopulation(Protocol[I]):
     @classmethod
-    def crossover(cls, a: Individual, b: Individual) -> Self:
+    def crossover(cls, a: I, b: I) -> Self:
         ...
 
 
-class Population(Collection[Individual], Protocol):
+class Population(Protocol[BasePopulation[I]]):
     @classmethod
-    def mutate_base(cls, base: BasePopulation) -> Self:
+    def mutate_base(cls, base: BasePopulation[I]) -> Self:
         ...
 
     @classmethod
-    def find_mate(cls, individual: Individual) -> Individual:
+    def find_mate(cls, individual: I) -> Individual:
         ...
 
 
-class Niche(Protocol):
-    def tournament_selection(self, population: Population) -> Individual:
+P = TypeVar('P', bound=Population, contravariant=True)
+
+
+class Niche(Protocol[P, I]):
+    def tournament_selection(self, population: P) -> Individual:
         ...
 
-    def can_thrive(self, individual: Individual) -> bool:
+    def can_thrive(self, individual: I) -> bool:
         ...
 
 
