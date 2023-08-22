@@ -1,45 +1,38 @@
 from hypothesis import given, strategies as st
 
-from implementation import BasePopulation, Individual, Niche, Population
+from implementation import Individual, Niche, Population
 
 
-@given(
-    st.data(),
-    st.builds(Individual.generate_random),
-    st.builds(Individual.generate_random)
-)
-def test_crossover(data, parent_a: Individual, parent_b: Individual):
-    offspring = BasePopulation.crossover(parent_a, parent_b)
-
-    individual = data.draw(st.sampled_from(offspring))
-
-    shuffle = next(
-        i == b for i, a, b in zip(individual, parent_a, parent_b)
-        if a != b
-    )
-
-    first, second = (parent_b, parent_a) if shuffle else (parent_a, parent_b)
-
-    split = next(
-        ix for ix, a in enumerate(individual)
-        if a != first[ix]
-    )
-
-    assert individual[:split] == first[:split]
-    assert individual[split:] == second[split:]
+st.register_type_strategy(Individual, st.builds(Individual, st.text(
+    alphabet=Individual.POOL,
+    min_size=Individual.LENGTH,
+    max_size=Individual.LENGTH
+)))
 
 
-@given(
-    st.data(),
-    st.builds(Niche),
-    st.builds(
-        Population,
-        st.lists(st.builds(Individual.generate_random), min_size=1)
-    )
-)
-def test_tournament_selection(data, niche: Niche, population: Population):
-    winner = niche.tournament_selection(population)
-    other_individual = data.draw(st.sampled_from(list(population)))
+@given(...)
+def test_crossover(parent_a: Individual, parent_b: Individual):
+    offspring = Population().crossover(parent_a, parent_b)
 
-    assert winner in population
-    assert niche._check_fit(winner) >= niche._check_fit(other_individual)
+    is_parent_a = is_parent_b = False
+
+    for gene, a, b in zip(offspring, parent_a, parent_b):
+        assert gene in (a, b)
+        is_parent_a |= gene == a
+        is_parent_b |= gene == b
+
+    assert is_parent_a and is_parent_b
+
+
+@given(...)
+def test_tournament_selection(niche: Niche, population: Population):
+    pop = set(population)
+    winner, loser = niche.tournament(pop)
+
+    while len(pop) > 1:
+        assert winner in pop
+
+        pop.remove(loser)
+        _, loser = niche.tournament(pop)
+    else:
+        assert winner == loser

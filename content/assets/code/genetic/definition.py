@@ -2,7 +2,7 @@ from collections.abc import Collection
 from typing import Protocol, TypeVar
 
 
-class Individual(Protocol):
+class Individual(Collection, Protocol):
     ...
 
 
@@ -39,13 +39,13 @@ def algorithm(population: Population, niche: Niche) -> int:
     generations = 0
 
     while not niche.can_thrive(parent_a):
-        offspring = population.crossover(parent_a, parent_b)
-        new_ind = offspring.mutate()
-        population.add(new_ind)
+        base_offspring = population.crossover(parent_a, parent_b)
+        real_offspring = base_offspring.mutate()
+        population.add(real_offspring)
 
-        parent_a, worst = niche.tournament(population)
-        population.remove(worst)
-        parent_b = population.find_mate(parent_a)
+        fittest, unfit = niche.tournament(population)
+        population.remove(unfit)
+        parent_a, parent_b = fittest, population.find_mate(fittest)
 
         generations += 1
 

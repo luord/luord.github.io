@@ -1,3 +1,4 @@
+from collections import UserString
 from collections.abc import Collection
 from dataclasses import dataclass, field
 from random import Random
@@ -7,24 +8,23 @@ from typing import ClassVar, Self
 from definition import algorithm
 
 
-class Individual(str):
+class Individual(UserString):
     LENGTH: ClassVar[int] = 50
     POOL: ClassVar[str] = ascii_lowercase
     MUTATION: ClassVar[int] = 270
     _random: ClassVar[Random] = Random()
 
-    def __new__(cls, base: str = ''):
-        return super().__new__(
-            cls,
-            base or ''.join(cls._random.choices(cls.POOL, k=cls.LENGTH))
+    def __init__(self, base: UserString | str = ''):
+        super().__init__(
+            base or ''.join(self._random.choices(self.POOL, k=self.LENGTH))
         )
 
     def __or__(self, other: Self) -> Self:
         division = self._random.randint(1, self.LENGTH-1)
-        return self.__class__(self[:division] + other[division:])
+        return self[:division] + other[division:]
 
     def __and__(self, other: Self) -> int:
-        return sum(a == b for a, b in zip(self, other))
+        return sum(a == b for a, b in zip(self.data, other.data))
 
 
 class Offspring(Individual):
@@ -35,7 +35,7 @@ class Offspring(Individual):
         return ''.join(self._random.choices(
             gene + self.POOL,
             weights=(self.MUTATION,) + (1,) * len(self.POOL)
-        )[0] for gene in self)
+        )[0] for gene in self.data)
 
 
 class Population(set[Individual]):
@@ -43,7 +43,7 @@ class Population(set[Individual]):
     _random: ClassVar[Random] = Random()
 
     def __init__(self):
-        return super().__init__(
+        super().__init__(
             Individual() for _ in range(self.SIZE)
         )
 
@@ -80,8 +80,8 @@ class Niche:
         pop: Collection[Individual]
     ) -> tuple[Individual, Individual]:
         return (
-            max(pop, key=lambda ind: ind & self.target),
-            min(pop, key=lambda ind: ind & self.target)
+            max(pop, key=lambda ind: (ind & self.target, ind)),
+            min(pop, key=lambda ind: (ind & self.target, ind))
         )
 
     def can_thrive(self, individual: Individual) -> bool:
