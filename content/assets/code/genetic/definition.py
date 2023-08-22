@@ -1,59 +1,51 @@
-from typing import Protocol, Self, TypeVar
+from collections.abc import Collection
+from typing import Protocol, TypeVar
 
 
 class Individual(Protocol):
-    @classmethod
-    def generate_random(cls) -> Self:
+    ...
+
+
+Ind = TypeVar('Ind', contravariant=True, bound=Individual)
+
+
+class Offspring(Protocol):
+    def mutate(self) -> Individual: ...
+
+
+class Population(Collection, Protocol[Ind]):
+    def select_random(self) -> Individual: ...
+
+    def crossover(self, first: Ind, second: Ind) -> Offspring: ...
+
+    def add(self, individual: Ind): ...
+
+    def remove(self, individual: Ind): ...
+
+    def find_mate(self, individual: Ind) -> Individual: ...
+
+
+class Niche(Protocol[Ind]):
+    def tournament(self, pop: Population) -> tuple[Individual, Individual]:
         ...
 
-
-I = TypeVar('I', bound=Individual, contravariant=True)
-
-
-class BasePopulation(Protocol[I]):
-    @classmethod
-    def crossover(cls, a: I, b: I) -> Self:
-        ...
+    def can_thrive(self, individual: Ind) -> bool: ...
 
 
-class Population(Protocol[BasePopulation[I]]):
-    @classmethod
-    def mutate_base(cls, base: BasePopulation[I]) -> Self:
-        ...
-
-    @classmethod
-    def find_mate(cls, individual: I) -> Individual:
-        ...
-
-
-P = TypeVar('P', bound=Population, contravariant=True)
-
-
-class Niche(Protocol[P, I]):
-    def tournament_selection(self, population: P) -> Individual:
-        ...
-
-    def can_thrive(self, individual: I) -> bool:
-        ...
-
-
-def algorithm(
-    niche: Niche,
-    Individual: type[Individual],
-    BasePopulation: type[BasePopulation],
-    Population: type[Population]
-) -> int:
-    parent_a = Individual.generate_random()
-    parent_b = Individual.generate_random()
+def algorithm(population: Population, niche: Niche) -> int:
+    parent_a = population.select_random()
+    parent_b = population.select_random()
 
     generations = 0
 
     while not niche.can_thrive(parent_a):
-        base_offspring = BasePopulation.crossover(parent_a, parent_b)
-        offspring = Population.mutate_base(base_offspring)
+        offspring = population.crossover(parent_a, parent_b)
+        new_ind = offspring.mutate()
+        population.add(new_ind)
 
-        parent_a = niche.tournament_selection(offspring)
-        parent_b = Population.find_mate(parent_a)
+        parent_a, worst = niche.tournament(population)
+        population.remove(worst)
+        parent_b = population.find_mate(parent_a)
 
         generations += 1
 

@@ -23,64 +23,65 @@ There are multiple types of genetic algorithms with multiple different uses, but
 start with random data.
 
     :::python
-    from collections.abc import Collection
-    from typing import Protocol, Self
+    from typing import Protocol
 
 
-    def algorithm(Individual: type[Individual]):
-      parent_a = Individual.generate_random()
-      parent_b = Individual.generate_random()
+    class Individual(Protocol):
+      ...
 
 
-    class Individual(Collection, Protocol):
-      @classmethod
-      def generate_random(cls) -> Self:
-        ...
+    class Population(Protocol):
+      def select_random(self) -> Individual: ...
 
-To keep things simple, we start with two parents that represent
-our random seed and we'll go from there.
 
-You might have noticed that `Individual` is a `Protocol`, which include no implementation.
-This is on purpose, as [we don't actually care][domain] about the implementation in
-order to understand the algorithm. [Protocols][] and Python's structural subtyping
-allow themselves quite well to showcase this[^mypy].
+    def algorithm(population: Population):
+      parent_a = population.select_random()
+      parent_b = population.select_random()
+
+To keep things simple, we start with two parents that are selected randomly from the existing
+population, and we'll go from there.[^protocols]
 
 ## Crossover
 
-Alright, we have our first pair, which means we can now produce the next "generation".
+With our first pair in place, we can now produce the next "generation".
 
     :::python
+    from collections.abc import Collection
+    from typing import Protocol, TypeVar
+
+
     # ...
-    def algorithm(
-      Individual: type[Individual],
-      BasePopulation: type[BasePopulation],
-      Population: type[Population]
-    ):
+    Ind = TypeVar('Ind', contravariant=True, bound=Individual)
+
+
+    class Offspring(Protocol):
+      def mutate(self) -> Individual: ...
+
+
+    class Population(Collection, Protocol[Ind]):
+      # ...
+      def crossover(self, first: Ind, second: Ind) -> Offspring: ...
+
+      def add(self, new: Ind): ...
+
+
+    def algorithm(population: Population):
       # ...
 
-      base_offspring = BasePopulation.crossover(parent_a, parent_b)
-      offspring = Population.mutate_base(base_offspring)
-
-
-    class BasePopulation(Collection[Individual], Protocol):
-      @classmethod
-      def crossover(cls, a: Individual, b: Individual) -> Self:
-        ...
-
-
-    class Population(Collection[Individual], Protocol):
-      @classmethod
-      def mutate(cls, base: BasePopulation) -> Self:
-        ...
+      offspring = population.crossover(parent_a, parent_b)
+      new_ind = offspring.mutate()
+      population.add(new_ind)
 
 The crossover in genetic algorithms is the operation used to combine the genetic information of
-two parents to produce offspring[^collection]. But we can't just stop there, we need genetic variance to ensure
+two parents to produce offspring. But we can't just stop there, we need genetic variance to ensure
 the population actually evolves over time. One form of variance is of course that the parents
 are shuffled and a random number of genes is picked from each parent, but even that isn't enough as
 it could leave us stuck[^pool].
 
 Actual variance comes from the key element of **mutation**, the random chance that any given
-offspring individual will have genes not present in the parents.
+offspring individual will have genes not present in the parents.[^offspring]
+
+Finally, the new individual[^type] is, of course, a new member of the population so we add it.
 
 ## Natural Selection
 
@@ -93,82 +94,80 @@ So let's do that, by introducing a "niche" and determining how well the individu
 
     :::python
     # ...
-
-    def algorithm(
-      niche: Niche,
-      Individual: type[Individual],
-      BasePopulation: type[BasePopulation],
-      Population: type[Population]
-    ):
+    class Population(Collection, Protocol[Ind]):
       # ...
-      fittest = niche.tournament_selection(offspring)
+      def remove(self, individual: Ind): ...
 
-    # ...
+
     class Niche(Protocol):
-      def tournament_selection(self, population: Population) -> Individual:
+      def tournament(self, pop: Population) -> tuple[Individual, Individual]:
         ...
 
+
+    def algorithm(population: Population, niche: Niche):
+      # ...
+      fittest, worst = niche.tournament(population)
+      population.remove(worst)
+
 Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
-genes, and in our algorithm, only that offspring individual that best fits the niche is the
-one to continue. This is usually called "tournament selection".
+genes, and in our algorithm, only that individual that best fits the niche is the
+one to continue. This is usually called "tournament selection" in genetic algorithm parlance.
+
+Finally, to maintain our analogy (and really to prevent our population from growing without bound)
+we remove the least fit individual from the population.
 
 ## Generations
 
 We have almost completed the algorithm, but the mere fact that we've found an individual that fits
 the niche better than others doesn't mean we've actually found one that _occupies_ the niche, the
-likelihood of achieving that in just the first generation is nil. We'll need many generations, so we need to repeat
-the process.
+likelihood of achieving that in just the first generation is nil. We'll need many generations, so we need
+to repeat the process until we find such individual.
 
     :::python
     # ...
+    class Population(Collection, Protocol[Ind]):
+      # ...
+      def find_mate(self, individual: Ind) -> Individual: ...
 
-    def algorithm(
-      niche: Niche,
-      Individual: type[Individual],
-      BasePopulation: type[BasePopulation],
-      Population: type[Population]
-    ) -> int:
-      parent_a = Individual.generate_random()
-      parent_b = Individual.generate_random()
+
+    class Niche(Protocol[Ind]):
+      # ...
+      def can_thrive(self, individual: Ind) -> bool: ...
+
+
+    def algorithm(population: Population, niche: Niche) -> int:
+      parent_a = population.select_random()
+      parent_b = population.select_random()
 
       generations = 0
 
       while not niche.can_thrive(parent_a):
-        base_offspring = BasePopulation.crossover(parent_a, parent_b)
-        offspring = Population.mutate_base(base_offspring)
+        offspring = population.crossover(parent_a, parent_b)
+        new_ind = offspring.mutate()
+        population.add(new_ind)
 
-        parent_a = niche.tournament_selection(offspring)
-        parent_b = Population.find_mate(parent_a)
+        fittest, worst = niche.tournament(population)
+        population.remove(worst)
+        parent_a, parent_b = fittest, population.find_mate(fittest)
 
         generations += 1
 
       return generations
-      
-    # ...
-    class Population(Collection[Individual], Protocol):
-      # ...
-
-      @classmethod
-      def find_mate(cls, individual: Individual) -> Individual:
-        ...
-
-
-    class Niche(Protocol):
-      # ...
-
-      def can_thrive(self, individual: Individual) -> bool:
-        ...
 
 There are several options here, one commonly used in real genetic algorithms is to pick the two
-fittest instead of just one and make those the parents of the next generation. But to keep our
-natural analogy going, let's instead assume that our fittest finds instead a "suitable mate" from
-another population, which also gives us another source of genetic variance.
+fittest instead of just one and make those "reproduce", producing an entirely new population
+and keep iterating from there. But to keep our
+natural analogy going, let's instead assume that our fittest finds instead a "suitable mate"[^mate] in another
+member of the population, which also adds another source of variance.
+
+Ultimately, the point here is iteration: continually doing the crossover and tournament selection until we meet
+our goal.
 
 ---
 
 And there we have it, that `algorithm` function represents our full genetic algorithm, in a way I hope is self-explanatory
 enough. That function _should_ work without change as long as it receives arguments that actually implement
-the protocols properly.
+the [protocols][] properly.
 
 [Here's a file][definition] with the complete definition, and [here's a file][implementation] with a
 string-based implementation of the algorithm, along with the function being run.
@@ -240,18 +239,27 @@ that the offspring is indeed the combination of the parents' "genes".
 Tournament selection is even simpler: Confirm that our winner in the population does actually beat
 (or at worst ties) with any other individual in the population according to the rules of the niche.
 
-[^mypy]: You'll notice that the code in every step of this article won't throw [mypy][] errors or
-[pyright][] errors.
-[^collection]: And this is why our `Individual` implements the `Collection` protocol; for all intents
-and purposes of the algorithm, an individual is a collection of "genes".
-[^pool]: If we stick to just the parents' genomes, then the target will never be reached if it requires a gene
-that neither of the parents does.
+[^protocols]: I use protocols because Python's structural subtyping[protocols][] is pretty good at
+properly representing a [domain][]. In simpler terms: we only care about what our objects can _do_.
+Indeed, the code I'll be showing shouldn't throw errors in [mypy][] or [pyright][].
+[^collection]: And this is why our `Population` implements the `Collection` protocol; for all intents
+and purposes of the algorithm, a population is a collection of individuals.
+[^pool]: If we stick to just the parents' genomes, then the target will never be reached if it requires a
+gene that neither of the parents has.
+[^offspring]: The intermediate class `Offspring` fulfills two purposes here: to explicitly show
+the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
+on the type system. We'll know we have a real individual only if it was selected from an
+existing population or if it's the result of mutation from the crossover of two parents.
+[^type]: On that note, you might have noticed that an "Individual" is represented only by an empty
+protocol and a generic type (and the type variable might not even be needed after Python 3.12 drops).
+This is on purpose; the algorithm doesn't need to care what an individual _is_.
+[^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes its parents.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
 
 [domain]: {filename}/Engineering/domain.md
 [mypy]: https://mypy-lang.org/
 [pyright]: https://github.com/microsoft/pyright
-[Protocols]: https://peps.python.org/pep-0544/
+[protocols]: https://peps.python.org/pep-0544/
 [definition]: {static}/assets/code/genetic/definition.py
 [implementation]: {static}/assets/code/genetic/implementation.py
 [tests]: {static}/assets/code/genetic/test.py
