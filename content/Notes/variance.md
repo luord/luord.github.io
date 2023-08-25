@@ -13,8 +13,8 @@ of variance, of which I only had a vague memory from college.
 Writing this note to ensure it doesn't become a vague memory again:
 
 - If something cannot be replaced whatsoever, either by subclass or superclass, it's deemed
-_invariant_ in its context. An example is identity: A city cannot be replaced
-by one of its streets, nor it can be treated as its whole surrounding region.
+_invariant_ in its context. An example is identity: It makes much more sense to compare a movie
+with another movie instead of with a song, even if both cinema and music are considered arts.
 - If something can be replaced by a subclass, it's deemed _covariant_ in its context.
 An example is possession: If you need something with a camera, then any standalone camera,
 smartphone or tablet will do. A telescope, however, might not.
