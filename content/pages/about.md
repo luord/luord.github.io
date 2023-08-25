@@ -43,7 +43,7 @@ thousand movies and can talk about them for hours.
 Literature
 : I read and write fiction, a lot. Mostly short stories because I don't have the
 time for full novels, but I do try to read the odd novel every now and then and
-also hope to publish a novel (or cycle) of my own some day. I don't have a
+also hope to publish a novel (or series) of my own some day. I don't have a
 set favorite genre as I read horror, historical fiction, romance, crime,
 thrillers, etc., but I do gravitate toward fantasy and, to a lesser extent,
 science fiction.
