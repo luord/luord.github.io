@@ -5,7 +5,7 @@ order: 2
 
 ## On Work
 
-I like helping people with improving their code—including where that code lives and how it's
+I like helping people at improving their code—including where that code lives and how it's
 written and deployed—and I'm sure I can help you if you're currently facing
 problems with too much technical debt, a slow or tediously manual development
 cycle, low testing coverage, problems with observability or management of deployments,
@@ -25,10 +25,6 @@ and infrastructure, and I've also led and mentored other developers.
 
 If this sounds like something you need a(n extra) hand with, [hit me up][contact], or if you
 want details on my experience, it's [here][cv].
-
-Small disclaimer: I'm happy to help any team that comes my way with any issues the team might
-be facing, but I must confess that while I enjoy UX work, I prefer core business logic or
-infrastructure and architecture work a little bit more.
 
 [contact]: {filename}/pages/contact.md
 [cv]: {filename}/pages/cv.md
