@@ -22,7 +22,7 @@ What I'm trying to say is yes, one should avoid the NIH syndrome, surf the commu
 
 It goes without saying, of course, that doing such a thing is really only beneficial early in one's career. I see no reason for reinventing the wheel once one is already an experimented developer. Of course, someone more experienced than me could probably tell me otherwise.
 
-In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), and LESS and CSS for the themes, although I *am* using a theme I found.
+In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), and LESS and CSS for the themes.
 
 [Flask-Restful]: https://flask-restful.readthedocs.io/ "One of the best plugins for Flask"
 [flask]: https://palletsprojects.com/p/flask/ "Flask Framework"
