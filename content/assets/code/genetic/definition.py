@@ -1,38 +1,34 @@
 from collections.abc import Collection
-from typing import Protocol, TypeVar
+from typing import Protocol
 
 
-class Individual(Collection, Protocol):
-    ...
-
-
-Ind = TypeVar('Ind', contravariant=True, bound=Individual)
-
-
-class Offspring(Protocol):
+class Offspring[Individual](Protocol):
     def mutate(self) -> Individual: ...
 
 
-class Population(Collection, Protocol[Ind]):
+class Population[Individual](Collection, Protocol):
     def select_random(self) -> Individual: ...
 
-    def crossover(self, first: Ind, second: Ind) -> Offspring: ...
+    def crossover(self, first: Individual, second: Individual)\
+        -> Offspring[Individual]: ...
 
-    def add(self, individual: Ind): ...
+    def add(self, individual: Individual): ...
 
-    def remove(self, individual: Ind): ...
+    def remove(self, individual: Individual): ...
 
-    def find_mate(self, individual: Ind) -> Individual: ...
-
-
-class Niche(Protocol[Ind]):
-    def tournament(self, pop: Population) -> tuple[Individual, Individual]:
-        ...
-
-    def can_thrive(self, individual: Ind) -> bool: ...
+    def find_mate(self, individual: Individual) -> Individual: ...
 
 
-def algorithm(population: Population, niche: Niche) -> int:
+class Niche[Individual](Protocol):
+    def tournament(self, pop: Collection[Individual])\
+        -> tuple[Individual, Individual]: ...
+
+    def can_thrive(self, individual: Individual) -> bool: ...
+
+
+def algorithm[Individual](
+    population: Population[Individual], niche: Niche[Individual]
+) -> int:
     parent_a = population.select_random()
     parent_b = population.select_random()
 

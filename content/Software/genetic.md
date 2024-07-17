@@ -27,15 +27,11 @@ start with a data sample.
     from typing import Protocol
 
 
-    class Individual(Collection, Protocol):
-      ...
-
-
-    class Population(Protocol):
+    class Population[Individual](Collection, Protocol):
       def select_random(self) -> Individual: ...
 
 
-    def algorithm(population: Population):
+    def algorithm[Individual](population: Population[Individual]):
       parent_a = population.select_random()
       parent_b = population.select_random()
 
@@ -47,25 +43,19 @@ population, and we'll go from there.[^protocols]
 With our first pair in place, we can now produce the next "generation".
 
     :::python
-    from typing import TypeVar
-
-
-    # ...
-    Ind = TypeVar('Ind', contravariant=True, bound=Individual)
-
-
-    class Offspring(Protocol):
+    class Offspring[Individual](Protocol):
       def mutate(self) -> Individual: ...
 
 
-    class Population(Collection, Protocol[Ind]):
+    class Population[Individual](Collection, Protocol):
       # ...
-      def crossover(self, first: Ind, second: Ind) -> Offspring: ...
+      def crossover(self, first: Individual, second: Individual)\
+          -> Offspring[Individual]: ...
 
-      def add(self, new: Ind): ...
+      def add(self, individual: Individual): ...
 
 
-    def algorithm(population: Population):
+    def algorithm[Individual](population: Population[Individual]):
       # ...
       base_offspring = population.crossover(parent_a, parent_b)
       real_offspring = base_offspring.mutate()
@@ -74,7 +64,7 @@ With our first pair in place, we can now produce the next "generation".
 The ***crossover*** in genetic algorithms is the operation used to combine the data of
 the parents to produce offspring. But we can't just stop there, we need genetic variance to ensure
 the population actually evolves over time. One form of variance is of course that the parents
-are shuffled and a random number of genes is picked from each parent, but even that isn't enough as
+contribute different characteristics selected at random from each parent, but even that isn't enough as
 it could leave us stuck[^pool].
 
 Actual variance comes from the key element of **mutation**, the random chance that any given
@@ -93,23 +83,25 @@ So let's do that, by introducing a "niche" and determining how well the individu
 
     :::python
     # ...
-    class Population(Collection, Protocol[Ind]):
+    class Population[Individual](Collection, Protocol):
       # ...
-      def remove(self, individual: Ind): ...
+      def remove(self, individual: Individual): ...
 
 
-    class Niche(Protocol):
-      def tournament(self, pop: Population) -> tuple[Individual, Individual]:
-        ...
+    class Niche[Individual](Protocol):
+      def tournament(self, pop: Collection[Individual])\
+        -> tuple[Individual, Individual]: ...
 
 
-    def algorithm(population: Population, niche: Niche):
+    def algorithm[Individual](
+      population: Population[Individual], niche: Niche[Individual]
+    ):
       # ...
       fittest, unfit = niche.tournament(population)
       population.remove(unfit)
 
 Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
-genes, and in our algorithm, only that individual that best fits the niche is the
+genes, and in our algorithm, only that individual in a group[^collection] that best fits the niche is the
 one to continue. This is usually called "***tournament selection***" in genetic algorithm jargon.
 
 Finally, to maintain our analogy (and really to prevent our population from growing without bound)
@@ -124,17 +116,19 @@ to repeat the process until we find such individual.
 
     :::python
     # ...
-    class Population(Collection, Protocol[Ind]):
+    class Population[Individual](Collection, Protocol):
       # ...
-      def find_mate(self, individual: Ind) -> Individual: ...
+      def find_mate(self, individual: Individual) -> Individual: ...
 
 
-    class Niche(Protocol[Ind]):
+    class Niche[Individual](Protocol):
       # ...
-      def can_thrive(self, individual: Ind) -> bool: ...
+      def can_thrive(self, individual: Individual) -> bool: ...
 
 
-    def algorithm(population: Population, niche: Niche) -> int:
+    def algorithm[Individual](
+      population: Population[Individual], niche: Niche[Individual]
+    ) -> int:
       parent_a = population.select_random()
       parent_b = population.select_random()
 
@@ -155,7 +149,7 @@ to repeat the process until we find such individual.
 
 There are several options here, one commonly used in real genetic algorithms is to pick the two
 fittest instead of just one and make those "reproduce", producing an entirely new population
-and keep iterating from there. But to keep our
+and continue iterating from there. But to keep our
 natural analogy going, let's instead assume that our fittest finds instead a "suitable mate"[^mate] in another
 member of the population, which also adds another source of variance.
 
@@ -244,7 +238,7 @@ longer work if we changed the metric (or changed what an individual is entirely)
 
 In these cases, we have to step back and think of invariants: what is always true about the tournament
 selection? As long as the winner remains in the population and no other individuals are added, it will _always_ be the winner. And that's what we test: We systematically remove each loser until only one
-individual is left in the population; that individual _must_ still be the original winner.
+individual is left in the population; that individual _must_ still be the original winner!
 
 [^protocols]: I use protocols because Python's [structural subtyping][protocols] is pretty good at
 properly representing a [domain][]. In simpler terms: we only care about what our objects can _do_.
@@ -255,13 +249,15 @@ gene that neither of the parents has.
 the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
 on the type system. We'll know we have a real individual only if it was selected from an
 existing population or if it's the result of mutation from the crossover of two parents.
-[^type]: You might have noticed that an "Individual" is represented only by an empty
-collection protocol and a generic type (and the type variable might not even be needed after Python 3.12 drops).
-This is on purpose: the algorithm doesn't need to care what an individual _is_ beyond "a collection of genes".
+[^type]: You might have noticed that an "Individual" is represented only by generic type arguments.
+This is on purpose: the algorithm doesn't need to care what an individual _is_.
+[^collection]: You might have noticed that in the type annotation, I used `Collection` instead of `Population`
+(which is itself a collection). That's because the tournament could be done over any group of individuals, it
+doesn't have to be a population specifically, and we gotta be "liberal in what we accept".
 [^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes its parents.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
 
-[protocols]: https://peps.python.org/pep-0544/
+[protocols]: https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols
 [domain]: {filename}/Engineering/domain.md
 [mypy]: https://mypy-lang.org/
 [pyright]: https://github.com/microsoft/pyright
