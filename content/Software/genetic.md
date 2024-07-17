@@ -150,7 +150,7 @@ to repeat the process until we find such individual.
 There are several options here, one commonly used in real genetic algorithms is to pick the two
 fittest instead of just one and make those "reproduce", producing an entirely new population
 and continue iterating from there. But to keep our
-natural analogy going, let's instead assume that our fittest finds instead a "suitable mate"[^mate] in another
+natural analogy going, let's instead assume that our fittest finds a "suitable mate"[^mate] in another
 member of the population, which also adds another source of variance.
 
 Ultimately, the point here is iteration: continually doing the crossover and tournament selection until we meet
@@ -251,8 +251,8 @@ on the type system. We'll know we have a real individual only if it was selected
 existing population or if it's the result of mutation from the crossover of two parents.
 [^type]: You might have noticed that an "Individual" is represented only by generic type arguments.
 This is on purpose: the algorithm doesn't need to care what an individual _is_.
-[^collection]: You might have noticed that in the type annotation, I used `Collection` instead of `Population`
-(which is itself a collection). That's because the tournament could be done over any group of individuals, it
+[^collection]: In the type annotation, I used `Collection` instead of `Population`
+(which is itself a collection) because the tournament could be done over any group of individuals; it
 doesn't have to be a population specifically, and we gotta be "liberal in what we accept".
 [^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes its parents.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
