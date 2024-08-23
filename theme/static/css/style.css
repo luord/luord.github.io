@@ -140,6 +140,7 @@ dt {
 
 .mail-link:before {
   content: "\f0e0";
+}
 
 #dates h3 {
   margin-left: 3ch;
@@ -185,7 +186,7 @@ dt {
 }
 
 @media print {
-  header {
+  body > header {
     display: none;
   }
 
@@ -197,7 +198,7 @@ dt {
     content: "Luis Orduz (contact information at: https://luord.com/pages/contact )"
   }
 
-  a {
+  a, a:visited, a:hover, a:active {
     color: inherit;
   }
 }
