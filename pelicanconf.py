@@ -30,6 +30,15 @@ DEFAULT_METADATA = {
     'status':'draft'
 }
 FILENAME_METADATA = '(?P<slug>.*)'
+MARKDOWN = {
+    'extension_configs': {
+        'markdown.extensions.admonition': {},
+        'markdown.extensions.codehilite': {'css_class': 'highlight'},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+    },
+    'output_format': 'html5',
+}
 
 #FOLDER SETTINGS
 PATH = 'content'
