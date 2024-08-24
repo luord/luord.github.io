@@ -8,7 +8,7 @@ order: 1
 I am Luis Orduz, a software engineer who also likes operative work. Or, to put it
 another way, I got a degree in Systems Engineering[^syseng] back in 2013 and
 have been working (mostly) as a full-stack web application developer that
-sometimes handles (some) infrastructure management ever since. If you want a
+sometimes handles (some) infrastructure management. If you want a
 rundown of my experience, go [here][cv]. For a "mission statement" of sorts,
 [here][mission].
 
@@ -68,7 +68,7 @@ Other stuff
 
     I might start practicing self-defense or a martial art some day.
 
-Well, that's enough about me I guess. To close, I must say that I had a hard
+Well, that's enough about me I guess[^rules]. To close, I must say that I had a hard
 time deciding whether to carry this blog in Spanish or English.
 Ultimately I settled on English for the reasons mentioned by Eric Raymond
 [here][htbah].
@@ -80,8 +80,10 @@ Thank you for visiting my website!
 [^deal]: This actually was a big deal for me. I had been the "little kid" since second grade.
 [^cine]: This is why I don't consider myself a "cinephile".
 [^tv]: This is also why I rarely watch TV series.
+[^rules]: Except for a list of adages I try to follow, if you're interested, [here][rules].
 
 [contact]: {filename}/pages/contact.md
 [cv]: {filename}/pages/cv.md
 [mission]: {filename}/pages/work.md
 [htbah]: http://www.catb.org/esr/faqs/hacker-howto.html#skills4 "Eric Raymond's Hacker Howto"
+[rules]: {filename}/pages/rules.md
