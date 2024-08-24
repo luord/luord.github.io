@@ -7,7 +7,7 @@ The other day, I read an article by __Julian Shapiro__{ .p-author} about
 how he collects it as particular _"memorized rules"_{ .p-name}. Also recommending
 to write them down, and to keep at most six of them present; updating them as
 you change or they become irrelevant.
-{: .h-cite .u-in-reply-to}
+{: .h-entry .h-cite .u-in-reply-to}
 
 So here are mine, in no particular order:
 
