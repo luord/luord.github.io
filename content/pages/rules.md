@@ -3,11 +3,11 @@ summary: Principles I consciously follow.
 status: hidden
 
 The other day, I read an article by __Julian Shapiro__{ .p-author} about
-[actionable advice](https://www.julian.com/blog/memorized-rules){ .u-url} and
+[actionable advice](https://www.julian.com/blog/memorized-rules){ .u-url .u-in-reply-to} and
 how he collects it as particular _"memorized rules"_{ .p-name}. Also recommending
 to write them down, and to keep at most six of them present; updating them as
 you change or they become irrelevant.
-{: .h-entry .h-cite .u-in-reply-to}
+{: .h-entry .h-cite}
 
 So here are mine, in no particular order:
 
