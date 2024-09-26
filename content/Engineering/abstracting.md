@@ -9,6 +9,7 @@ In [my last post][refactoring]{.u-url}, we did a basic rundown of a very convolu
 more explicit what was actually happening in it. That by itself goes a long way in improving how readable the code is, and thus makes it easier to maintain.
 I've seen small improvements like that be welcome enthusiastically among different teams, but we can go
 further.
+{: .h-entry}
 
 I remember a project I worked on where there was basically no separation of concerns between request
 handling boilerplate, database connection boilerplate and actual business logic; everything was handled
