@@ -2,13 +2,11 @@ title: Memorized Rules
 summary: Principles I consciously follow.
 status: hidden
 
-!!! h-entry ""
-    The other day, I read an article by __Julian Shapiro__{ .p-author} about
-    [actionable advice](https://www.julian.com/blog/memorized-rules){ .u-url} and
-    how he collects it as particular _"memorized rules"_{ .p-name}. Also recommending
-    to write up to six of them down to keep them present; updating them as
-    one changes or they become irrelevant.
-    {: .h-cite .u-in-reply-to}
+The other day, I read an article by Julian Shapiro about
+[actionable advice](https://www.julian.com/blog/memorized-rules) and
+how he collects it as particular "memorized rules". Also recommending
+to write up to six of them down to keep them present; updating them as
+one changes or they become irrelevant.
 
 So here are mine, in no particular order:
 

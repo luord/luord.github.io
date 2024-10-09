@@ -1,0 +1,7 @@
+{% if WEBMENTION_URL %}
+<form class="webmention" action="{{WEBMENTION_URL}}" method="post">
+  <input type="hidden" name="target" value="{{ target_url }}">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+{% endif %}

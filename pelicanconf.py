@@ -30,22 +30,14 @@ DEFAULT_METADATA = {
     'status':'draft'
 }
 FILENAME_METADATA = '(?P<slug>.*)'
-MARKDOWN = {
-    'extension_configs': {
-        'markdown.extensions.admonition': {},
-        'markdown.extensions.codehilite': {'css_class': 'highlight'},
-        'markdown.extensions.extra': {},
-        'markdown.extensions.meta': {},
-    },
-    'output_format': 'html5',
-}
 
 #FOLDER SETTINGS
 PATH = 'content'
 STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
-  'assets/redirect/resume.html': {'path': 'pages/resume.html'}
+  'assets/redirect/resume.html': {'path': 'pages/resume.html'},
+  'assets/redirect/email.html': {'path': 'pages/email.html', 'url': 'pages/email'},
 }
 
 # SAVING SETTINGS

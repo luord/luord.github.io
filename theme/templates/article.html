@@ -21,6 +21,7 @@
     {% if PDF_PROCESSOR %}
     | <a href="{{ SITEURL }}/pdf/{{ article.slug }}.pdf">Get the pdf</a>
     {% endif %}
+    <p class="p-summary" style="display: none;">{{ article.summary | striptags }}</p>
   </header>
 
   <section class="e-content">
@@ -43,9 +44,14 @@
 <footer>
   <ul class="navigator">
     <li><a href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
-    <li><a href="{{ SITEURL }}/{{ CONTACT_URL }}">Would love your feedback!</a></li>
+    <li><a href="{{ SITEURL }}/{{ CONTACT_URL }}">Say hi!</a></li>
     <li><a href="https://form.jotform.com/233346248810051">Subscribe to the newsletter</a></li>
   </ul>
+
+  {% with target_url = article.url %}
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+    {% include 'fragments/webmention.html' %}
+  {% endwith %}
 
   <ul class="navigator">
   {% set p_art = article.prev_article

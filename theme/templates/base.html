@@ -34,9 +34,15 @@
   <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css" />
   <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/pygment.css" />
 
-  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
-  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
-  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+  {% if INDIEAUTH_ENDPOINT %}
+  <link rel="authorization_endpoint" href="{{ INDIEAUTH_ENDPOINT }}" />
+  {% endif %}
+  {% if INDIEAUTH_TOKEN %}
+  <link rel="token_endpoint" href="{{ INDIEAUTH_TOKEN }}" />
+  {% endif %}
+  {% if WEBMENTION_URL %}
+  <link rel="webmention" href="{{ WEBMENTION_URL }}" />
+  {% endif %}
 </head>
 
 <body>

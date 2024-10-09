@@ -18,14 +18,18 @@ FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_MAX_ITEMS = 10
 CATEGORY_FEED_ATOM = 'feed/{slug}.atom.xml'
 
-WEBSUB_URL="https://luord.superfeedr.com/"
-
 # Following items are often useful when publishing
 
 # SOCIAL SETTINGS
 FACEBOOK_USERNAME = "luord"
 LINKEDIN_USERNAME = "luis-orduz"
 TWITTER_USERNAME = "luord"
+
+# IndieWeb settings
+WEBSUB_URL="https://luord.superfeedr.com/"
+WEBMENTION_URL="https://webmention.io/luord.com/webmention"
+INDIEAUTH_TOKEN="https://tokens.indieauth.com/token"
+INDIEAUTH_ENDPOINT="https://indieauth.com/auth"
 
 FEED_EXTRA_ROOT_TAGS = [
     {"name": "icon", "contents": f"{FEED_DOMAIN}/{USER_LOGO_ICON}"}

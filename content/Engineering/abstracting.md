@@ -5,10 +5,11 @@ date: 2022-03-31
 image: /assets/img/abstracting/idea.jpg
 status: published
 
-In [my last post][refactoring]{.u-mention-of}, we did a basic rundown of a very convoluted short algorithm to make
+In [my last post][refactoring]{.u-url}, we did a basic rundown of a very convoluted short algorithm to make
 more explicit what was actually happening in it. That by itself goes a long way in improving how readable the code is, and thus makes it easier to maintain.
 I've seen small improvements like that be welcome enthusiastically among different teams, but we can go
 further.
+{.h-cite}
 
 I remember a project I worked on where there was basically no separation of concerns between request
 handling boilerplate, database connection boilerplate and actual business logic; everything was handled

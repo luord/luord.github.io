@@ -170,6 +170,14 @@ dt {
   padding: 0;
 }
 
+.webmention {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1ch;
+  padding: 0;
+}
+
 @media (prefers-color-scheme: light) {
   html {
     background-color: #f1f1f1;
