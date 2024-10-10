@@ -30,6 +30,7 @@ DEFAULT_METADATA = {
     'status':'draft'
 }
 FILENAME_METADATA = '(?P<slug>.*)'
+SUMMARY_MAX_LENGTH = 20
 
 #FOLDER SETTINGS
 PATH = 'content'
