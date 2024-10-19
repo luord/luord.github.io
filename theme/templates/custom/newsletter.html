@@ -1,0 +1,8 @@
+{% extends "page.html" %}
+{% block content %}
+{{ super() }}
+<form action="{{NEWSLETTER_ENDPOINT}}" method="post">
+  <input type="email" name="address" placeholder="Your email" required>
+  <input type="submit" value="Subscribe">
+</form>
+{% endblock %}

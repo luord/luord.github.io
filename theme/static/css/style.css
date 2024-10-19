@@ -32,6 +32,10 @@ body > footer, body > header {
   text-align: center;
 }
 
+body > footer {
+  margin-top: 1em;
+}
+
 body > header li a {
   border: 1px dotted;
   padding: 1px 2px;
@@ -66,11 +70,11 @@ aside ul, #main ul, header ul, body > footer ul {
   padding: 0;
 }
 
-body > footer li, body > header li, aside li a:before {
+body > footer li, body > footer ul, body > header li, aside li a:before {
   display: inline-block;
 }
 
-body > footer li + li, body > header li + li {
+body > footer li, body > header li + li {
   margin-left: 2ch;
 }
 
@@ -107,6 +111,7 @@ aside li a:before {
 
 body > footer li i {
   font: normal 1.5em FontAwesome;
+  vertical-align: bottom;
 }
 
 body > footer img {
@@ -120,6 +125,14 @@ code {
 
 dt {
   text-decoration: underline;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1ch;
+  padding: 0;
 }
 
 .cat-link:before {
@@ -167,14 +180,6 @@ dt {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 0;
-}
-
-.webmention {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1ch;
   padding: 0;
 }
 

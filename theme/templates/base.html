@@ -71,9 +71,6 @@
       {% endfor %}
     </ul>
   </nav>
-  <p>
-    If you want to receive new blog posts directly to your email, <a href="https://form.jotform.com/233346248810051">subscribe here</a>.
-  </p>
 </header>
 <main>
   {% block content_header %}<header><h1>Articles</h1></header>{% endblock %}
@@ -84,7 +81,13 @@
 {% block sidebar %}{% endblock %}
 
 <footer>
+  {% if (not page or 'newsletter' not in page.url) and NEWSLETTER_URL %}
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="{{ SITEURL }}/{{ NEWSLETTER_URL }}">subscribe here</a>.
+  </p>
+  {% endif %}
   <nav>
+    Find me on:
     <ul>
       <li><a rel="me" href="https://github.com/luord" aria-label="GitHub profile"><i aria-hidden="true" class="fab fa-github"></i></a></li>
       <li><a rel="me" href="https://gitlab.com/luord" aria-label="GitLab profile"><i aria-hidden="true" class="fab fa-gitlab"></i></a></li>
