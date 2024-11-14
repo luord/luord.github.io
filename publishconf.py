@@ -19,7 +19,7 @@ FEED_MAX_ITEMS = 10
 CATEGORY_FEED_ATOM = 'feed/{slug}.atom.xml'
 
 NEWSLETTER_URL = 'pages/newsletter'
-NEWSLETTER_ENDPOINT = 'https://luord-newsletter.web.val.run'
+NEWSLETTER_ENDPOINT = 'https://luord-newsletter.web.val.run/subscribe'
 
 # Following items are often useful when publishing
 
