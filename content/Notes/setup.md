@@ -15,5 +15,5 @@ been possible, but nice tools like [rclone](https://rclone.org/) bisync and
 [tailscale](https://tailscale.com/) make it significantly easier nowadays.
 
 The script is [here](https://github.com/luord/scripts/blob/master/setup.sh).
-It ended up being a handy opportunity to practice my Bash, and it's
-working pretty well for me. Still, suggestions are welcome!
+It ended up being a handy opportunity to practice my Bash too, and it's
+working pretty well for a minimalist like me. Still, suggestions are welcome!
