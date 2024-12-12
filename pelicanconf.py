@@ -22,7 +22,7 @@ PAGINATION_PATTERNS = (
     (1, '{url}', '{save_as}'),
     (2, '{base_name}/p/{number}', '{base_name}/p/{number}.html'),
 )
-DEFAULT_DATE = 'fs'
+DEFAULT_DATE = None
 SUMMARY_MAX_LENGTH = 100
 
 # POST SETTINGS

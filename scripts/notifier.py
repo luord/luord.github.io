@@ -34,7 +34,9 @@ FEED_DELTA_DAYS = int(os.getenv("FEED_DELTA_DAYS", 1))
 logging.basicConfig(level=logging.INFO)
 
 
-def get_new_items(feed_url: str) -> list[feedparser.util.FeedParserDict]:
+def get_new_items(
+    feed_url: str, date_attribute: str = 'published'
+) -> list[feedparser.util.FeedParserDict]:
     feed = feedparser.parse(feed_url)
     zone = dt.datetime.fromisoformat(feed.feed.updated).astimezone().tzinfo
     base_date = dt.datetime.now(tz=zone) - dt.timedelta(days=FEED_DELTA_DAYS)
@@ -42,12 +44,14 @@ def get_new_items(feed_url: str) -> list[feedparser.util.FeedParserDict]:
     return [
         entry
         for entry in feed.entries
-        if dt.datetime.fromisoformat(entry.published) >= base_date
+        if dt.datetime.fromisoformat(entry[date_attribute]) >= base_date
     ]
 
 
 def send_newsletter(items: list[feedparser.util.FeedParserDict]) -> None:
     for item in items:
+        logging.info(f"Sending newsletter for item {item.title}")
+
         data = {
             "from": MAIL_SENDER,
             "to": MAIL_RECIPIENT,
@@ -85,6 +89,8 @@ def send_newsletter(items: list[feedparser.util.FeedParserDict]) -> None:
 
 def send_webmentions(items: list[feedparser.util.FeedParserDict]) -> None:
     for item in items:
+        logging.info(f"Sending webmentions for {item.title}, if any")
+
         reply_links = iw.get_reply_urls(item.link)
         for link in reply_links:
             try:
@@ -104,7 +110,7 @@ def main() -> None:
     logging.info(f"Getting items for last {FEED_DELTA_DAYS} days")
 
     full_items = get_new_items(FEED_FULL)
-    note_items = get_new_items(FEED_NOTES)
+    note_items = get_new_items(FEED_NOTES, date_attribute="updated")
 
     send_newsletter(full_items)
     send_webmentions(full_items + note_items)
