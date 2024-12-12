@@ -3,5 +3,7 @@
 output
 .hypothesis
 
-.env
 *.swp
+.venv
+
+.env
