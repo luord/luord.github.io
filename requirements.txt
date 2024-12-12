@@ -4,7 +4,7 @@ markdown
 
 feedparser
 requests
-git+https://github.com/luord/indieweb-utils@dependency-match
+git+https://github.com/capjamesg/indieweb-utils
 
 fire
 pook
