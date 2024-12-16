@@ -12,10 +12,7 @@ cycle, low testing coverage, problems with observability or management of deploy
 difficulty with feedback loops in the process, or most other problems related to
 delivering a functional application.
 
-Working together, I can help you or your team turn those technical liabilities into technical
-assets.
-
-I have ten years of experience (not counting college) primarily with web
+I have over ten years of experience (not counting college) primarily with web
 development, and I know a thing or two about writing maintainable code both in
 the backend (mostly Python; Go to a lesser extent) and the frontend in JS/TS.
 I've had responsibilities both updating legacy applications and migrating them
@@ -23,7 +20,8 @@ to more modern stacks _and_ I've also written applications from scratch and take
 status and beyond. This is to say, I have experience with making decisions on architecture
 and infrastructure, and I've also led and mentored other developers.
 
-If this sounds like something you need a(n extra) hand with, [hit me up][contact], or if you
+Working together, I can help you or your team turn those technical liabilities into technical
+assets. If this sounds like something you need a(n extra) hand with, [hit me up][contact], or if you
 want details on my experience, it's [here][cv].
 
 [contact]: {filename}/pages/contact.md
