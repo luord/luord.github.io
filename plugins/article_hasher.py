@@ -16,8 +16,8 @@ def hash_urls(generator):
 
         b32_hash = get_b32_hash(article.date.timestamp())
         article.ix = b32_hash
-        article.override_save_as = f"{article.category.slug}/{b32_hash}.html"
-        article.override_url = f"{article.category.slug}/{b32_hash}"
+        article.override_save_as = f"{article.category.slug}/{b32_hash}/index.html"
+        article.override_url = f"{article.category.slug}/{b32_hash}/"
 
 
 def register():
