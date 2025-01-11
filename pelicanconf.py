@@ -38,22 +38,31 @@ STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
   'assets/redirect/resume.html': {'path': 'pages/resume.html'},
-  'assets/redirect/email.html': {'path': 'pages/email.html', 'url': 'pages/email'},
+  'assets/redirect/email.html': {'path': 'pages/email/index.html', 'url': 'pages/email/'},
 }
 
 # SAVING SETTINGS
-ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}'
-ARTICLE_SAVE_AS= '{date:%Y}/{date:%m}/{date:%d}/{slug}.html'
+ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}/'
+ARTICLE_SAVE_AS= '{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 ARTICLE_EXCLUDES = ['assets']
-PAGE_URL = 'pages/{slug}'
-CATEGORY_URL='category/{slug}'
-TAG_URL='tag/{slug}'
+PAGE_URL = 'pages/{slug}/'
+PAGE_SAVE_AS = 'pages/{slug}/index.html'
+CATEGORY_URL='category/{slug}/'
+CATEGORY_SAVE_AS='category/{slug}/index.html'
+TAG_URL='tag/{slug}/'
+TAG_SAVE_AS='tag/{slug}/index.html'
+ARCHIVES_URL='archives/'
+ARCHIVES_SAVE_AS='archives/index.html'
+CATEGORIES_URL='categories/'
+CATEGORIES_SAVE_AS='categories/index.html'
+TAGS_URL='tags/'
+TAGS_SAVE_AS='tags/index.html'
 AUTHOR_SAVE_AS=''
 AUTHORS_SAVE_AS=''
 AUTHOR_URL=''
-CONTACT_URL='pages/contact'
-ABOUT_URL='pages/about'
-MISSION_URL='pages/work'
+CONTACT_URL='pages/contact/'
+ABOUT_URL='pages/about/'
+MISSION_URL='pages/work/'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = ""
@@ -81,8 +90,8 @@ CATEGORY_DESCRIPTIONS = {
 HASHED_CATEGORIES = ("Notes",)
 
 MENUITEMS = (
-    ("Notes", "category/notes"),
+    ("Notes", "category/notes/"),
 )
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['article_hasher', 'category_separator', 'feed_extra_root', 'neighbors']
+PLUGINS = ['article_hasher', 'category_separator', 'feed_extra_root', 'neighbors', 'sitemap']

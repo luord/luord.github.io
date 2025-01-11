@@ -1,4 +1,5 @@
 pelican
+pelican-sitemap
 ghp-import
 markdown
 

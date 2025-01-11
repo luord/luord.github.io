@@ -9,24 +9,17 @@
   <meta name="author" content="{{ AUTHOR }}" />
   <meta name="robots" content="index, follow" />
 
-  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}"/>
-  <meta property="og:url" content="{% block ogurl %}{{ SITEURL }}/{% endblock %}"/>
-  <meta property="og:site_name" content="{{ SITENAME }}"/>
-  <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
-  <meta property="og:description" content="{% block ogdesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
-  <meta property="og:locale" content="en_US"/>
-  <meta property="og:image" content="{{ SITEURL }}/{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
-  <meta name="twitter:card" content="summary">
-
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0072bb" />
 
   <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}/{% endblock %}" />
+  <link rel="icon" type="image/png" href="{{ SITEURL }}/{{ USER_LOGO_ICON }}{{ VERSION }}" />
+  {% if output_file == 'index.html' %}
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ SITEURL }}/sitemap.xml" />
+  {% endif %}
   {% block alternate %}
   <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
   {% endblock %}
-
-  <link rel="icon" type="image/png" href="{{ SITEURL }}/{{ USER_LOGO_ICON }}{{ VERSION }}" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
   <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
@@ -44,6 +37,15 @@
   {% if WEBMENTION_URL %}
   <link rel="webmention" href="{{ WEBMENTION_URL }}" />
   {% endif %}
+
+  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}"/>
+  <meta property="og:url" content="{% block ogurl %}{{ SITEURL }}/{% endblock %}"/>
+  <meta property="og:site_name" content="{{ SITENAME }}"/>
+  <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
+  <meta property="og:description" content="{% block ogdesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="{{ SITEURL }}/{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
+  <meta name="twitter:card" content="summary">
 </head>
 
 <body>
@@ -100,7 +102,7 @@
     </ul>
   </nav>
   <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a>
-  <small>This blog by <a href="https://luord.com">Luis Orduz</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+  <small>This blog by <a href="{{ SITEURL }}/">Luis Orduz</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
 </footer>
 </body>
 </html>

@@ -56,7 +56,7 @@
       <a href="{{ SITEURL }}/{{ CONTACT_URL }}">here</a>.
     </p>
     <p>
-      For short posts about more than software, check my <a href="{{ SITEURL }}/category/notes">Notes</a>.
+      For short posts about more than software, check my <a href="{{ SITEURL }}/category/notes/">Notes</a>.
     </p>
   </div>
   {% if TAG_CLOUD_STEPS %}
@@ -88,9 +88,9 @@
   </ul>
   <b>Browse content by</b>
   <ul>
-    <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_SAVE_AS|default('categories') }}">Categories</a></li>
-    <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS|default('archives') }}">Dates</a></li>
-    <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_SAVE_AS|default('tags') }}">Tags</a></li>
+    <li><a class="cat-link" href="{{ SITEURL }}/{{ CATEGORIES_URL }}">Categories</a></li>
+    <li><a class="arc-link" href="{{ SITEURL }}/{{ ARCHIVES_URL }}">Dates</a></li>
+    <li><a class="tag-link" href="{{ SITEURL }}/{{ TAGS_URL }}">Tags</a></li>
   </ul>
 </aside>
 {% endblock %}

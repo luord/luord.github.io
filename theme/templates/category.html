@@ -17,7 +17,9 @@
 </header>
 {% endblock %}
 {% block content_footer %}
+{% if CATEGORY_FEED_ATOM %}
 <footer>
 You can subscribe to this category <a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">here</a>.
 </footer>
+{% endif %}
 {% endblock %}
