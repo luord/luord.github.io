@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}</title>
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
 
   <meta name="description" content="{% block metadesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
   <meta name="author" content="{{ AUTHOR }}" />
@@ -38,7 +38,7 @@
   <link rel="webmention" href="{{ WEBMENTION_URL }}" />
   {% endif %}
 
-  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }} — {{ SITESUBTITLE }}{% endblock %}"/>
+  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{% endblock %}"/>
   <meta property="og:url" content="{% block ogurl %}{{ SITEURL }}/{% endblock %}"/>
   <meta property="og:site_name" content="{{ SITENAME }}"/>
   <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
@@ -54,7 +54,7 @@
   <strong>
     {{ SITENAME }}
   </strong>
-  <p>{{ SITESUBTITLE }}</p>
+  <p>{{ SITEDESCRIPTION }}</p>
   </a>
   <nav>
     <ul>

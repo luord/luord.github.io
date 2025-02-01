@@ -5,6 +5,7 @@ markdown
 
 feedparser
 requests
+lexrpc<1
 git+https://github.com/capjamesg/indieweb-utils
 
 fire
