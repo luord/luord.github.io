@@ -43,7 +43,7 @@
 {% block content_footer %}
 <footer>
   <ul class="navigator">
-    <li><a href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
     <li><a href="{{ SITEURL }}/{{ CONTACT_URL }}">Say hi!</a></li>
   </ul>
 
@@ -76,4 +76,11 @@
   {% endif %}
   </ul>
 </footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "{{ article.title }}";
+  shareConfig.text = "{{ article.summary | striptags }}";
+  shareConfig.url = "{{ SITEURL ~ '/' ~ article.url }}";
+</script>
+<script type="text/javascript" src="{{ SITEURL }}/theme/js/share.js"></script>
 {% endblock content_footer %}
