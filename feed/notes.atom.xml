@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Luis Orduz - Notes</title><link href="https://luord.com/" rel="alternate"></link><link href="https://luord.com/feed/notes.atom.xml" rel="self"></link><id>https://luord.com/</id><updated>2024-12-08T00:19:00-05:00</updated><icon>https://luord.com/assets/img/site/favicon.png</icon><entry><title>Automated initial OS setup</title><link href="https://luord.com/notes/gxemsl2/" rel="alternate"></link><published>2024-12-08T00:19:00-05:00</published><updated>2024-12-08T00:19:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2024-12-08:/notes/gxemsl2/</id><summary type="html">&lt;p&gt;This weekend I finally got done something I probably should have back since I
+got my first computer nearly two …&lt;/p&gt;</summary><content type="html">&lt;p&gt;This weekend I finally got done something I probably should have back since I
+got my first computer nearly two decades ago: a script to automate the initial
+setup of a new OS installation. After all, I've been using Linux for most of
+that time and it wasn't even that hard to do. I guess I never felt fully
+confident in my setup itself to bother replicating it.&lt;/p&gt;
+&lt;p&gt;The biggest hurdle was that I have also always wanted synchronization
+of my most valuable files across all my devices... Which I finally got done
+this time too in a simple enough way, just how I like it. Sure, it's always
+been possible, but nice tools like &lt;a href="https://rclone.org/"&gt;rclone&lt;/a&gt; bisync and
+&lt;a href="https://tailscale.com/"&gt;tailscale&lt;/a&gt; make it significantly easier nowadays.&lt;/p&gt;
+&lt;p&gt;The script is &lt;a href="https://github.com/luord/scripts/blob/master/setup.sh"&gt;here&lt;/a&gt;.
+It ended up being a handy opportunity to practice my Bash too, and it's
+working pretty well for a minimalist like me. Still, suggestions are welcome!&lt;/p&gt;</content><category term="Notes"></category></entry><entry><title>Type variance</title><link href="https://luord.com/notes/gnmokz2/" rel="alternate"></link><published>2023-08-22T18:45:00-05:00</published><updated>2023-08-22T18:45:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2023-08-22:/notes/gnmokz2/</id><summary type="html">&lt;p&gt;I spent a while fixing up the &lt;a href="https://luord.com/2023/03/01/genetic/"&gt;genetic&lt;/a&gt; algorithm I wrote a while ago; up
+until the version that is …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I spent a while fixing up the &lt;a href="https://luord.com/2023/03/01/genetic/"&gt;genetic&lt;/a&gt; algorithm I wrote a while ago; up
+until the version that is up now, I didn't really like how it looked and the reason was
+the type hints. It simply didn't click to me why the classes from the implementation
+weren't compatible with the protocols in the definition and why I had to create the
+type variables (which I find really ugly, and hopefully won't be required anymore in the near
+future). Reading up on how to improve it led me to the concept
+of variance, of which I only had a vague memory from college.&lt;/p&gt;
+&lt;p&gt;Writing this note to ensure it doesn't become a vague memory again:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;If something cannot be replaced whatsoever, either by subclass or superclass, it's deemed
+&lt;em&gt;invariant&lt;/em&gt; in its context. An example is &lt;abbr title="Being"&gt;identity&lt;/abbr&gt;: It makes much more sense to compare a movie
+with another movie instead of with a song, even if both cinema and music are considered arts.&lt;/li&gt;
+&lt;li&gt;If something can be replaced by a subclass, it's deemed &lt;em&gt;covariant&lt;/em&gt; in its context.
+An example is &lt;abbr title="Having"&gt;possession&lt;/abbr&gt;: If you need something with a camera, then any standalone camera,
+smartphone or tablet will do. A telescope, however, might not.&lt;/li&gt;
+&lt;li&gt;If something can be replaced by a superclass, it's deemed &lt;em&gt;contravariant&lt;/em&gt; in its context.
+An example is &lt;abbr title="Doing"&gt;action&lt;/abbr&gt;: If you can run, it follows that you can do something that only
+needs for you to walk. Conversely, just because I see you walking I can't assume you can run
+a marathon.&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Notes"></category></entry><entry><title>Asinine awards</title><link href="https://luord.com/notes/gjc26d2/" rel="alternate"></link><published>2023-01-24T11:07:00-05:00</published><updated>2023-01-24T11:07:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2023-01-24:/notes/gjc26d2/</id><summary type="html">&lt;p&gt;The biggest movie award nominations came out today and to the surprise of nobody, the year's
+mediocre critical darling of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;The biggest movie award nominations came out today and to the surprise of nobody, the year's
+mediocre critical darling of choice got the most nods.
+I actually thought it was passable when I first watched it, but quite a few people
+called it awesome enough times to make me watch it a second time, to see if I had
+missed something. It only made me find it even more pointless and boring, and I ended
+up hating it and lowered the original rating I gave it.&lt;/p&gt;
+&lt;p&gt;But really, the worst sin of these awards is the total snubbing of "The Northman",
+which deserved at the very least a Best Director nomination. And while I'm very happy
+for "Top Gun: Maverick", "All Quiet on the Western Front", "Elvis" and, specially, "Elvis"'s
+frontman Austin Butler getting the recognition they of course deserve, his nomination
+only reminds me of how Taron Egerton was ignored three years ago for "Rocketman" while
+one of the worst performances I've ever seen (admittedly, by an otherwise good actor)
+not only got nominated but won. Really, it was
+the 2020 Best Actor shenanigans what made me lost what little faith I still had back then
+for awards, so at this point I'm just beating a dead horse.&lt;/p&gt;
+&lt;p&gt;All that said, credit where it's due: Certain uncomfortably revisionist movie everyone was calling
+a shoo-in for multiple nominations too was ignored, so that automatically means
+the academy has at the very least a saner head on its shoulders than some other award voters.&lt;/p&gt;</content><category term="Notes"></category></entry><entry><title>AI Sadness</title><link href="https://luord.com/notes/gjb22t2/" rel="alternate"></link><published>2023-01-22T22:35:00-05:00</published><updated>2023-01-22T22:35:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2023-01-22:/notes/gjb22t2/</id><summary type="html">&lt;p&gt;Well damn, I was tentatively excited about everything going on regarding large language models
+and how they're being used, until …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Well damn, I was tentatively excited about everything going on regarding large language models
+and how they're being used, until today it was brought to my attention how they behave
+when the questions are political in nature. Safe to say, impartial they're not, and the excitement
+I used to feel instantly became dread. The only silver lining I see is the belief
+that the people who would use these models to confirm their biases would already do so in other ways,
+and the people who know better would know not to treat them as source of truth regarding political
+issues.&lt;/p&gt;
+&lt;p&gt;Somehow, that thought did not make me feel better.&lt;/p&gt;</content><category term="Notes"></category></entry><entry><title>Created a miniblog</title><link href="https://luord.com/notes/gj7j7k2/" rel="alternate"></link><published>2023-01-20T15:00:00-05:00</published><updated>2023-01-20T15:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2023-01-20:/notes/gj7j7k2/</id><summary type="html">&lt;p&gt;As a way to write more in my site, and in general, I've decided to properly set the
+&lt;a href="https://luord.com/category/notes/"&gt;notes category …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;p&gt;As a way to write more in my site, and in general, I've decided to properly set the
+&lt;a href="https://luord.com/category/notes/"&gt;notes category&lt;/a&gt; of this blog as a microblog "separated" from the
+main blog. Had to create some plugins for &lt;a href="https://getpelican.com/"&gt;Pelican&lt;/a&gt; to
+accomplish it, and included the cool way to create slugs I read about in
+&lt;cite class="h-cite u-in-reply-to"&gt;&lt;a class="u-url p-name" href="https://brandur.org/fragments/base32-slugs"&gt;
+this great blog post&lt;/a&gt; by &lt;span class="p-author"&gt;Brandur Leach&lt;/span&gt;&lt;/cite&gt;.&lt;/p&gt;
+&lt;p&gt;To make sure whoever subscribes to the main blog doesn't get this more
+"stream of thought" bite-size content, the posts in this category are excluded from the main
+feed; it has its own feed anyway.&lt;/p&gt;</content><category term="Notes"></category></entry><entry><title>Adding IndieWeb stuff to my blog.</title><link href="https://luord.com/notes/g53io62/" rel="alternate"></link><published>2021-06-10T23:44:00-05:00</published><updated>2021-06-10T23:44:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2021-06-10:/notes/g53io62/</id><summary type="html">&lt;p&gt;Added microformats, Webmentions, POSSE, backfeed and WebSub support to my blog. In fact, this note was syndicated automatically by &lt;a href="https://brid.gy"&gt;https …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;p&gt;Added microformats, Webmentions, POSSE, backfeed and WebSub support to my blog. In fact, this note was syndicated automatically by &lt;a href="https://brid.gy"&gt;https://brid.gy&lt;/a&gt;. Now waiting for Webmentions to display them.&lt;/p&gt;</content><category term="Notes"></category></entry></feed>
