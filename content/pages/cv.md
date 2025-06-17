@@ -6,13 +6,14 @@ order: 3
 This is a summary of my experience and education.
 ___
 ## Profile
-Systems Engineer, by degree, with interest and focus in Software development and Infrastructure management.
+Systems Engineer, by degree, with interest and focus on Software development and Infrastructure management.
 Follower of good development practices (such as the SOLID principles, DRY, YAGNI and TDD) and keen on refactoring,
 vying to keep my code maintainable.
 
-Working since 2013 as a full-stack developer building web applications, services and their clients. I gravitate toward backend work with REST architectures.
+Working since 2013 as a full-stack developer building web applications, services and their clients. I gravitate toward backend work with REST architectures, but I
+also enjoy working in the frontend, either SPAs or through progressive enhancement with libraries like HTMX.
 
-Practicer of DevOps, always trying to learn new and better ways to ease the development, testing and deployment proccesses.
+Practicer of DevOps, always trying to learn new and better ways to ease the development, testing and deployment processes.
 ___
 ## Technical Skills
 * Backend development with a strong preference for Python and PostgreSQL for data storage, but with working knowledge of Go and MongoDB.
@@ -20,8 +21,28 @@ ___
 * Frontend web development, both Javascript and Typescript, from existing designs.
 ___
 ## Employment History
+### Senior Software Engineer {: .low-margin }
+*RGG,               08/24 - Present*
+
+Backend work for a large online store, primarily in Python with Django and Django Rest Framework, using MySQL as the database and deployed to AWS ECS. Features worked
+on include implementation of similarity keywords for documents, migration of the search backend to a new service, and creation of a new recommendation API.
+
+* Development of new features and bug fixing in the back-end, primarily Python, using Django and Django Rest Framework.
+* Development and refactoring of client APIs for third party services.
+
 ### Software Engineer {: .low-margin }
-*Lightmatter,       02/21-Present*
+*MachEight,         10/22 - 11/23*
+
+Full-stack engineering work for an analytics application, the interface being a single page application in react with features like simple chat for communication
+between the clients or with an LLM chatbot that used the data as context, the interface for uploading and managing the datasets and the management of permissions.
+The backend was primarily REST APIs using Django and Django Rest Framework, while also using third party SDKs for the services used, such as the LLM.
+
+* Development of new features and bug fixing in the back-end, primarily Python, using Django and Django Rest Framework.
+* Development of new features and bug fixing in the front-end, primarily Typescript, using React.
+* Maintenance of the infrastructure, primarily using Docker and Github Actions, as well as deployment in AWS ECS.
+
+### Software Engineer {: .low-margin }
+*Lightmatter,       02/21-09/22*
 
 Software Engineer (full-stack, primarily backend) working in different projects, primarily Django based with different extensions such as wagtail or oscar, usually using PostgreSQL as the database and deployed to different PaaSs.
 
@@ -37,16 +58,16 @@ Full-stack engineering consulting for multiple clients, creating new functionali
 * Development of new features and bug fixing in the back-end, primarily Python, of both REST based API services and full applications including templating systems with frameworks like Django and Flask.
 * Development of new features and bug fixing in the front-end, primarily Javascript and TypeScript, for different applications. Mainly Single Page Applications using frameworks like Vue and React.
 * Refactoring of the code to improve quality, where possible, as well as contributing to architecture decisions for multiple applications with the different clients.
-* Setting up continuous testing and deployment of different applications, as well as setting up task runners and dedicated single issue functions.
+* Setting up continuous testing and deployment of different applications, as well as setting up task runners and dedicated single purpose functions.
 * Creation of several different Proofs of Concept and prototypes for new functionalities or new services either for existing applications or for new projects.
 
 ### Software Engineer {: .low-margin }
 *BairesDev,         10/19-07/20*
 
-Full-stack developer with a primary focus in the backend for one of the clients, a job posting application, using Go mainly with Gin and MongoDB. The infrastructure is primarily handled with Docker, orchestrated through Kubernetes and deployed using Gitlab CI pipelines.
+Full-stack developer with a primary focus on the backend for one of the clients, a job posting application, using Go mainly with Gin and MongoDB. The infrastructure is primarily handled with Docker, orchestrated through Kubernetes and deployed using Gitlab CI pipelines.
 
 * Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
-* Creation of new APIs as well as improvement of the Object Mappings in Go.
+* Creation of new APIs as well as improvement of the object mappings in Go.
 * Limited database administration, using express to monitor the mongo database and update possible errors.
 * Multiple refactoring and introduction of improved development practices like following some Clean Architecture principles and more unit testing.
 * Work on the different frontend views, written in Vue with Vuex, Vue-Router and Foundation.
@@ -64,7 +85,7 @@ Full-stack developer for multiple clients, including a medical device supply com
 ### Software Developer(Backend) {: .low-margin }
 *BairesDev,         11/17-01/19*
 
-Full-stack developer with a primary focus in the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
+Full-stack developer with a primary focus on the backend for one of the clients, a marketing research company, using python mainly with Flask, SQLAlchemy and Celery. The infrastructure is primarily handled with Docker and Python libraries such as Click.
 
 * Development of new features and bug fixing in the back-end, updating libraries, code refactoring and task supervision during pagerduty cycle.
 * General maintenance of the front-end of a particular interface, written in React.
@@ -76,7 +97,7 @@ Full-stack developer with a primary focus in the backend for one of the clients,
 
 Backend development in python for general projects, currently focused on projects for  National Geographic, primarily in Django.
 
-* In charge of implementing the security guidelines for the Your Shot project, including migration to HTTPS and implementation of better text parsing and restriction techniques.
+* In charge of implementing the security guidelines for the _Your Shot_ project, including migration to HTTPS and implementation of better text parsing and restriction techniques.
 * Member of the SWAT team, in charge of providing backend support for other teams.
 * General bug fixing and maintenance of both the code and the development environment.
 
