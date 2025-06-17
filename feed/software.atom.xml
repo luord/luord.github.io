@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Luis Orduz - Software</title><link href="https://luord.com/" rel="alternate"></link><link href="https://luord.com/feed/software.atom.xml" rel="self"></link><id>https://luord.com/</id><updated>2023-03-01T00:00:00-05:00</updated><icon>https://luord.com/assets/img/site/favicon.png</icon><entry><title>A genetic algorithm implemented in Python</title><link href="https://luord.com/2023/03/01/genetic/" rel="alternate"></link><published>2023-03-01T00:00:00-05:00</published><updated>2023-03-01T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2023-03-01:/2023/03/01/genetic/</id><summary type="html">&lt;p&gt;An example of abstraction and analogy.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Natural selection is, roughly, the likelihood of a given individual to survive long
+enough to reproduce, and thus continue its species. Factor in mutations—random changes in the
+genes—and the probability a given mutation has to help an individual survive (or not) in its
+environment and the result is that some individuals are more likely to reproduce than others.
+Those fitter individuals are more likely to pass on their mutations to the next generation, which will add
+mutations of its own, ultimately causing the population to slowly change as these mutations
+accumulate. Repeat this process over multiple generations across millions of years and we
+get evolution.&lt;/p&gt;
+&lt;p&gt;Turns out that implementing these ideas, or at least analogies, in software can be useful to
+solve certain problems, so let's write a simple program that exemplifies the process.&lt;/p&gt;
+&lt;h2&gt;Seed&lt;/h2&gt;
+&lt;p&gt;There are multiple types of genetic algorithms with multiple different uses, but usually they
+start with a data sample.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;collections.abc&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Collection&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Protocol&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Collection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;select_random&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;algorithm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt;
+  &lt;span class="n"&gt;parent_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+  &lt;span class="n"&gt;parent_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To keep things simple, we start with two parents that are selected randomly from the existing
+population, and we'll go from there.&lt;sup id="fnref:protocols"&gt;&lt;a class="footnote-ref" href="#fn:protocols"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h2&gt;Crossover&lt;/h2&gt;
+&lt;p&gt;With our first pair in place, we can now produce the next "generation".&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Offspring&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;mutate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Collection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;crossover&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;first&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;second&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;\
+      &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Offspring&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;algorithm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="n"&gt;base_offspring&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;crossover&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;real_offspring&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;base_offspring&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mutate&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+  &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;real_offspring&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;strong&gt;&lt;em&gt;crossover&lt;/em&gt;&lt;/strong&gt; in genetic algorithms is the operation used to combine the data of
+the parents to produce offspring. But we can't just stop there, we need genetic variance to ensure
+the population actually evolves over time. One form of variance is of course that the parents
+contribute different characteristics selected at random from each parent, but even that isn't enough as
+it could leave us stuck&lt;sup id="fnref:pool"&gt;&lt;a class="footnote-ref" href="#fn:pool"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;Actual variance comes from the key element of &lt;strong&gt;mutation&lt;/strong&gt;, the random chance that any given
+offspring individual will have genes not present in the parents.&lt;sup id="fnref:offspring"&gt;&lt;a class="footnote-ref" href="#fn:offspring"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Finally, the new individual is, of course, a new member of the population so we add it&lt;sup id="fnref:type"&gt;&lt;a class="footnote-ref" href="#fn:type"&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;h2&gt;Natural Selection&lt;/h2&gt;
+&lt;p&gt;At this point, we have parents and their offspring, what now? It's time to determine the goal.
+Genetic algorithms are commonly used to find a good enough solution to certain types of,
+often trial and error, problems that don't translate well to common normal algorithms.
+Fortunately, the only thing resembling a "goal" in nature is simply thriving, surviving long
+enough to reproduce...
+So let's do that, by introducing a "niche" and determining how well the individuals fit that niche.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Collection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Niche&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;tournament&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Collection&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;\
+    &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;tuple&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;algorithm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;
+  &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Niche&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="n"&gt;fittest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;unfit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tournament&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;unfit&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
+genes, and in our algorithm, only that individual in a group&lt;sup id="fnref:collection"&gt;&lt;a class="footnote-ref" href="#fn:collection"&gt;5&lt;/a&gt;&lt;/sup&gt; that best fits the niche is the
+one to continue. This is usually called "&lt;strong&gt;&lt;em&gt;tournament selection&lt;/em&gt;&lt;/strong&gt;" in genetic algorithm jargon.&lt;/p&gt;
+&lt;p&gt;Finally, to maintain our analogy (and really to prevent our population from growing without bound)
+we remove the least fit individual from the population.&lt;/p&gt;
+&lt;h2&gt;Generations&lt;/h2&gt;
+&lt;p&gt;We have almost completed the algorithm, but the mere fact that we've found an individual that fits
+the niche better than others doesn't mean we've actually found one that &lt;em&gt;thrives&lt;/em&gt; in the niche; the
+likelihood of achieving that in just the first generation is nil. We'll need many generations, so we need
+to repeat the process until we find such individual.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Collection&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;find_mate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Niche&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;&lt;span class="n"&gt;Protocol&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# ...&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;can_thrive&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;individual&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;...&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;algorithm&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;](&lt;/span&gt;
+  &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Niche&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="n"&gt;parent_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+  &lt;span class="n"&gt;parent_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;select_random&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+  &lt;span class="n"&gt;generations&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+  &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;can_thrive&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;base_offspring&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;crossover&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;real_offspring&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;base_offspring&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mutate&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;real_offspring&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;fittest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;unfit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tournament&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;unfit&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fittest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find_mate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fittest&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;generations&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+  &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;generations&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are several options here, one commonly used in real genetic algorithms is to pick the two
+fittest instead of just one and make those "reproduce", producing an entirely new population
+and continue iterating from there. But to keep our
+natural analogy going, let's instead assume that our fittest finds a "suitable mate"&lt;sup id="fnref:mate"&gt;&lt;a class="footnote-ref" href="#fn:mate"&gt;6&lt;/a&gt;&lt;/sup&gt; in another
+member of the population, which also adds another source of variance.&lt;/p&gt;
+&lt;p&gt;Ultimately, the point here is iteration: continually doing the crossover and tournament selection until we meet
+our goal.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;And there we have it, that &lt;code&gt;algorithm&lt;/code&gt; function represents our full genetic algorithm, in a way I hope is self-explanatory
+enough. That function &lt;em&gt;should&lt;/em&gt; work without change as long as it receives arguments that actually implement
+the &lt;a href="https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols"&gt;protocols&lt;/a&gt; properly.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://luord.com/assets/code/genetic/definition.py"&gt;Here's a file&lt;/a&gt; with the complete definition, and &lt;a href="https://luord.com/assets/code/genetic/implementation.py"&gt;here's a file&lt;/a&gt; with a
+string-based implementation of the algorithm, along with the function being run.&lt;/p&gt;
+&lt;p&gt;Now, before finishing, you'll notice that I talked very little about the actual &lt;em&gt;problems&lt;/em&gt; that could
+be solved with this type of algorithm... Well that's true, because the point of this post was the
+algorithm itself. That said, I might write a follow up with a practical example.&lt;/p&gt;
+&lt;h2&gt;Appendix (On implementation and testing)&lt;/h2&gt;
+&lt;p&gt;I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
+of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
+crossover and tournament selection. However, we can write &lt;a href="https://luord.com/assets/code/genetic/test.py"&gt;tests&lt;/a&gt; to do that instead
+of explaining the implementations line by line!&lt;sup id="fnref:jokes"&gt;&lt;a class="footnote-ref" href="#fn:jokes"&gt;7&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;hypothesis&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;given&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;strategies&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;st&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;implementation&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;
+
+
+&lt;span class="n"&gt;st&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register_type_strategy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;st&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;builds&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;st&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+  &lt;span class="n"&gt;alphabet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;POOL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="n"&gt;min_size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LENGTH&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="n"&gt;max_size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LENGTH&lt;/span&gt;
+&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Before anything is done, we have to tell &lt;a href="https://hypothesis.readthedocs.io/en/latest/"&gt;hypothesis&lt;/a&gt; how to create an &lt;code&gt;Individual&lt;/code&gt; that
+actually fits our implementation. Only then we move onto the tests:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;implementation&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;
+
+&lt;span class="nd"&gt;@given&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;test_crossover&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Individual&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="n"&gt;offspring&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;crossover&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+  &lt;span class="n"&gt;is_parent_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;is_parent_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kc"&gt;False&lt;/span&gt;
+
+  &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;gene&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;zip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;offspring&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;parent_b&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;gene&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;is_parent_a&lt;/span&gt; &lt;span class="o"&gt;|=&lt;/span&gt; &lt;span class="n"&gt;gene&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+    &lt;span class="n"&gt;is_parent_b&lt;/span&gt; &lt;span class="o"&gt;|=&lt;/span&gt; &lt;span class="n"&gt;gene&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
+
+  &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;is_parent_a&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;is_parent_b&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This test tells us everything we need to know about what
+happens in &lt;code&gt;crossover&lt;/code&gt; without actually having to check the implementation: We don't care how it's
+done, but we do care that every gene in the offspring comes from one of the parents, and that &lt;em&gt;both&lt;/em&gt;
+parents had an input.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# ...&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;implementation&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Niche&lt;/span&gt;
+
+
+&lt;span class="nd"&gt;@given&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;test_tournament_selection&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Niche&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Population&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="n"&gt;pop&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;population&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="n"&gt;winner&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;loser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tournament&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+  &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;winner&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;pop&lt;/span&gt;
+
+    &lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;loser&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;loser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;niche&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tournament&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pop&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;winner&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;loser&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Tournament selection is a bit trickier to test because the calculation for each fittest &lt;em&gt;is&lt;/em&gt; an
+implementation detail, but one the whole idea depends upon. We could simply repeat the implementation
+here and assert that the winner and loser were calculated correctly but then the test would no
+longer work if we changed the metric (or changed what an individual is entirely).&lt;/p&gt;
+&lt;p&gt;In these cases, we have to step back and think of invariants: what is always true about the tournament
+selection? As long as the winner remains in the population and no other individuals are added, it will &lt;em&gt;always&lt;/em&gt; be the winner. And that's what we test: We systematically remove each loser until only one
+individual is left in the population; that individual &lt;em&gt;must&lt;/em&gt; still be the original winner!&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:protocols"&gt;
+&lt;p&gt;I use protocols because Python's &lt;a href="https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols"&gt;structural subtyping&lt;/a&gt; is pretty good at
+properly representing a &lt;a href="https://luord.com/2022/04/30/domain/"&gt;domain&lt;/a&gt;. In simpler terms: we only care about what our objects can &lt;em&gt;do&lt;/em&gt;.
+On that note, the code I'll be showing shouldn't throw errors in &lt;a href="https://mypy-lang.org/"&gt;mypy&lt;/a&gt; or &lt;a href="https://github.com/microsoft/pyright"&gt;pyright&lt;/a&gt;.&amp;#160;&lt;a class="footnote-backref" href="#fnref:protocols" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:pool"&gt;
+&lt;p&gt;If we stick to just the parents' genomes, then the target will never be reached if it requires a
+gene that neither of the parents has.&amp;#160;&lt;a class="footnote-backref" href="#fnref:pool" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:offspring"&gt;
+&lt;p&gt;The intermediate class &lt;code&gt;Offspring&lt;/code&gt; fulfills two purposes here: to explicitly show
+the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
+on the type system. We'll know we have a real individual only if it was selected from an
+existing population or if it's the result of mutation from the crossover of two parents.&amp;#160;&lt;a class="footnote-backref" href="#fnref:offspring" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:type"&gt;
+&lt;p&gt;You might have noticed that an "Individual" is represented only by generic type arguments.
+This is on purpose: the algorithm doesn't need to care what an individual &lt;em&gt;is&lt;/em&gt;.&amp;#160;&lt;a class="footnote-backref" href="#fnref:type" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:collection"&gt;
+&lt;p&gt;In the type annotation, I used &lt;code&gt;Collection&lt;/code&gt; instead of &lt;code&gt;Population&lt;/code&gt;
+(which is itself a collection) because the tournament could be done over any group of individuals; it
+doesn't have to be a population specifically, and we gotta be "liberal in what we accept".&amp;#160;&lt;a class="footnote-backref" href="#fnref:collection" title="Jump back to footnote 5 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:mate"&gt;
+&lt;p&gt;&lt;em&gt;How&lt;/em&gt; it finds it is an implementation detail, hopefully one that excludes its parents.&amp;#160;&lt;a class="footnote-backref" href="#fnref:mate" title="Jump back to footnote 6 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:jokes"&gt;
+&lt;p&gt;Since, as we all know, "code is for what, tests are for why, and comments are for jokes".&amp;#160;&lt;a class="footnote-backref" href="#fnref:jokes" title="Jump back to footnote 7 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="Software"></category><category term="software"></category><category term="algorithms"></category><category term="code"></category><category term="examples"></category></entry><entry><title>Oracle in Docker</title><link href="https://luord.com/2017/11/13/oracle/" rel="alternate"></link><published>2017-11-13T00:00:00-05:00</published><updated>2017-11-13T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2017-11-13:/2017/11/13/oracle/</id><summary type="html">&lt;p&gt;Using the official oracle docker images in development&lt;/p&gt;</summary><content type="html">&lt;p&gt;A while ago, I had to work in a project that used oracle as its data layer (yeah, I know...).
+When we started, there was no such thing as an Oracle docker image so the development environment
+was either set-up manually or using bash scripts. I tried to create images but, first, it was hell and, second, I didn't want to
+bother with any license breach. I love bash and I'm often scripting away repetitive stuff
+but I am way too used to docker for my development environments (and also for deploying and in production);
+as such, it can be said that, whenever I had to rebuild the environment from scratch (and since a migration was being
+made towards data warehouses, that was more often than usual), I cursed my days.&lt;/p&gt;
+&lt;p&gt;Thankfully, by the time we were finishing and regressions were becoming more and more expected, &lt;a href="https://www.oracle.com/corporate/pressrelease/docker-oracle-041917.html"&gt;Oracle released
+official images to the docker store&lt;/a&gt;. I didn't waste time and, with some effort as the documentation
+was quite sparse, I managed to set them up locally and turned the bash scripts (and some plain
+text instructions) and other requirements into a &lt;code&gt;docker-compose&lt;/code&gt; file. This short guide is about duplicating
+the process (well, the Oracle part).&lt;/p&gt;
+&lt;h2&gt;Initial steps&lt;/h2&gt;
+&lt;p&gt;First of all, create an account in the &lt;a href="https://store.docker.com/"&gt;docker store&lt;/a&gt; if you don't have one already.&lt;/p&gt;
+&lt;p&gt;Next, login with your account in the docker console, using the command &lt;code&gt;docker login&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Getting Oracle&lt;/h2&gt;
+&lt;p&gt;With that set up, head over to the &lt;a href="https://hub.docker.com/_/oracle-database-enterprise-edition"&gt;oracle enterprise page&lt;/a&gt; in the docker store and click in the
+button that says "&lt;em&gt;Proceed to Checkout&lt;/em&gt;".&lt;/p&gt;
+&lt;p&gt;At this point, fill the information requested and accept the terms, the process is similar to the one Oracle has for downloading the
+client and databases from their website. They require it here too because this is Oracle.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Now&lt;/em&gt; you can pull the docker image: &lt;code&gt;docker pull store/oracle/database-enterprise:12.2.0.1&lt;/code&gt;. It'll take a while.&lt;/p&gt;
+&lt;h2&gt;Using Oracle&lt;/h2&gt;
+&lt;p&gt;At this point you're probably in the instructions page, which is now far more detailed than it was when the images were released,
+lucky you. They are relatively easy to follow but I'll write the last few commands required to use the image here anyway.&lt;/p&gt;
+&lt;p&gt;To start the image, run the command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;-d&lt;span class="w"&gt; &lt;/span&gt;--name&lt;span class="w"&gt; &lt;/span&gt;&amp;lt;db-container-name&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;store/oracle/database-enterprise:12.2.0.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To connect to the database using Oracle's sqlplus client, use the following command:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-it&lt;span class="w"&gt; &lt;/span&gt;&amp;lt;db-container-name&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;bash&lt;span class="w"&gt; &lt;/span&gt;-c&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;source /home/oracle/.bashrc; sqlplus /nolog&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Some options&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Setting the &lt;code&gt;DB_SID&lt;/code&gt; environment variable changes the name of the database. Default is &lt;code&gt;ORCLCDB&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;The port &lt;code&gt;1521&lt;/code&gt; can be mapped so that the container can be accessed from the host. It can also, of course, be linked or set up in a network with other containers.&lt;/li&gt;
+&lt;li&gt;The data can be separated in a volume, the directory to be mapped is &lt;code&gt;/ORCL&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Remember to change the password of the &lt;code&gt;sys&lt;/code&gt; user (default is &lt;code&gt;Oradoc_db1&lt;/code&gt;). This probably should be done in a Dockerfile that
+uses this image as base.&lt;/li&gt;
+&lt;li&gt;There's a smaller image (&lt;code&gt;store/oracle/database-enterprise:12.2.0.1-slim&lt;/code&gt;) whose Oracle installation has fewer options and tools.
+This is what I'd probably use if I have to work with Oracle again.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And that's it for now. If you have any problems or corrections, let me know in the comments!&lt;/p&gt;</content><category term="Software"></category><category term="operations"></category><category term="development"></category><category term="oracle"></category><category term="docker"></category><category term="guides"></category><category term="tutorials"></category></entry><entry><title>Continuous delivery with Gitlab</title><link href="https://luord.com/2016/10/20/cd/" rel="alternate"></link><published>2016-10-20T00:00:00-05:00</published><updated>2016-10-20T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-10-20:/2016/10/20/cd/</id><summary type="html">&lt;p&gt;A rapid delivery pipeline using containers and gitlab ci for free (thanks to google app engine). Pretty good for development, I believe.&lt;/p&gt;</summary><content type="html">&lt;p&gt;When I worked full-time in unique projects, writing the code and tests before running everything manually and then
+deploying to staging or production, also manually, was good enough. Now, however, with the potential
+to work in several and vastly different projects and environments, this "process" has become increasingly
+tedious; as such, as I've become more interested in operations since I started working with Docker, I tasked myself with automating this.&lt;/p&gt;
+&lt;p&gt;After a while of trying different tools, and the impossibility to work with others due to the limited income of a recent freelancer,
+I've settled in a process that I believe will suit me just fine, thanks to GitLab.com's
+all-around awesomeness. It beats the other offerings I considered by a margin:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Over GitHub, GitLab has private repositories, something clients &lt;em&gt;will&lt;/em&gt; want, in its free tier and their built-in CI.&lt;/li&gt;
+&lt;li&gt;Over Google Cloud Repositories, GitLab has their integrated CI.&lt;sup id="fnref:gcr"&gt;&lt;a class="footnote-ref" href="#fn:gcr"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;Over Heroku (which I was reticent about anyway for different reasons), GitLab CI is far less opinionated and
+offers more freedom in setting up the delivery process while allowing itself to deploy different types of applications more easily.&lt;/li&gt;
+&lt;li&gt;Over dedicated automation tools such as Jenkins or Buildbot, GitLab CI has the advantage of being simpler and straightforward.
+It might not be as maneuverable, but I believe what it offers is more than I need.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, GitLab has the advantage that its CI service is fully integrated and out-of-the-box with the git repositories, along with other useful
+or potentially useful features. One of these is that it works extremely well with docker, which I already use for local development.&lt;/p&gt;
+&lt;p&gt;My development process is now, roughly:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Running docker containers locally.&lt;/li&gt;
+&lt;li&gt;Using git hooks (set in place using bash scripts) to trigger tests.&lt;/li&gt;
+&lt;li&gt;Pushing to GitLab, where their CI will take charge of running tests again and, on success, pushing to the defined destination.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Right now, I'm pushing to Google App Engine, whose free tier, despite their lacking repositories&lt;sup id="fnref:rant"&gt;&lt;a class="footnote-ref" href="#fn:rant"&gt;2&lt;/a&gt;&lt;/sup&gt;, is still the best option for me.&lt;/p&gt;
+&lt;p&gt;But enough of introduction, let's get on with the guide:&lt;/p&gt;
+&lt;h2&gt;Preparation&lt;/h2&gt;
+&lt;p&gt;We need:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An account in &lt;a href="https://gitlab.com"&gt;GitLab.com&lt;/a&gt; or one's own GitLab server. I believe a private GitLab server would work too but I've only tested this
+on the website.&lt;/li&gt;
+&lt;li&gt;An account in &lt;a href="https://cloud.google.com"&gt;Google Cloud&lt;/a&gt;. Or adjust the &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;-specific steps to your vendor of choice.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docker.com"&gt;Docker&lt;/a&gt;, &lt;a href="https://docs.docker.com/compose/"&gt;docker-compose&lt;/a&gt;, and &lt;a href="https://git-scm.com"&gt;git&lt;/a&gt; installed locally. Some familiarity with git might be required.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;&lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; Setup&lt;/h2&gt;
+&lt;p&gt;(If you're already familiar with creating a project in Google App Engine or use a different vendor, skip ahead to &lt;a href="#gitlab-setup"&gt;GitLab setup&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In the cloud console, create a project:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE create project" src="/assets/img/gae/create_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Fill in the name you want (I called mine "gitlab-test").&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE project name" src="/assets/img/gae/project_name.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;For all of the following steps, remember the project ID that was returned upon creation.&lt;/p&gt;
+&lt;p&gt;Afterwards, go to IAM &amp;amp; Admin:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE IAM" src="/assets/img/gae/gae_iam.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once there, click on "Service Accounts":&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE IAM Services" src="/assets/img/gae/gae_services.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Then click on "CREATE SERVICE ACCOUNT" and fill in the form that pops up like so:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Gitlab Service" src="/assets/img/gae/create_service.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Gitlab Service" src="/assets/img/gae/gitlab_service.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;After clicking "CREATE", this will download a json file that contains the key that GitLab CI needs to connect to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;.&lt;/p&gt;
+&lt;p&gt;Now we need to enable the two APIs required to deploy to app engine remotely. There's a straightforward way that is merely clicking a link
+but, since I wouldn't trust it myself if I didn't see it firsthand, I won't expect you to trust it either. So the slightly longer way it is:&lt;/p&gt;
+&lt;p&gt;In the google cloud console sidebar, click on API manager:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API Manager" src="/assets/img/gae/api_manager.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once in the API manager, click in "ENABLE API".&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE Enable API" src="/assets/img/gae/enable_api.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;In the library that opens there's a search box, type "app engine admin api" there and click in the first result.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API search" src="/assets/img/gae/api_search.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Once there, click in "ENABLE".&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GAE API Enable" src="/assets/img/gae/api_enable.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Now just repeat this process (API Manager &amp;gt; Enable API &amp;gt; Search &amp;gt; Enable) for "Google Cloud Storage".&lt;/p&gt;
+&lt;h2 id="gitlab-setup"&gt;GitLab setup&lt;/h2&gt;
+&lt;p&gt;(If you're already familiar with creating a GitLab project and setting up project variables, go straight to &lt;a href="#code"&gt;Code&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;First of all, create a project by clicking on the "New Project" button:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab New Project" src="/assets/img/gitlab/new_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Fill up the "new project" form using the settings and name you want:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Create Project" src="/assets/img/gitlab/create_project.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;After sending the form, click on the project settings menu and select "Variables":&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Variables" src="/assets/img/gitlab/project_settings.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Set the &lt;code&gt;GAE_PROJECT&lt;/code&gt; variable with the id of your Google Cloud Project:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GitLab Set Variable" src="/assets/img/gitlab/variable.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Afterwards, set a new variable named &lt;code&gt;GAE_KEY&lt;/code&gt;, whose value must be the contents of the json file we downloaded earlier from &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;. Delete the json file as it could be dangerous to have it lying around.&lt;/p&gt;
+&lt;p&gt;These variables might not be needed if the process to deploy to your vendor doesn't require authentication or there are other ways of authenticating.&lt;/p&gt;
+&lt;h2 id="code"&gt;Code&lt;/h2&gt;
+&lt;p&gt;The app we're deploying will be a simple "Hello World" in &lt;a href="https://palletsprojects.com/p/flask/"&gt;Flask&lt;/a&gt; with the following structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;app
+| - app.yaml
+| - docker-compose.yml
+| - .gitlab-ci.yml
+| - app
+|   | - __init__.py
+|   | - app.py
+|   | - test.py
+|   | - Dockerfile
+|   | - requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;app.py&lt;/code&gt; is within a module and not in the root folder (which would be simpler) for ease of deployment to Google App Engine. This is its code:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flask&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;
+
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Flask&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;route&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello World!&amp;#39;&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;test.py&lt;/code&gt;, as its name indicates, it's just a very simple unit test for &lt;code&gt;app.py&lt;/code&gt;, as an example:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;unittest&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;app&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nc"&gt;Test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;unittest&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;TestCase&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test_client&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;assertEqual&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Hello World!&amp;#39;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;__init__.py&lt;/code&gt; has the &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; path setup:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+
+&lt;span class="n"&gt;lib_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+  &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abspath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__file__&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+  &lt;span class="s1"&gt;&amp;#39;lib&amp;#39;&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;insert&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lib_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.app&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The app only has one dependency, &lt;code&gt;flask&lt;/code&gt;, and that single word&lt;sup id="fnref:reqs"&gt;&lt;a class="footnote-ref" href="#fn:reqs"&gt;3&lt;/a&gt;&lt;/sup&gt; is the content of &lt;code&gt;requirements.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now the stuff this guide is meant to be about. First the &lt;code&gt;Dockerfile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;python:latest&lt;/span&gt;
+
+&lt;span class="k"&gt;ADD&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;requirements.txt&lt;span class="w"&gt; &lt;/span&gt;/
+
+&lt;span class="k"&gt;RUN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;pip&lt;span class="w"&gt; &lt;/span&gt;install&lt;span class="w"&gt; &lt;/span&gt;-r&lt;span class="w"&gt; &lt;/span&gt;requirements.txt
+
+&lt;span class="k"&gt;ADD&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.&lt;span class="w"&gt; &lt;/span&gt;/code
+
+&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/code&lt;/span&gt;
+
+&lt;span class="k"&gt;CMD&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;-m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;unittest&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;discover&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Simple enough: from the python image install the requirements and run the test.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;docker-compose.yml&lt;/code&gt; is very simple too:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;build&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;app&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Build and run what's in the &lt;code&gt;app&lt;/code&gt; folder&lt;/p&gt;
+&lt;p&gt;Now what allows GitLab to perform its magic, the &lt;code&gt;.gitlab-ci.yml&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;back&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;python&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;stage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;build&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;&amp;gt;-&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="no"&gt;pip install -t app/lib&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="no"&gt;-r app/requirements.txt&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;export PYTHONPATH=$PWD/app/lib:$PYTHONPATH&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;python -m unittest discover&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;artifacts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;paths&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;app/lib/&lt;/span&gt;
+
+&lt;span class="nt"&gt;deploy_production&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;google/cloud-sdk&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;stage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;deploy&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;production&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;echo $GAE_KEY &amp;gt; /tmp/key.json&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;gcloud config set project $GAE_PROJECT&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p p-Indicator"&gt;&amp;gt;-&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="no"&gt;gcloud&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="no"&gt;auth activate-service-account&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="no"&gt;--key-file /tmp/key.json&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;gcloud --quiet app deploy&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;after_script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;rm /tmp/key.json&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are a couple things happening here, but nothing overly complicated:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the build stage, run the python docker image, install the requirements locally in a folder called &lt;code&gt;lib&lt;/code&gt;, run the tests and then make the &lt;code&gt;lib&lt;/code&gt; folder available for next stages.&lt;/li&gt;
+&lt;li&gt;In the deployment stage... deploy the app to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; (Adjust the commands for your vendor of choice).&lt;sup id="fnref:credit"&gt;&lt;a class="footnote-ref" href="#fn:credit"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As you can see, to deploy we are using the variables (&lt;code&gt;GAE_KEY&lt;/code&gt; and &lt;code&gt;GAE_PROJECT&lt;/code&gt;) we set in the previous section.&lt;/p&gt;
+&lt;p&gt;Finally, &lt;code&gt;app.yaml&lt;/code&gt;, which is specific to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nt"&gt;runtime&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;python27&lt;/span&gt;
+&lt;span class="nt"&gt;threadsafe&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+
+&lt;span class="nt"&gt;handlers&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;url&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;/&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;app.app&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This uses the module structure so it can use the external libraries (&lt;code&gt;flask&lt;/code&gt;) in the project.&lt;/p&gt;
+&lt;h2&gt;Deployment&lt;/h2&gt;
+&lt;p&gt;There's not much to this, just run &lt;code&gt;docker-compose up&lt;/code&gt; and wait for the OK or possible errors. If there's nothing wrong, then we're ready to deploy. The &lt;code&gt;Dockerfile&lt;/code&gt; and the &lt;code&gt;docker-compose.yml&lt;/code&gt; file can be tweaked to actually run the server or perform any other task one might need.&lt;/p&gt;
+&lt;p&gt;In the root folder of our app, initialize git and add the repository URL of the gitlab project as remote. Then you only have to push the code
+and, after a few minutes, check the url &lt;code&gt;[your-project-id].appspot.com&lt;/code&gt; and the "Hello World!" should be staring right back at you.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;So that's it! We've deployed our app to &lt;abbr title="Google App Engine"&gt;GAE&lt;/abbr&gt; using GitLab. From then on, you can just dedicate yourself to writing the code and its tests.
+To deploy (to production or staging or any environment you choose), you just need to push and this process will take care testing and delivering the code if there aren't any errors.&lt;/p&gt;
+&lt;p&gt;Things we could do now is setting up automatic local testing on each commit, multiple stages and notifications for failed and successful builds, etc.&lt;/p&gt;
+&lt;p&gt;If you have any questions, let me know in the comments.&lt;/p&gt;
+&lt;style&gt;
+p &gt; img {
+  width: 100%;
+  display: block;
+}
+&lt;/style&gt;
+
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:gcr"&gt;
+&lt;p&gt;It amazes me how cloud repositories is almost completely isolated
+  from all other Google Cloud services. They used to have a Push-to-Deploy feature but that's gone (if it isn't,
+  it must be really well-hidden now because I spent days reading documentation, forums and question threads about this) and now
+  they suggest setting up one's own continuous integration service. I can't imagine why they did that and, again,
+  I'd rather not risk being charged for running their recommended Jenkins setup.&amp;#160;&lt;a class="footnote-backref" href="#fnref:gcr" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:rant"&gt;
+&lt;p&gt;Indeed, if their cloud repositories were integrated with their cloud platform, I might have never bothered to look into GitLab. A good thing in hindsight, all things considered.&amp;#160;&lt;a class="footnote-backref" href="#fnref:rant" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:reqs"&gt;
+&lt;p&gt;Not versioning your dependencies is, of course, not recommended.&amp;#160;&lt;a class="footnote-backref" href="#fnref:reqs" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:credit"&gt;
+&lt;p&gt;The script for the &lt;code&gt;deploy_production&lt;/code&gt; stage in &lt;code&gt;.gitlab-ci.yml&lt;/code&gt; is partly based on the one in &lt;a href="https://medium.com/evenbit/an-easy-guide-to-automatically-deploy-your-google-app-engine-project-with-gitlab-ci-48cb84757125"&gt;this&lt;/a&gt; cool post by Dennis Alund.&amp;#160;&lt;a class="footnote-backref" href="#fnref:credit" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="Software"></category><category term="operations"></category><category term="development"></category><category term="gitlab"></category><category term="docker"></category><category term="google-cloud"></category><category term="guides"></category><category term="tutorials"></category></entry><entry><title>The Not-Invented-Here syndrome</title><link href="https://luord.com/2016/06/25/nih/" rel="alternate"></link><published>2016-06-25T00:00:00-05:00</published><updated>2016-06-25T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-06-25:/2016/06/25/nih/</id><summary type="html">&lt;p&gt;On creating own solutions versus implementing existing libraries or methods.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I read a while ago about the NIH syndrome and how it's generally not recommended because it unnecessarily increases the workload and the amount of code that needs to be maintained. Not to mention that using existing libraries or frameworks, specially open source ones, can also eventually involve helping the community and, thus, improving the code for everyone.&lt;/p&gt;
+&lt;p&gt;So, the recommendation is generally reusing as much code as possible, hopefully keeping the amount of original code reduced to the actual business logic of the project at hand. I think this is sound, but there's something to be said about producing in-house code and reinventing the wheel a little.&lt;/p&gt;
+&lt;p&gt;In my last official project, where I worked as a backend developer for a startup, we did use frameworks for all of backend, frontend and presentation, as well as several plugins for the frameworks to avoid increasing the workload too much, but we also wrote a lot of code that we might have found in existing libraries if we looked.&lt;/p&gt;
+&lt;p&gt;For a lot of the REST API, for example, I wrote all of the entrypoints and callback logic. I know now that proper usage of &lt;a href="https://flask-restful.readthedocs.io/" title="One of the best plugins for Flask"&gt;Flask-Restful&lt;/a&gt; (&lt;a href="https://palletsprojects.com/p/flask/" title="Flask Framework"&gt;flask&lt;/a&gt; is, of course, my favorite framework) could have saved me a lot of work in that area... But I don't really regret it, I can say a learned a whole lot because I've always been a bit of a hands-on learner.&lt;/p&gt;
+&lt;p&gt;Of course, I've also seen first-hand that doing everything in-house can and does get out of control and, after a while, it becomes almost impossible for the handful of developers of a startup to maintain all that code.&lt;/p&gt;
+&lt;p&gt;In the project I'm working now, thanks to what I learned from writing a lot of my own code, it's been easier for me to research libraries and decide what would be a better fit as well as recognizing where I really do need to write; part of the reason I didn't reuse as much as I could in that other project was overestimating what was actual business logic and what were mere building blocks.&lt;/p&gt;
+&lt;p&gt;Given the chance, I'll probably refactor all that code and use Flask-Restful or similar to simplify it and make it more easily maintainable; but every learning opportunity is a good opportunity so I'm glad I went more zealous in the first go in that project.&lt;/p&gt;
+&lt;p&gt;What I'm trying to say is yes, one should avoid the NIH syndrome, surf the community, reuse stuff that hundreds if not thousands of people have polished (the more eyes, the better) and prevent getting the codebase from getting out of control due to reinventing the wheel. But one should also tackle at least one project where one writes as much code as possible, it highlights the importance of reusing the code in later projects, one gets first-hand experience on what leads people to write such libraries in the first place and, in general, one learns how the kind of projects one is working on generally work.&lt;/p&gt;
+&lt;p&gt;It goes without saying, of course, that doing such a thing is really only beneficial early in one's career. I see no reason for reinventing the wheel once one is already an experimented developer. Of course, someone more experienced than me could probably tell me otherwise.&lt;/p&gt;
+&lt;p&gt;In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), and LESS and CSS for the themes.&lt;/p&gt;</content><category term="Software"></category><category term="process"></category><category term="development"></category><category term="concepts"></category><category term="musings"></category><category term="python"></category><category term="flask"></category></entry></feed>
