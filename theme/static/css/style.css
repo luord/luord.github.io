@@ -1,3 +1,16 @@
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 400;
+  src: url('/theme/font/Montserrat-Italic-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-style: normal;
+  src: url('/theme/font/Montserrat-VariableFont_wght.ttf');
+}
+
 html {
   box-sizing: border-box;
   font: 16px/1.5em Montserrat, sans-serif;
