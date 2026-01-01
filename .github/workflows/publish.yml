@@ -8,10 +8,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-      - uses: earthly/setup-ucacher@main 
+          python-version: '3.13'
 
-      - run: ucacher python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements.txt
       - run: make github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
