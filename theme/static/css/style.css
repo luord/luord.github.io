@@ -83,7 +83,7 @@ aside ul, #main ul, header ul, body > footer ul {
   padding: 0;
 }
 
-body > footer li, body > footer ul, body > header li, aside li a:before {
+body > footer li, body > footer ul, body > header li {
   display: inline-block;
 }
 
@@ -117,16 +117,6 @@ img {
   border-bottom: 1px solid;
 }
 
-aside li a:before {
-  font-family: FontAwesome;
-  width: 1.3em;
-}
-
-body > footer li i {
-  font: normal 1.5em FontAwesome;
-  vertical-align: bottom;
-}
-
 body > footer img {
   vertical-align: middle;
 }
@@ -146,26 +136,6 @@ form {
   justify-content: center;
   gap: 1ch;
   padding: 0;
-}
-
-.cat-link:before {
-  content: "\f02c";
-}
-
-.arc-link:before {
-  content: "\f073";
-}
-
-.tag-link:before {
-  content: "\f02b";
-}
-
-.feed-link:before {
-  content: "\f09e";
-}
-
-.mail-link:before {
-  content: "\f0e0";
 }
 
 #dates h3 {
