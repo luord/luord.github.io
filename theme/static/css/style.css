@@ -96,12 +96,40 @@ aside li svg {
   height: 1.5em;
 }
 
-body > footer li, body > footer ul, body > header li {
+body > header li {
   display: inline-block;
 }
 
-body > footer li, body > header li + li {
+body > header li + li {
   margin-left: 2ch;
+}
+
+body > footer nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+body > footer nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+  margin: 0;
+  padding: 0;
+}
+
+body > footer nav a {
+  display: block;
+}
+
+body > footer nav svg {
+  display: block;
+  stroke: currentColor;
+  fill: currentColor;
+  width: 2em;
+  height: 2em;
 }
 
 article p > img {
