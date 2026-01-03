@@ -70,27 +70,27 @@
   <b>Subscribe</b>
   <ul>
     {% if TAG_FEED_ATOM and tag is defined %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM.format(slug=tag.slug) }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ TAG_FEED_ATOM.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% elif TAG_FEED_RSS and tag is defined %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS.format(slug=tag.slug) }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ TAG_FEED_RSS.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% elif CATEGORY_FEED_ATOM and category is defined %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% elif CATEGORY_FEED_RSS and category is defined %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS.format(slug=category.slug) }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_RSS.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% elif FEED_ALL_ATOM %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% elif FEED_ALL_RSS %}
-      <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}">Feed</a></li>
+      <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
     {% endif %}
     {% if NEWSLETTER_URL %}
-    <li><a href="{{ SITEURL }}/{{ NEWSLETTER_URL }}">Newsletter</a></li>
+    <li><a href="{{ SITEURL }}/{{ NEWSLETTER_URL }}"><svg><use href="/theme/icons.svg#mail" /></svg>Newsletter</a></li>
     {% endif %}
   </ul>
   <b>Browse content by</b>
   <ul>
-    <li><a href="{{ SITEURL }}/{{ CATEGORIES_URL }}"><svg><use href="/theme/icons/categories.svg#svg-cat" stroke="currentColor" /></svg>Categories</a></li>
-    <li><a href="{{ SITEURL }}/{{ ARCHIVES_URL }}">Dates</a></li>
-    <li><a href="{{ SITEURL }}/{{ TAGS_URL }}">Tags</a></li>
+    <li><a href="{{ SITEURL }}/{{ CATEGORIES_URL }}"><svg><use href="/theme/icons.svg#categories" /></svg>Categories</a></li>
+    <li><a href="{{ SITEURL }}/{{ ARCHIVES_URL }}"><svg><use href="/theme/icons.svg#calendar" /></svg>Dates</a></li>
+    <li><a href="{{ SITEURL }}/{{ TAGS_URL }}"><svg><use href="/theme/icons.svg#tags" /></svg>Tags</a></li>
   </ul>
 </aside>
 {% endblock %}
