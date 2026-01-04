@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domains of engineers and users | Luis Orduz</title>
+
+  <meta name="description" content="Improving communication by writing code that describes the domain more closely." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2022/04/30/domain/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="Domains of engineers and users"/>
+  <meta property="og:url" content="https://luord.com/2022/04/30/domain/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Improving communication by writing code that describes the domain more closely." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com//assets/img/splash/domain.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2022/04/30/domain/" rel="bookmark"
+         title="Permalink to Domains of engineers and users"><span class="p-name">Domains of engineers and users</span></a></h1>
+<address>
+  <span class="dt-published">2022-04-30</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/engineering/">Engineering</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>I finished <a href="https://luord.com/2022/03/31/abstracting/">my last post</a> by mentioning how refactoring can help us achieve a code base where discussing
+the code and discussing the domain model can be analogous or even entail similar discussions. That's
+a topic that deserves a deeper looking into.</p>
+<h2>Experts on different domains</h2>
+<p>Imagine this conversation:</p>
+<blockquote>
+<p>End user/Product owner: "We'd like for the URL of the Foo to have the provided identifier instead of these random characters."</p>
+<p>Engineer: "Oh, by default the framework adds a UUID as the primary key, which is also used for URLs; we'll update it."</p>
+<p>End user/Product owner: "Is that a front-end change or a back-end change?"</p>
+</blockquote>
+<p>Now, now, that's an exaggeration as I've worked with plenty of users and product people who were well
+versed enough on technical details—often because they <em>had</em> to pick up the terminology—to understand what the developer was talking about
+in that exchange, but I hope this gets the idea across: Too often, there's a gap in shared terminology that hinders the communication between
+engineers and users.</p>
+<p>And here's an example in the other direction:</p>
+<blockquote>
+<p>End user/Product owner: "We need the aggregated results of the 'Foo' to be calculated from the monthly 'bar' instead of the weekly 'bar' from now on."</p>
+<p>Engineer: "Understood, I'll add it to the backlog and change it as soon as possible."</p>
+<p>Engineer (later, to another engineer or the tech lead): "Where the hell do the aggregated results value come from? Is that in the database? How is it called there? And what even is <code>bar</code>?"</p>
+</blockquote>
+<p>Now that one is no exaggeration; I've had that exact conversation over the years, multiple times.
+And I've been on both sides of that last question too. Of course, I've also been in projects where there was enough rapport between
+the engineering and product teams for the engineer to simply ask the product owner right away... But the problem still persists,
+only in the form of periodic repetitive conversations instead of the latency caused by the developer looking for someone who understands.</p>
+<p>The point is that engineers are experts on the domain of software engineering, while users
+are experts on <em>their</em> own domain, which they're hoping it gets easier to do with the
+application/platform/system they bought/subscribed to, or hired the engineers to create/maintain.</p>
+<h2>Code and stories</h2>
+<p>Let's imagine that the user/product owner comes at us with the following requirement:</p>
+<blockquote>
+<p>As a user, I want to store my "Foo" with the "jon", "doe",
+"bar" and "baz" values. With the understanding that "baz" is seven times
+"bar".</p>
+</blockquote>
+<p>After the appropriate back and forth, we come to the following <a href="https://luord.com/2020/02/01/stories/">user story</a>:</p>
+<dl>
+<dt>Store Foo</dt>
+<dd>Create a new model in <code>cool_framework</code> used to store the periodic <code>Foo</code> of the
+user. The fields are <code>jon</code> (unique string), <code>doe</code> (integer, 100 by default),
+and <code>bar</code> (float, cannot be empty); <code>baz</code> will be dynamically generated from <code>bar</code>.
+A UUID field will be included as primary key by the framework.</dd>
+</dl>
+<p>This user story is of course lacking a way for users to actually submit the data they want to store<sup id="fnref:form"><a class="footnote-ref" href="#fn:form">1</a></sup>,
+but it already has more than enough to show how the mismatch in communication starts: The user/product owner
+could very well ask "what the hell is a UUID?"<sup id="fnref:float"><a class="footnote-ref" href="#fn:float">2</a></sup></p>
+<p>I should point out that I am in no way condemning this approach. It's perfectly fine and how around ninety
+percent of the projects I've worked on have looked.</p>
+<p>But now let's look at the code that fulfills the user story:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cool_framework</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+  <span class="n">jon</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">doe</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+  <span class="n">bar</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="nd">@models</span><span class="o">.</span><span class="n">computed_property</span>
+  <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">*</span> <span class="mi">7</span>
+</code></pre></div>
+
+<p>Again, this is perfectly fine; I currently work in projects whose code looks like this (with a
+billion more fields and methods, of course), and there aren't problems, usually.</p>
+<p>The thing is while this code can trivially be discused among engineers, it can't be discussed
+by or with users. By this point, both groups are essentially speaking different languages: The users
+talk about whatever Foo is, how the "jon" group performed this week, when the "baz" could change, etc.;
+the engineers, conversely, are talking about fields, properties, tables, migrations, etc.</p>
+<p>And this works! Most of my experience has had this kind of separation and the teams work and the product
+is delivered. But what if the language gap could be narrowed?</p>
+<h2>A shared language</h2>
+<p>Let's rephrase that story:</p>
+<dl>
+<dt>Store Foo</dt>
+<dd>Create a class/type/struct<sup id="fnref:class"><a class="footnote-ref" href="#fn:class">3</a></sup> <code>Foo</code> where the user can store multiple instances of the following
+values: <code>jon</code> (type <code>ProvidedIdentifier</code>), <code>doe</code> (type <code>UserEstimation</code>), and <code>bar</code> (type <code>PeriodicResults</code>);
+<code>baz</code> (type <code>AggregatedResults</code>) is calculated from <code>bar</code>.</dd>
+</dl>
+<p>I just made up those types, but what's important here is that we're to assume that those types <em>mean something</em> to
+the users. Whatever is in "jon", the users usually call it the "provided identifier" of whatever Foo is; they know
+that "bar" is the "periodic results" of whatever it is that the users do. Ditto for the other fields.</p>
+<p>With that understanding, let's rewrite the code to start illustrating why representing the domain more explicitly is important:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+
+
+<span class="k">class</span> <span class="nc">ProvidedIdentifier</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="n">unique</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">class</span> <span class="nc">UserEstimation</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="k">class</span> <span class="nc">PeriodicResults</span><span class="p">(</span><span class="n">Decimal</span><span class="p">):</span>
+  <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="n">nullable</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">AggregatedResults</span><span class="p">(</span><span class="n">Decimal</span><span class="p">):</span>
+  <span class="n">FACTOR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span>
+
+  <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">:</span> <span class="n">PeriodicResults</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">FACTOR</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+  <span class="n">jon</span><span class="p">:</span> <span class="n">ProvidedIdentifier</span>
+  <span class="n">doe</span><span class="p">:</span> <span class="n">UserEstimation</span>
+  <span class="n">bar</span><span class="p">:</span> <span class="n">PeriodicResults</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AggregatedResults</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">AggregatedResults</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Is the code more verbose? In total, absolutely<sup id="fnref:lesscode"><a class="footnote-ref" href="#fn:lesscode">4</a></sup> but it too became clearer
+about the <em>what</em> we're dealing with: We can assume that the signatures of those classes came from discussions with the users,
+where they described what that data means in their business and how it's supposed to behave.
+Sure, <code>doe</code> is still a string, <code>bar</code> a floating point value, etcetera, but now the developers can talk about
+the code in terms similar to what the users talk about, which also means they'll talk to the <em>users</em> in those terms too.</p>
+<p>Let's reimage the conversations from the start, but now with the assumption that all the code is like this:</p>
+<p>Well, for starters the first conversation no longer makes sense as another win from these changes is that we decoupled
+our business logic from whatever framework we're using<sup id="fnref:clean"><a class="footnote-ref" href="#fn:clean">5</a></sup>... As long as the framework treats the business code as source of truth anyway.</p>
+<p>As for the second,</p>
+<blockquote>
+<p>End user/Product owner: "We need the aggregated results of the 'Foo' to be calculated from the monthly 'bar' instead of the weekly 'bar' from now on."</p>
+<p>Engineer: "Just to make sure, <code>baz</code> is the aggregated results and <code>bar</code> is the periodic results, correct?"</p>
+<p>End user/Product owner: "Correct!"</p>
+<p>Engineer: "Cool, I'll get it done."</p>
+</blockquote>
+<p>Let's be real, it's likely that the engineer still doesn't know what the hell these "results" are or why the users care about them, but now at least it might be easier
+to pinpoint what needs to change without having to find someone who might be more familiar with the domain.</p>
+<p>Finally, it bears mentioning that this approach doesn't solve all communication problems: The engineers will never be domain experts on the users' domain, so there will
+always be questions, specially when creating new features as the developers will need to ask what the new classes/types will need for fields and metadata<sup id="fnref:terminology"><a class="footnote-ref" href="#fn:terminology">6</a></sup>;
+as for the users/product owners, the decoupling with the framework and the increasing reliance on native language constructs means that the number of technical details they need
+to have an idea about becomes smaller, but not zero.</p>
+<p>Regardless, giving the team (both involved users and developers) a way to more fluidly discuss the product is a huge step forward in my book.</p>
+<h2>A caveat</h2>
+<p>All of that is pretty nice; however, the boilerplate the users don't care about still needs to exist <em>somewhere</em>. Maybe abstracted and hidden away in specific modules or even
+internal libraries that have their own repos, but finding and correcting leaky abstractions is a neverending battle, so those
+discussions that ideally should be among engineers only might find their way in conversations with the users.</p>
+<p>Imagine a world where we didn't need to abstract the boilerplate for every project; that it simply didn't exist.
+In that ideal world, we could just drop some native classes/structs/etc that contain all the business logic and <em>only</em> the business logic to some tool(s),
+and the tool would automagically take care of all the wiring needed for the application to reach the end user.</p>
+<p>I've given a lot of thought to such an idea, and maybe it's a pipe dream, but stranger things happen in this industry all the time.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:form">
+<p>Let's say a form in some web site/application.&#160;<a class="footnote-backref" href="#fnref:form" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:float">
+<p>Or, for that matter "what are strings and floats?" You never know!&#160;<a class="footnote-backref" href="#fnref:float" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:class">
+<p>Or whatever construct your favorite language uses to group data, if any!&#160;<a class="footnote-backref" href="#fnref:class" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:lesscode">
+<p>But hey, the code of the <code>Foo</code> class itself got simpler.&#160;<a class="footnote-backref" href="#fnref:lesscode" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:clean">
+<p>Yay for clean architecture!&#160;<a class="footnote-backref" href="#fnref:clean" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:terminology">
+<p>In other words, some conversations for the developers to make the business rules clearer, which they then can express in the code!&#160;<a class="footnote-backref" href="#fnref:terminology" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/software/">software</a>
+|    <a href="https://luord.com/tag/development/">development</a>
+|    <a href="https://luord.com/tag/engineering/">engineering</a>
+|    <a href="https://luord.com/tag/refactoring/">refactoring</a>
+  </footer>
+  <p class="p-summary" style="display: none;">Improving communication by writing code that describes the domain more closely.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2022/04/30/domain/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2022/04/30/domain/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2022/03/31/abstracting/">
+      Previous: Practical refactoring: Abstractions
+    </a>
+  </li>
+  <li >
+    <a href="https://luord.com/2023/03/01/genetic/">
+      Next: A genetic algorithm implemented in Python
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "Domains of engineers and users";
+  shareConfig.text = "Improving communication by writing code that describes the domain more closely.";
+  shareConfig.url = "https://luord.com/2022/04/30/domain/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Not-Invented-Here syndrome | Luis Orduz</title>
+
+  <meta name="description" content="On creating own solutions versus implementing existing libraries or methods." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2016/06/25/nih/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="The Not-Invented-Here syndrome"/>
+  <meta property="og:url" content="https://luord.com/2016/06/25/nih/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="On creating own solutions versus implementing existing libraries or methods." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com/assets/img/site/image.png" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2016/06/25/nih/" rel="bookmark"
+         title="Permalink to The Not-Invented-Here syndrome"><span class="p-name">The Not-Invented-Here syndrome</span></a></h1>
+<address>
+  <span class="dt-published">2016-06-25</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/software/">Software</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>I read a while ago about the NIH syndrome and how it's generally not recommended because it unnecessarily increases the workload and the amount of code that needs to be maintained. Not to mention that using existing libraries or frameworks, specially open source ones, can also eventually involve helping the community and, thus, improving the code for everyone.</p>
+<p>So, the recommendation is generally reusing as much code as possible, hopefully keeping the amount of original code reduced to the actual business logic of the project at hand. I think this is sound, but there's something to be said about producing in-house code and reinventing the wheel a little.</p>
+<p>In my last official project, where I worked as a backend developer for a startup, we did use frameworks for all of backend, frontend and presentation, as well as several plugins for the frameworks to avoid increasing the workload too much, but we also wrote a lot of code that we might have found in existing libraries if we looked.</p>
+<p>For a lot of the REST API, for example, I wrote all of the entrypoints and callback logic. I know now that proper usage of <a href="https://flask-restful.readthedocs.io/" title="One of the best plugins for Flask">Flask-Restful</a> (<a href="https://palletsprojects.com/p/flask/" title="Flask Framework">flask</a> is, of course, my favorite framework) could have saved me a lot of work in that area... But I don't really regret it, I can say a learned a whole lot because I've always been a bit of a hands-on learner.</p>
+<p>Of course, I've also seen first-hand that doing everything in-house can and does get out of control and, after a while, it becomes almost impossible for the handful of developers of a startup to maintain all that code.</p>
+<p>In the project I'm working now, thanks to what I learned from writing a lot of my own code, it's been easier for me to research libraries and decide what would be a better fit as well as recognizing where I really do need to write; part of the reason I didn't reuse as much as I could in that other project was overestimating what was actual business logic and what were mere building blocks.</p>
+<p>Given the chance, I'll probably refactor all that code and use Flask-Restful or similar to simplify it and make it more easily maintainable; but every learning opportunity is a good opportunity so I'm glad I went more zealous in the first go in that project.</p>
+<p>What I'm trying to say is yes, one should avoid the NIH syndrome, surf the community, reuse stuff that hundreds if not thousands of people have polished (the more eyes, the better) and prevent getting the codebase from getting out of control due to reinventing the wheel. But one should also tackle at least one project where one writes as much code as possible, it highlights the importance of reusing the code in later projects, one gets first-hand experience on what leads people to write such libraries in the first place and, in general, one learns how the kind of projects one is working on generally work.</p>
+<p>It goes without saying, of course, that doing such a thing is really only beneficial early in one's career. I see no reason for reinventing the wheel once one is already an experimented developer. Of course, someone more experienced than me could probably tell me otherwise.</p>
+<p>In a different but related matter, in this website I've tried to avoid using frameworks of any kind; opting for more hands-on code. Just like doing it once helps to learn, I think that keeping a side, personal, project for practice keeps one from forgetting the basics. This site is, thus, my sandbox in a way, helping me practice HTML and Jinja templating (through the Pelican blog), and LESS and CSS for the themes.</p>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/process/">process</a>
+|    <a href="https://luord.com/tag/development/">development</a>
+|    <a href="https://luord.com/tag/concepts/">concepts</a>
+|    <a href="https://luord.com/tag/musings/">musings</a>
+|    <a href="https://luord.com/tag/python/">python</a>
+|    <a href="https://luord.com/tag/flask/">flask</a>
+  </footer>
+  <p class="p-summary" style="display: none;">On creating own solutions versus implementing existing libraries or methods.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2016/06/25/nih/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2016/06/25/nih/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2016/03/14/hello/">
+      Previous: Hello World!
+    </a>
+  </li>
+  <li >
+    <a href="https://luord.com/2016/10/20/cd/">
+      Next: Continuous delivery with Gitlab
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "The Not-Invented-Here syndrome";
+  shareConfig.text = "On creating own solutions versus implementing existing libraries or methods.";
+  shareConfig.url = "https://luord.com/2016/06/25/nih/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

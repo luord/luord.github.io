@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating stories from requirements | Luis Orduz</title>
+
+  <meta name="description" content="On crafting actionable development stories from requirements" />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2020/02/01/stories/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="Creating stories from requirements"/>
+  <meta property="og:url" content="https://luord.com/2020/02/01/stories/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="On crafting actionable development stories from requirements" />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com//assets/img/splash/stories.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2020/02/01/stories/" rel="bookmark"
+         title="Permalink to Creating stories from requirements"><span class="p-name">Creating stories from requirements</span></a></h1>
+<address>
+  <span class="dt-published">2020-02-01</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/engineering/">Engineering</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>A few weeks ago, one of my best friends came to me with an idea for an application. Unlike most (if not all) of my ideas, this one I actually believe to have potential so I asked him to prepare a list of requirements we could use to at least have a rough goal to aim for with this application. He delivered, and I was presented a good enough list... And I did nothing with it, I've been letting it sit there, all unfulfilled potential. But that changes now!</p>
+<p>I've been working as a software engineer for a while and that experience, the <a href="https://agilemanifesto.org/">manifesto</a>, what I remember from my college studies and what I've read regarding system design all point to the same conclusion: Having a fixed list of tasks and dedicating too much time to it is pointless because requirements change like waves in the sea.</p>
+<p>However, I still feel it's important to have a set of stories to work on, both to have a general idea of what the system is and how it's supposed to work, as well as for documenting progress; nothing kills motivation like the feeling you're not actually advancing towards your goal. Besides, we control the requirements in this case and, even though waves are fickle, <a href="https://oceanservice.noaa.gov/facts/conveyor.html">the global conveyor belt</a> is still a thing. Much like with that <abbr title="sorry">overly elaborate metaphor</abbr>, my goal is not to describe how every single detail in the application is supposed to work, but more a general description of each functionality, and general details on how to implement it.</p>
+<p>With that in mind, I'll show how I approached turning that requirements list written in the "as a user" format into stories that developers can actually work on. I'll forgo things like "story points" or "acceptance criteria" because not only are those restrictive, I'm doing this as a developer for developers—all two of us—and what I care about is what to do and how to do it. And that's also the reason I won't be using stuff like certain project management tool that most software development teams are familiar with whose name I won't mention, at the risk of summoning giant lizards.<sup id="fnref:jira"><a class="footnote-ref" href="#fn:jira">1</a></sup></p>
+<p>In fact, this is a good point to mention <a href="https://sourcehut.org/">sourcehut</a>, Drew DeVault's cool set of tools for creating software that's very reminiscent of how the biggest open source projects are maintained. I'm going to be creating these stories using sourcehut's todo, which is to say: simple issues.</p>
+<p>Without further ado, let's take one of the requirements as example, one that is universal enough that I can use without risking IP: user accounts. This is an abbreviation of my friend's requirement:</p>
+<blockquote>
+<p>As a user I can create an account in the application, with an email or using social networks (an email should be sent introducing the platform upon registration).</p>
+</blockquote>
+<p>As mentioned, my goal with the stories is knowing what to do and how to do it, from a developer's perspective. Part by part, this is the architecture<sup id="fnref:arch"><a class="footnote-ref" href="#fn:arch">2</a></sup> that this requirement defines:</p>
+<ol>
+<li>The <abbr title="excuse me being captain obvious">application has a domain</abbr>, and this domain includes the entity User because that's what we want to create.</li>
+<li>The application has some sort of data layer that the application interfaces with to store this User data.</li>
+<li>The application has adapters that <em>interface</em> with third parties to retrieve the user data, social networks in this case.</li>
+<li>The application has the <strong>use case</strong> "create user" that is called in two different ways: using email or using the adapters mentioned above.</li>
+<li>The application has an <em>interface</em> that the user employs to send the email and other data, or to trigger the retrieval from third parties.</li>
+<li>The application has a second <strong>use case</strong>, which is to send an automated email to the, well, email provided by the user upon successful creation.</li>
+</ol>
+<p>With that rough outline, we have an idea for two or three stories, because at this stage is better to restrict stories to the number of use cases, or to the number of times all use cases are instantiated across the application.<sup id="fnref:cases"><a class="footnote-ref" href="#fn:cases">3</a></sup> Of course, stories ultimately can involve <em>editing</em> use cases too; the point is that we should make the stories about the application business rules whenever possible.</p>
+<p>The stories mentioned here are deliberately vague on the tech stack because I want this to be applicable for as many developers as possible.</p>
+<dl>
+<dt>Create User from email</dt>
+<dd>Create an Use Case that accepts raw data as well as a data repository<sup id="fnref:postgres"><a class="footnote-ref" href="#fn:postgres">4</a></sup> and creates an instance of the User domain model using the raw data. It then passes this data to the repository for creation.</dd>
+<dd>Create an interface adapter<sup id="fnref:flask"><a class="footnote-ref" href="#fn:flask">5</a></sup> that receives data (including email) submitted by an user and passes it to the aforementioned Use Case, alongside the database repository.</dd>
+<dd>Create a view<sup id="fnref:web"><a class="footnote-ref" href="#fn:web">6</a></sup> that allows the user to submit this data to the adapter.<sup id="fnref:server"><a class="footnote-ref" href="#fn:server">7</a></sup></dd>
+<dt>Create User from third party</dt>
+<dd>Create an interface adapter that gathers data (including email) about an user sent from third parties<sup id="fnref:dance"><a class="footnote-ref" href="#fn:dance">8</a></sup>. It passes this data to the create user Use Case alongside the database repository.<sup id="fnref:clean"><a class="footnote-ref" href="#fn:clean">9</a></sup></dd>
+<dd>Create a view that allows the user to go through the third party communication cycle.</dd>
+<dt>Send email on user creation</dt>
+<dd>Edit Create User Use case so that, upon successful storage, calls a new Use Case.</dd>
+<dd>This new Use Case is in charge of sending the body and addressee of an email to an email sender interface adapter.<sup id="fnref:flow"><a class="footnote-ref" href="#fn:flow">10</a></sup></dd>
+<dd>Create an interface adapter that uses the data produced by the  use case and sends it to an external queue<sup id="fnref:celery"><a class="footnote-ref" href="#fn:celery">11</a></sup>, in the form of a message, that should send the email.</dd>
+</dl>
+<p>These stories are somewhat vague, and that is deliberate. I don't want to restrict—and not only because I would be restricting myself—and details of implementation are what code reviews and tests are for. The one exception I make on not specifying implementation is regarding the tech stack itself: it's such a big decision that all developers are benefitted if the stack is clear<sup id="fnref:caveat"><a class="footnote-ref" href="#fn:caveat">12</a></sup>.</p>
+<p>The stories should only define a rough end goal, and I believe the ones I wrote here achieve that. Anyhow, I feel that this is a good first step and a general description of how we'll be working on this project.</p>
+<p>This is going to be part of a series, an idea born from a <a href="https://flaviocopes.com/blog-seo/">great article on blogging</a> that I read the other day, which inspired me to write more and gave me the idea of how to actually write: I'm going to push myself into working on this application (and refactoring an older one, with another friend) so that I have material to write for this blog, and I can use the will to write for the blog as incentive to work on those projects, killing two birds with one stone.</p>
+<p><strong>IMPORTANT</strong>: Everything I'm writing in these series is my interpretation and general idea of a good process. Anything (or everything) I write might be entirely wrong and, in such event, I <abbr title="read: beg">encourage</abbr> you to correct me in the comments.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:jira">
+<p>Just FYI, I don't hate it, it can be a great tool, as long as it isn't drowned in the bastardization of scrum, which I don't hate either... as long as it's used as a guideline instead of a forced two-week waterfall grind.&#160;<a class="footnote-backref" href="#fnref:jira" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:arch">
+<p>I'm trying to describe this within the terms of the <a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">clean architecture</a>. Results may vary.&#160;<a class="footnote-backref" href="#fnref:arch" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:cases">
+<p>And debatably at any stage. I've seen projects where stories are created for everything, even changing the color of a button to a slightly differen shade of blue. YMMV on advantages and disadvantages of that practice.&#160;<a class="footnote-backref" href="#fnref:cases" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:postgres">
+<p>I'm a postgreSQL user.&#160;<a class="footnote-backref" href="#fnref:postgres" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:flask">
+<p>Probably a function that would retrieve the data in a given format, create a domain entity object from it that would then pass this object into the database adapter, probably a SQLAlchemy model. This function itself would be called from a <a href="https://www.palletsprojects.com/p/flask/">flask</a> endpoint.&#160;<a class="footnote-backref" href="#fnref:flask" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:web">
+<p>I've worked as a full stack web developer almost exclusively, so in here I'm thinking of a form, created either from a JS framework or just a simple web form.&#160;<a class="footnote-backref" href="#fnref:web" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:server">
+<p>Of course, nobody is forced to use a client-server system, but it's what I'll use.&#160;<a class="footnote-backref" href="#fnref:server" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:dance">
+<p>Probably something like <a href="https://flask-dance.readthedocs.io/en/latest/">flask-dance</a>.&#160;<a class="footnote-backref" href="#fnref:dance" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:clean">
+<p>Remember not to pollute the business rules or the entities with data or steps specific to any third party.&#160;<a class="footnote-backref" href="#fnref:clean" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:flow">
+<p>Remember not to break flow of control, these business rules don't care how the database signals success or how the sender adapter sends the message. But that's an implementation detail that should be discussed in review.&#160;<a class="footnote-backref" href="#fnref:flow" title="Jump back to footnote 10 in the text">&#8617;</a></p>
+</li>
+<li id="fn:celery">
+<p>Probably rabbitmq through Celery.&#160;<a class="footnote-backref" href="#fnref:celery" title="Jump back to footnote 11 in the text">&#8617;</a></p>
+</li>
+<li id="fn:caveat">
+<p>Everything beyond that (meaning <em>how</em> the stack is used) is outside the scope of the story. That's for tests and reviews.&#160;<a class="footnote-backref" href="#fnref:caveat" title="Jump back to footnote 12 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/architecture/">architecture</a>
+|    <a href="https://luord.com/tag/design/">design</a>
+|    <a href="https://luord.com/tag/model/">model</a>
+|    <a href="https://luord.com/tag/musings/">musings</a>
+|    <a href="https://luord.com/tag/craftsmanship/">craftsmanship</a>
+  </footer>
+  <p class="p-summary" style="display: none;">On crafting actionable development stories from requirements</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2020/02/01/stories/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2020/02/01/stories/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2017/11/13/oracle/">
+      Previous: Oracle in Docker
+    </a>
+  </li>
+  <li >
+    <a href="https://luord.com/2022/01/01/2021/">
+      Next: 21 & 22
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "Creating stories from requirements";
+  shareConfig.text = "On crafting actionable development stories from requirements";
+  shareConfig.url = "https://luord.com/2020/02/01/stories/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

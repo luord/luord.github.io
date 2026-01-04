@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practical refactoring: 'clever' code | Luis Orduz</title>
+
+  <meta name="description" content="Practical example of the problems with clever code and the benefits of refactoring." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2022/02/28/refactoring/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="Practical refactoring: 'clever' code"/>
+  <meta property="og:url" content="https://luord.com/2022/02/28/refactoring/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Practical example of the problems with clever code and the benefits of refactoring." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com//assets/img/refactoring/clever.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2022/02/28/refactoring/" rel="bookmark"
+         title="Permalink to Practical refactoring: 'clever' code"><span class="p-name">Practical refactoring: 'clever' code</span></a></h1>
+<address>
+  <span class="dt-published">2022-02-28</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/engineering/">Engineering</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>Look at this code</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_best_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WinnerPair</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Divide population in half.</span>
+<span class="sd">    Pick the word closest to the matching word in each half.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">WinnerPair</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">population_half</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">population_half</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[::</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+    <span class="p">))</span>
+</code></pre></div>
+
+<p>I'm not gonna deny it, I liked writing it, I like that it is technically a single function call<sup id="fnref:class"><a class="footnote-ref" href="#fn:class">1</a></sup>,
+the usage of lambdas and the built-in Python functions used for handling, well, functions and iterables.
+What can I say? It makes me feel "clever" because technically it's code that requires certain level of
+familiarity with the language.</p>
+<p>It's also a total mess. I literally spent an entire afternoon explaining this "short" piece of code
+to an experienced engineer who had already invested a few months getting familiar with Python.</p>
+<p>This code is me at my most self-indulgent and I'm well aware I would never have written this outside
+of a <a href="https://gitlab.com/luord/prototype">prototype meant only for me to play around</a>. Code like this is <strong>not</strong> meant to live in a
+system worked at by more than one developer. It'd be a nightmare to maintain, as only the one who wrote
+it could possibly understand it. Hell, I wrote this and I had to struggle a bit puzzling what it actually
+did.</p>
+<p>In short, this code is ripe for improvement, which is exactly what I'm gonna do.</p>
+<h2>Unclear iterations</h2>
+<p>The first thing that jumps at me upon seeing this code is that there are three nested iterations in it,
+but it's very difficult to tell which one is which or where each one ends.
+An easy first fix is then relying less on built-in functions and making the iterations more explicit
+via <code>for</code> statements.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_best_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WinnerPair</span><span class="p">:</span>
+    <span class="c1"># Get the words closest to the target in each half of the population</span>
+    <span class="n">winners</span> <span class="o">=</span> <span class="n">WinnerPair</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">population</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">x</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)):</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">population</span><span class="p">:</span>
+            <span class="n">similarity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">char_word</span><span class="p">,</span> <span class="n">char_target</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">word</span><span class="p">):</span>
+                <span class="n">similarity</span> <span class="o">+=</span> <span class="n">chard_word</span> <span class="o">==</span> <span class="n">char_target</span>
+            <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">word</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+        <span class="n">winner</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">score</span><span class="p">:</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">winners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">winner</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">winners</span>
+</code></pre></div>
+
+<p>Looks quite different, doesn't it? It would seem to someone completely unfamiliar with Python that
+I changed more than replacing the function calls with <code>for</code>s, but that's truly <em>all</em> I did:</p>
+<ol>
+<li>The first function was <code>map</code> which is doing <em>something</em> to both halves of the population.</li>
+<li>The second function was <code>max</code> which is picking the highest according to <em>something</em> in each word in
+the population.</li>
+<li>The third function was <code>sum</code> which is actually calculating that previous "something": In this case,
+how similar is the current word with the target word.</li>
+</ol>
+<p>I then reused <code>max</code>, but it's now clearer what maximum value of what it's being picked. I will not lie:
+I hesitated with leaving the <code>sum</code> as it was as I felt that with the other replacements it was clear enough,
+but then I saw the opportunity to further clarify that we were comparing the current word with the target word.
+On the other hand, I did leave <code>zip</code> as it was, as that one <strong>is</strong> clear enough to me.<sup id="fnref:craft"><a class="footnote-ref" href="#fn:craft">2</a></sup></p>
+<hr>
+<p>Aside: Someone with some familiarity with algorithm analysis might see three nested <code>for</code> loops and
+pale at the "cubic" complexity, but this function isn't iterating over the population input
+(let's call it "n") multiple times. It's instead iterating only once over the <em>total characters</em> input
+(let's say "m"). In short: This iteration only visits each character in the population once.</p>
+<p>The word list (but not each word) <em>is</em> visited twice because of the <code>max</code> function, but since two is a
+constant, it remains of linear complexity.</p>
+<hr>
+<p>Anyhow, those "straightfoward" changes are enough to at least being able to tell what the function
+is doing line by line, but it can be better.</p>
+<p>As it is, we're doing a bunch of operations over basic data types with a comment explaining what
+those data types are supposed to represent. We could instead explicitly define our own abstractions over
+those data types and let those abstractions tell us what they can or can't do, or how they should be
+used.</p>
+<p>But I feel like that is interesting enough for its own post, so see you <a href="https://luord.com/2022/03/31/abstracting/">in the next part</a>!</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:class">
+<p>Well, a function call wrapped in a class instantiation, but who's nitpicking?&#160;<a class="footnote-backref" href="#fnref:class" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:craft">
+<p>I firmly think that Software Engineering <strong>is</strong> engineering, and I have no problem calling myself "engineer" over, say, "craftsman", but there <em>is</em> a subjective factor to some decisions.&#160;<a class="footnote-backref" href="#fnref:craft" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/software/">software</a>
+|    <a href="https://luord.com/tag/development/">development</a>
+|    <a href="https://luord.com/tag/craftsmanship/">craftsmanship</a>
+  </footer>
+  <p class="p-summary" style="display: none;">Practical example of the problems with clever code and the benefits of refactoring.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2022/02/28/refactoring/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2022/02/28/refactoring/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2022/01/01/2021/">
+      Previous: 21 & 22
+    </a>
+  </li>
+  <li >
+    <a href="https://luord.com/2022/03/31/abstracting/">
+      Next: Practical refactoring: Abstractions
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "Practical refactoring: 'clever' code";
+  shareConfig.text = "Practical example of the problems with clever code and the benefits of refactoring.";
+  shareConfig.url = "https://luord.com/2022/02/28/refactoring/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

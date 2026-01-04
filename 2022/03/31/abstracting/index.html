@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practical refactoring: Abstractions | Luis Orduz</title>
+
+  <meta name="description" content="Improving code by way of writing specific and self-describing abstractions." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2022/03/31/abstracting/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="Practical refactoring: Abstractions"/>
+  <meta property="og:url" content="https://luord.com/2022/03/31/abstracting/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Improving code by way of writing specific and self-describing abstractions." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com//assets/img/abstracting/idea.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2022/03/31/abstracting/" rel="bookmark"
+         title="Permalink to Practical refactoring: Abstractions"><span class="p-name">Practical refactoring: Abstractions</span></a></h1>
+<address>
+  <span class="dt-published">2022-03-31</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/engineering/">Engineering</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>In <a href="https://luord.com/2022/02/28/refactoring/">my last post</a>, we did a basic rundown of a very convoluted short algorithm to make
+more explicit what was actually happening in it. That by itself goes a long way in improving how readable the code is, and thus makes it easier to maintain.
+I've seen small improvements like that be welcome enthusiastically among different teams, but we can go
+further.</p>
+<p>I remember a project I worked on where there was basically no separation of concerns between request
+handling boilerplate, database connection boilerplate and actual business logic; everything was handled
+within the same functions. It was a nightmare. I was hired to create some new APIs, but it took me just a
+week of trying to create new handlers like that to decide that such was no way to live. I took it
+upon myself to refactor that code. It bears reasserting that when refactoring, it's good—and often enough—to first reach for the lowest hanging fruit and in that code the easiest improvement was, of course,
+separating code that dealt with different things into different functions, and calling those new functions from the old ones.</p>
+<p>Now, the small script we're going through does really only one thing, but that doesn't mean we can't
+divide some responsibilities by way of abstracting away some code <strong>not</strong> directly related to that
+one thing. If we do this, we improve the code in at least three ways:</p>
+<ol>
+<li>The algorithm itself becomes more immediately obvious; it's easier to understand what the code does.</li>
+<li>By abstracting the supporting/boilerplate code, we make it possible to reuse those same structures
+somewhere else.</li>
+<li>This gives us a opportunity to bring the code in step with the domain: using names specific to what
+we're doing instead of talking exclusively about basic data types.</li>
+</ol>
+<h2>The abstractions</h2>
+<p>Something I didn't mention in my last post is that the small method we're refactoring is actually part of a basic
+genetic algorith I implemented for fun. Well, genetic algorithms deal with populations, so what if
+instead dealing with "lists" of "strings", we create an actual <code>Population</code> class/data type that does
+what we need our populations to do:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Population</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Self</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">x</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Not complicated, now we know that a population is a list, but one that when iterated just produces
+two sublists: the two halves of the original. We <em>can</em> improve it further, but this is enough for
+what we need<sup id="fnref:premature"><a class="footnote-ref" href="#fn:premature">1</a></sup>.</p>
+<p>We have our population, but our genetic algorithm is not of random things; it specifically looks for
+individuals that match a given root individual, with the purpose of each generation to be closer to that individual.</p>
+<p>Let's give it a try:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Individual</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ch_s</span> <span class="o">==</span> <span class="n">ch_o</span> <span class="k">for</span> <span class="n">ch_s</span><span class="p">,</span> <span class="n">ch_o</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">))</span>
+</code></pre></div>
+
+<p>For our "model"<sup id="fnref:genetic"><a class="footnote-ref" href="#fn:genetic">2</a></sup> we know that we need a specific type of string that when compared with another will
+return the number of identical characters. So we do just that: create a <code>str</code> subclass that
+can "intersect" with other strings of the same type, and give a numeric value representing how well
+they match.</p>
+<p>With these two abstractions alone, our method improves considerably:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_best_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WinnerPair</span><span class="p">:</span>
+    <span class="c1"># self.population: Population[Individual]</span>
+    <span class="c1"># self.root: Individual</span>
+    <span class="n">winners</span> <span class="o">=</span> <span class="n">WinnerPair</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">half</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">:</span>
+        <span class="n">winner</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">half</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ind</span><span class="p">:</span> <span class="n">ind</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">winners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">winner</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">winners</span>
+</code></pre></div>
+
+<p>I <em>like</em> it. We get each member of the winner pair from half of the population, and notice how the code
+doesn't show things we don't need to know to understand the steps:</p>
+<ol>
+<li>How do we get each half of the population? That doesn't matter for understanding the algorithm; we just
+need to know that we're getting a half. How that half is gathered is up to the implementtion in <code>Population</code>
+which we can check if we need to, or we could change it if we have to: Like instead of appending the
+odd-positioned items to a half and the even-positioned to the other half, we could just literally split it
+at the central index.</li>
+<li>To get the winner we're comparing how well is the intersection between each individual and the root
+(<code>self.root</code>, renamed from <code>self.word</code><sup id="fnref:word"><a class="footnote-ref" href="#fn:word">3</a></sup>, in this case). How is that intersection calculated/found?
+That's entirely an implementation detail, which again we can check and/or change in <code>Individual</code>
+if we have to. We could even make individuals a different type instead of strings, make a comparison
+appropriate for that type, and we wouldn't need to change <strong>anything</strong> in this method.</li>
+</ol>
+<p>Notice that, at the end of my previous post, I said that we could use abstractions instead of relying
+on comments to tell us what the data types are supposed to represent. There are still comments in this
+piece of code... but that comment is just to note <em>what</em> abstractions we're using, and is there just
+for description purposes. In the full code it would be completely redundant, since the types of
+<code>self.population</code> and <code>self.root</code> would already be defined somewhere else. Likely at the top of the class
+this method belongs to.</p>
+<p>Nonetheless, we could still make those comments explicit in the code<sup id="fnref:jokes"><a class="footnote-ref" href="#fn:jokes">4</a></sup> by way of, say, making them
+arguments to the method. However, <em>that</em> would no longer be a refactoring<sup id="fnref:zero"><a class="footnote-ref" href="#fn:zero">5</a></sup>... But we can cheat a little
+bit:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_winners</span><span class="p">(</span>
+  <span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">],</span> <span class="n">root</span><span class="p">:</span> <span class="n">Individual</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WinnerPair</span><span class="p">:</span>
+    <span class="n">winners</span> <span class="o">=</span> <span class="n">WinnerPair</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">half</span> <span class="ow">in</span> <span class="n">population</span><span class="p">:</span>
+        <span class="n">winner</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">half</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ind</span><span class="p">:</span> <span class="n">ind</span> <span class="o">&amp;</span> <span class="n">root</span><span class="p">)</span>
+        <span class="n">winners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">winner</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">winners</span>
+
+<span class="k">def</span> <span class="nf">get_best_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WinnerPair</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">get_winners</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Basically, we create a new <em>function</em> that isn't necessarily tied to a class (note the lack of <code>self</code>) and we
+call that function from our method. This gives us the potential advantage of reusing that very same winner finding
+logic somewhere else if the opportunity arises.</p>
+<h2>Hindsight</h2>
+<p>So there you have it, we improved the code, considerably, just by moving a few lines around and making
+what we're doing and using more explicit. It goes without saying that this would help us communicate between the developers <em>and</em> with
+the product team (if any) much more easily.</p>
+<p>Ideally, in a good codebase, discussing the code and discussing the
+business model would entail very similar expressions, as the code would just be a literal (with caveats of course) representation
+of that business model. Hopefully this post showed how such a thing could be achieved.</p>
+<p>This is a subject I really, really like and I'm hoping to keep writing about it.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:premature">
+<p>When refactoring, it's easy to get lost making increasingly minute improvements. We always
+gotta remember that premature optimization is the root of all evil and that abstractions can easily
+become unnecessary indirections. This is a fine line, and sometimes I don't spot it, so it's important to
+remember that the goal is to make the code <em>more</em> maintainable instead of perfect from the get go (which is impossible anyway). In an
+actual product, it also helps to remember what I think as the rule zero of Software Engineering:
+"fight for the users". If something we're doing won't improve the users'
+experience in any meaningful way, it might be best left alone.&#160;<a class="footnote-backref" href="#fnref:premature" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:genetic">
+<p>This genetic algorithm in particular just iterates over populations that increasingly
+resemble the root word.&#160;<a class="footnote-backref" href="#fnref:genetic" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:word">
+<p>In my opinion, the naming of the root individual as <code>self.word</code> was a code smell born out of
+the usage of basic data types instead of proper abstractions. It was a way to hint at the developer that
+the comparison was between strings. Using proper types/classes, we no longer need to do that.&#160;<a class="footnote-backref" href="#fnref:word" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:jokes">
+<p>After all, "code is for what, tests are for why and comments are for jokes" (which is also a
+joke... or is it?)&#160;<a class="footnote-backref" href="#fnref:jokes" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:zero">
+<p>If "improve the easiest thing first" is rule one of refactoring, then "do <strong><em>not</em></strong>, under any
+circumstance, change the contract" is rule zero of refactoring. To put it another way: if we have a good
+test suite, a proper refactoring shouldn't change the result of <em>any</em> test. Anything other than that is
+an actual change in the behavior of the application/system, and it better have been agreed upon.&#160;<a class="footnote-backref" href="#fnref:zero" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/software/">software</a>
+|    <a href="https://luord.com/tag/development/">development</a>
+|    <a href="https://luord.com/tag/craftsmanship/">craftsmanship</a>
+|    <a href="https://luord.com/tag/engineering/">engineering</a>
+  </footer>
+  <p class="p-summary" style="display: none;">Improving code by way of writing specific and self-describing abstractions.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2022/03/31/abstracting/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2022/03/31/abstracting/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2022/02/28/refactoring/">
+      Previous: Practical refactoring: 'clever' code
+    </a>
+  </li>
+  <li >
+    <a href="https://luord.com/2022/04/30/domain/">
+      Next: Domains of engineers and users
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "Practical refactoring: Abstractions";
+  shareConfig.text = "Improving code by way of writing specific and self-describing abstractions.";
+  shareConfig.url = "https://luord.com/2022/03/31/abstracting/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>
