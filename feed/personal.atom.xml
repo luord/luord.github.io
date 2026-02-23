@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Luis Orduz - Personal</title><link href="https://luord.com/" rel="alternate"></link><link href="https://luord.com/feed/personal.atom.xml" rel="self"></link><id>https://luord.com/</id><updated>2022-01-01T00:00:00-05:00</updated><icon>https://luord.com/assets/img/site/favicon.png</icon><entry><title>21 &amp; 22</title><link href="https://luord.com/2022/01/01/2021/" rel="alternate"></link><published>2022-01-01T00:00:00-05:00</published><updated>2022-01-01T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2022-01-01:/2022/01/01/2021/</id><summary type="html">&lt;p&gt;Summary of my 2021, some ideas for 2022&lt;/p&gt;</summary><content type="html">&lt;h2&gt;2021&lt;/h2&gt;
+&lt;p&gt;I wish I could say 2021 was an eventful year, but frankly I spent most of it dealing with ennui, boredom and general disenchantment.
+One could even say I might have faced some burnout, but I don't think that's it; I still very much like writing code.&lt;/p&gt;
+&lt;p&gt;I also got covid right in the middle of the year so that might also have put a damper on things, but that doesn't mean that absolutely
+nothing happened last year.&lt;/p&gt;
+&lt;h3&gt;Life&lt;/h3&gt;
+&lt;p&gt;Back in June 2020, and rather suddenly, an opportunity to accomplish one of my personal goals presented itself, and I decided to go
+for it with the caveat that I had to complete it within ten months. Indeed, I finished it by April, and now that's one fewer thing
+for me to worry about, forever.&lt;/p&gt;
+&lt;p&gt;I moved back to Bucaramanga, my home city, after spending three years in Bogotá.
+I figured I wasn't doing much of anything there (even less with covid around) so I decided I wanted to spend more time with my folks,
+siblings and my sister's children.&lt;/p&gt;
+&lt;p&gt;I could finally go back to the movies after over a year of lockdown, but more on that later.&lt;/p&gt;
+&lt;h3&gt;Work&lt;/h3&gt;
+&lt;p&gt;I started working at a new company, with which I'm extremely happy. It fits all I want from a place to work nigh perfectly
+(remote, flexible, well organized, interest in new tech, etc) and the team is great.
+Some of the projects are better than others but regardless, it would take a lot, &lt;em&gt;a lot&lt;/em&gt;, for me to leave.&lt;/p&gt;
+&lt;p&gt;On the personal projects front, I created a prototype to compare single page applications with backend generated fragments displayed
+by &lt;a href="https://htmx.org/"&gt;htmx&lt;/a&gt;.&lt;sup id="fnref:htmx"&gt;&lt;a class="footnote-ref" href="#fn:htmx"&gt;1&lt;/a&gt;&lt;/sup&gt; Also I learned a little about genetic algorithms while on it.&lt;/p&gt;
+&lt;p&gt;Did some updates to this website, mainly related to &lt;a href="https://indieweb.org/"&gt;indie web&lt;/a&gt; things.&lt;/p&gt;
+&lt;h3&gt;Reading&lt;/h3&gt;
+&lt;h4&gt;Technical&lt;/h4&gt;
+&lt;p&gt;I cut back on my HN surfing. Not because the signal to noise ratio has gotten lower (although I've gotten the feeling sometimes)
+but because I was simply spending too much time in, often repetitive, comment sections. And I didn't even comment, I mostly read.&lt;/p&gt;
+&lt;p&gt;Instead, I've been subscribing to more and more blogs (both company tech blogs and engineers' personal blogs), to the point that
+my subscription list in &lt;a href="https://theoldreader.com/"&gt;the old reader&lt;/a&gt; tripled over the year. I'd say the change is good in general.&lt;/p&gt;
+&lt;p&gt;Likewise, I've followed more people on social media (primarily the same engineers whose blogs I subscribed to),
+mostly for discovery value: Often those people share stuff by other people, which means potentially new blogs to follow.&lt;sup id="fnref:sm"&gt;&lt;a class="footnote-ref" href="#fn:sm"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h4&gt;Fiction&lt;/h4&gt;
+&lt;p&gt;I finally got an e-reader last year, and it &lt;em&gt;has&lt;/em&gt; translated on my reading quite a few more books than in recent years.
+Mostly fantasy, and I'd say my favorite was probably "&lt;a href="https://www.goodreads.com/book/show/9579634-prince-of-thorns"&gt;Prince of Thorns&lt;/a&gt;".
+I'll be reading its sequels and more this year.&lt;/p&gt;
+&lt;h3&gt;Movies&lt;/h3&gt;
+&lt;p&gt;According to &lt;a href="https://www.criticker.com/profile/luord/"&gt;my Criticker profile&lt;/a&gt;, I watched sixty six films last year.
+I love that almost half of them were watched in theaters, although I &lt;em&gt;do&lt;/em&gt; stream movies; had to pick up the habit during 2020.&lt;/p&gt;
+&lt;p&gt;Apparently, the movie I hated the most overall was some cliched horror movie from 2019, but the one I hated the most that I watched
+in theaters was of course the new "matrix" movie.&lt;/p&gt;
+&lt;p&gt;Conversely, I gave the exact same rating, the highest of the 66, to two different movies: "Savig private Ryan",
+which I watched at home, and "Spider-Man: No way home", which I watched in theaters. Yup, I stand by it,
+definitely the two movies I liked the most that I saw last year.&lt;/p&gt;
+&lt;p&gt;Unfortunately, nothing over 85 (which would translate to a nine or higher in &lt;a href="https://www.imdb.com/user/ur39224109"&gt;imdb&lt;/a&gt;),
+and indeed, no movie I watched last year really floored me.
+I'm hopeful for "&lt;a href="https://www.imdb.com/title/tt11138512/"&gt;The Northman&lt;/a&gt;" to pull it off this 2022.&lt;/p&gt;
+&lt;h3&gt;Music&lt;/h3&gt;
+&lt;p&gt;I don't stream music; I'd rather buy the songs I like and listen only to my collection... But that didn't happen often last year.
+Though I did remember adding "&lt;a href="https://www.youtube.com/watch?v=ocpDEOXABWg"&gt;Courtesy Call&lt;/a&gt;" as well as some instrumental tracks to
+my "music for programming/writing" playlist.&lt;/p&gt;
+&lt;h2&gt;2022&lt;/h2&gt;
+&lt;p&gt;With 2021 out of the way, I do have plans for this year.&lt;/p&gt;
+&lt;h3&gt;Life&lt;/h3&gt;
+&lt;p&gt;I'm pretty happy with where my life is right now, materially speaking, so I'm focusing this year on finally losing weight.
+I have a plan this time.&lt;/p&gt;
+&lt;h3&gt;Work&lt;/h3&gt;
+&lt;p&gt;Will keep working in my current job. As I said, I have zero interest in leaving my current company.&lt;/p&gt;
+&lt;p&gt;Will do far more experimentation, both to practice stuff I might have gotten rusty with and to get to know new things... such as Rust.&lt;/p&gt;
+&lt;p&gt;I also have an idea for a potential tool/service that could become my first officially released open source project. Gotta
+work on it and iterate to see if it actually is viable or not.&lt;/p&gt;
+&lt;h3&gt;Reading&lt;/h3&gt;
+&lt;p&gt;Nothing much, will continue the trend of reading the blogs I already follow and subscribe to more.&lt;/p&gt;
+&lt;p&gt;Likewise, more usage of my e-reader for fiction.&lt;/p&gt;
+&lt;h3&gt;Writing&lt;/h3&gt;
+&lt;p&gt;I'll do my best to be more active on this blog. Can't promise a regular schedule to myself, but I will write at least a
+&lt;a href="/category/notes"&gt;note&lt;/a&gt; of anything that comes to mind or that I find interesting.&lt;/p&gt;
+&lt;p&gt;Will finish some stories I am writing privately and will try to get started on something I feel I can actually publish. To get
+feedback if nothing else.&lt;/p&gt;
+&lt;h3&gt;Movies&lt;/h3&gt;
+&lt;p&gt;As I said, I'm really looking forward to "The Northman", but also there's a handful of other movies that I'm hoping they're as
+great as they look (looking at you "Doctor Strange") or that end up surprising me
+(looking at you "Avatar 2" or "The secrets of Dumbledore", among others).&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:htmx"&gt;
+&lt;p&gt;Long story short: HTMX is absolutely magical and everyone should be using it.&amp;#160;&lt;a class="footnote-backref" href="#fnref:htmx" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:sm"&gt;
+&lt;p&gt;I still actively avoid the awful, outrage-obsessed side of social media, of course.&amp;#160;&lt;a class="footnote-backref" href="#fnref:sm" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="Personal"></category></entry><entry><title>Hello World!</title><link href="https://luord.com/2016/03/14/hello/" rel="alternate"></link><published>2016-03-14T00:00:00-05:00</published><updated>2016-03-14T00:00:00-05:00</updated><author><name>Luis Orduz</name></author><id>tag:luord.com,2016-03-14:/2016/03/14/hello/</id><summary type="html">&lt;p&gt;I, Luis Orduz, hereby start my blog.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I'm a Software Developer and, as such, the first entry of my blog is
+to be a &lt;em&gt;Hello World&lt;/em&gt; page, which I now proceed to write in Python...&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Ahoy!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;... and browser ECMAScript (or JavaScript if you prefer, which I don't).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Good Day.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So... that's it for today.&lt;/p&gt;
+&lt;p&gt;UPDATE: I decided to dedicate my site mostly to Software after all.&lt;/p&gt;</content><category term="Personal"></category><category term="software"></category><category term="python"></category><category term="javascript"></category></entry></feed>

@@ -1,0 +1,242 @@
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 400;
+  src: url('/theme/font/Montserrat-Italic-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-style: normal;
+  src: url('/theme/font/Montserrat-VariableFont_wght.ttf');
+}
+
+html {
+  box-sizing: border-box;
+  font: 16px/1.5em Montserrat, sans-serif;
+  background-color: #212121;
+  color: #f1f1f1;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+body > * {
+  width: 100%;
+}
+
+main {
+  max-width: 70ch;
+  padding: 1ch;
+}
+
+aside {
+  max-width: 30ch;
+}
+
+body > footer, body > header {
+  text-align: center;
+}
+
+body > footer {
+  margin-top: 1em;
+}
+
+body > header li a {
+  border: 1px dotted;
+  padding: 1px 2px;
+}
+
+body > header strong, body > aside b {
+  margin: 0.67em 0;
+  display: block;
+}
+
+h1, body > header strong {
+  font-size: 1.5em;
+}
+
+h2 {
+  font-size: 1.3em;
+}
+
+h3, body > aside b {
+  font-size: 1.2em;
+}
+
+pre {
+  overflow: auto;
+}
+
+aside li, #main li, body > header li, .navigator, body > footer li {
+  list-style: none;
+}
+
+aside ul, #main ul, header ul, body > footer ul {
+  padding: 0;
+}
+
+aside li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+aside li svg {
+  stroke: currentColor;
+  fill: currentColor;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+body > header li {
+  display: inline-block;
+}
+
+body > header li + li {
+  margin-left: 2ch;
+}
+
+body > footer nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+body > footer nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+body > footer nav a {
+  display: block;
+}
+
+body > footer nav svg {
+  display: block;
+  stroke: currentColor;
+  fill: currentColor;
+  width: 2em;
+  height: 2em;
+}
+
+article p > img {
+  width: 100%;
+  display: block;
+}
+
+a {
+  color: #3B8FC0;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #3F93C4;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  filter: grayscale(30%);
+}
+
+.summary {
+  border-bottom: 1px solid;
+}
+
+body > footer img {
+  vertical-align: middle;
+}
+
+code {
+  color: #f8f8f2;
+  background: #272822;
+}
+
+dt {
+  text-decoration: underline;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1ch;
+  padding: 0;
+}
+
+#dates h3 {
+  margin-left: 3ch;
+}
+
+#dates p.h-entry {
+  margin-left: 6ch;
+}
+
+#dates article.h-entry {
+  display: flex;
+  border-bottom: 1px dotted;
+}
+
+#dates article.h-entry header {
+  flex: 1;
+}
+
+#dates article.h-entry .e-content {
+  flex: 4;
+}
+
+.navigator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    background-color: #f1f1f1;
+    color: #212121;
+  }
+
+  a {
+    color: #0072bb;
+  }
+
+  a:visited {
+    color: #00739a;
+  }
+}
+
+@media print {
+  body > header {
+    display: none;
+  }
+
+  footer {
+    display: none;
+  }
+
+  main:before {
+    content: "Luis Orduz (contact information at: https://luord.com/pages/contact/ )"
+  }
+
+  a, a:visited, a:hover, a:active {
+    color: inherit;
+  }
+}

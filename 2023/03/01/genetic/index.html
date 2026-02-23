@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A genetic algorithm implemented in Python | Luis Orduz</title>
+
+  <meta name="description" content="An example of abstraction and analogy." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2023/03/01/genetic/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="A genetic algorithm implemented in Python"/>
+  <meta property="og:url" content="https://luord.com/2023/03/01/genetic/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="An example of abstraction and analogy." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com/assets/img/genetic/genes.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2023/03/01/genetic/" rel="bookmark"
+         title="Permalink to A genetic algorithm implemented in Python"><span class="p-name">A genetic algorithm implemented in Python</span></a></h1>
+<address>
+  <span class="dt-published">2023-03-01</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/software/">Software</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>Natural selection is, roughly, the likelihood of a given individual to survive long
+enough to reproduce, and thus continue its species. Factor in mutations—random changes in the
+genes—and the probability a given mutation has to help an individual survive (or not) in its
+environment and the result is that some individuals are more likely to reproduce than others.
+Those fitter individuals are more likely to pass on their mutations to the next generation, which will add
+mutations of its own, ultimately causing the population to slowly change as these mutations
+accumulate. Repeat this process over multiple generations across millions of years and we
+get evolution.</p>
+<p>Turns out that implementing these ideas, or at least analogies, in software can be useful to
+solve certain problems, so let's write a simple program that exemplifies the process.</p>
+<h2>Seed</h2>
+<p>There are multiple types of genetic algorithms with multiple different uses, but usually they
+start with a data sample.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+
+<span class="k">class</span> <span class="nc">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Collection</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">select_random</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">algorithm</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">]):</span>
+  <span class="n">parent_a</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">select_random</span><span class="p">()</span>
+  <span class="n">parent_b</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">select_random</span><span class="p">()</span>
+</code></pre></div>
+
+<p>To keep things simple, we start with two parents that are selected randomly from the existing
+population, and we'll go from there.<sup id="fnref:protocols"><a class="footnote-ref" href="#fn:protocols">1</a></sup></p>
+<h2>Crossover</h2>
+<p>With our first pair in place, we can now produce the next "generation".</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Offspring</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">class</span> <span class="nc">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Collection</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
+  <span class="c1"># ...</span>
+  <span class="k">def</span> <span class="nf">crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">second</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span>\
+      <span class="o">-&gt;</span> <span class="n">Offspring</span><span class="p">[</span><span class="n">Individual</span><span class="p">]:</span> <span class="o">...</span>
+
+  <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Individual</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">algorithm</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">]):</span>
+  <span class="c1"># ...</span>
+  <span class="n">base_offspring</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span><span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">)</span>
+  <span class="n">real_offspring</span> <span class="o">=</span> <span class="n">base_offspring</span><span class="o">.</span><span class="n">mutate</span><span class="p">()</span>
+  <span class="n">population</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">real_offspring</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The <strong><em>crossover</em></strong> in genetic algorithms is the operation used to combine the data of
+the parents to produce offspring. But we can't just stop there, we need genetic variance to ensure
+the population actually evolves over time. One form of variance is of course that the parents
+contribute different characteristics selected at random from each parent, but even that isn't enough as
+it could leave us stuck<sup id="fnref:pool"><a class="footnote-ref" href="#fn:pool">2</a></sup>.</p>
+<p>Actual variance comes from the key element of <strong>mutation</strong>, the random chance that any given
+offspring individual will have genes not present in the parents.<sup id="fnref:offspring"><a class="footnote-ref" href="#fn:offspring">3</a></sup></p>
+<p>Finally, the new individual is, of course, a new member of the population so we add it<sup id="fnref:type"><a class="footnote-ref" href="#fn:type">4</a></sup>.</p>
+<h2>Natural Selection</h2>
+<p>At this point, we have parents and their offspring, what now? It's time to determine the goal.
+Genetic algorithms are commonly used to find a good enough solution to certain types of,
+often trial and error, problems that don't translate well to common normal algorithms.
+Fortunately, the only thing resembling a "goal" in nature is simply thriving, surviving long
+enough to reproduce...
+So let's do that, by introducing a "niche" and determining how well the individuals fit that niche.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="k">class</span> <span class="nc">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Collection</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
+  <span class="c1"># ...</span>
+  <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Individual</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">class</span> <span class="nc">Niche</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">tournament</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Individual</span><span class="p">])</span>\
+    <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Individual</span><span class="p">,</span> <span class="n">Individual</span><span class="p">]:</span> <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">algorithm</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span>
+  <span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">],</span> <span class="n">niche</span><span class="p">:</span> <span class="n">Niche</span><span class="p">[</span><span class="n">Individual</span><span class="p">]</span>
+<span class="p">):</span>
+  <span class="c1"># ...</span>
+  <span class="n">fittest</span><span class="p">,</span> <span class="n">unfit</span> <span class="o">=</span> <span class="n">niche</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+  <span class="n">population</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">unfit</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
+genes, and in our algorithm, only that individual in a group<sup id="fnref:collection"><a class="footnote-ref" href="#fn:collection">5</a></sup> that best fits the niche is the
+one to continue. This is usually called "<strong><em>tournament selection</em></strong>" in genetic algorithm jargon.</p>
+<p>Finally, to maintain our analogy (and really to prevent our population from growing without bound)
+we remove the least fit individual from the population.</p>
+<h2>Generations</h2>
+<p>We have almost completed the algorithm, but the mere fact that we've found an individual that fits
+the niche better than others doesn't mean we've actually found one that <em>thrives</em> in the niche; the
+likelihood of achieving that in just the first generation is nil. We'll need many generations, so we need
+to repeat the process until we find such individual.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="k">class</span> <span class="nc">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Collection</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">):</span>
+  <span class="c1"># ...</span>
+  <span class="k">def</span> <span class="nf">find_mate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">class</span> <span class="nc">Niche</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+  <span class="c1"># ...</span>
+  <span class="k">def</span> <span class="nf">can_thrive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span> <span class="nf">algorithm</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span>
+  <span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">[</span><span class="n">Individual</span><span class="p">],</span> <span class="n">niche</span><span class="p">:</span> <span class="n">Niche</span><span class="p">[</span><span class="n">Individual</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+  <span class="n">parent_a</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">select_random</span><span class="p">()</span>
+  <span class="n">parent_b</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">select_random</span><span class="p">()</span>
+
+  <span class="n">generations</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="k">while</span> <span class="ow">not</span> <span class="n">niche</span><span class="o">.</span><span class="n">can_thrive</span><span class="p">(</span><span class="n">parent_a</span><span class="p">):</span>
+    <span class="n">base_offspring</span> <span class="o">=</span> <span class="n">population</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span><span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">)</span>
+    <span class="n">real_offspring</span> <span class="o">=</span> <span class="n">base_offspring</span><span class="o">.</span><span class="n">mutate</span><span class="p">()</span>
+    <span class="n">population</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">real_offspring</span><span class="p">)</span>
+
+    <span class="n">fittest</span><span class="p">,</span> <span class="n">unfit</span> <span class="o">=</span> <span class="n">niche</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+    <span class="n">population</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">unfit</span><span class="p">)</span>
+    <span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span> <span class="o">=</span> <span class="n">fittest</span><span class="p">,</span> <span class="n">population</span><span class="o">.</span><span class="n">find_mate</span><span class="p">(</span><span class="n">fittest</span><span class="p">)</span>
+
+    <span class="n">generations</span> <span class="o">+=</span> <span class="mi">1</span>
+
+  <span class="k">return</span> <span class="n">generations</span>
+</code></pre></div>
+
+<p>There are several options here, one commonly used in real genetic algorithms is to pick the two
+fittest instead of just one and make those "reproduce", producing an entirely new population
+and continue iterating from there. But to keep our
+natural analogy going, let's instead assume that our fittest finds a "suitable mate"<sup id="fnref:mate"><a class="footnote-ref" href="#fn:mate">6</a></sup> in another
+member of the population, which also adds another source of variance.</p>
+<p>Ultimately, the point here is iteration: continually doing the crossover and tournament selection until we meet
+our goal.</p>
+<hr>
+<p>And there we have it, that <code>algorithm</code> function represents our full genetic algorithm, in a way I hope is self-explanatory
+enough. That function <em>should</em> work without change as long as it receives arguments that actually implement
+the <a href="https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols">protocols</a> properly.</p>
+<p><a href="https://luord.com/assets/code/genetic/definition.py">Here's a file</a> with the complete definition, and <a href="https://luord.com/assets/code/genetic/implementation.py">here's a file</a> with a
+string-based implementation of the algorithm, along with the function being run.</p>
+<p>Now, before finishing, you'll notice that I talked very little about the actual <em>problems</em> that could
+be solved with this type of algorithm... Well that's true, because the point of this post was the
+algorithm itself. That said, I might write a follow up with a practical example.</p>
+<h2>Appendix (On implementation and testing)</h2>
+<p>I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
+of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
+crossover and tournament selection. However, we can write <a href="https://luord.com/assets/code/genetic/test.py">tests</a> to do that instead
+of explaining the implementations line by line!<sup id="fnref:jokes"><a class="footnote-ref" href="#fn:jokes">7</a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">hypothesis</span> <span class="kn">import</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span>
+
+<span class="kn">from</span> <span class="nn">implementation</span> <span class="kn">import</span> <span class="n">Individual</span>
+
+
+<span class="n">st</span><span class="o">.</span><span class="n">register_type_strategy</span><span class="p">(</span><span class="n">Individual</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">builds</span><span class="p">(</span><span class="n">Individual</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+  <span class="n">alphabet</span><span class="o">=</span><span class="n">Individual</span><span class="o">.</span><span class="n">POOL</span><span class="p">,</span>
+  <span class="n">min_size</span><span class="o">=</span><span class="n">Individual</span><span class="o">.</span><span class="n">LENGTH</span><span class="p">,</span>
+  <span class="n">max_size</span><span class="o">=</span><span class="n">Individual</span><span class="o">.</span><span class="n">LENGTH</span>
+<span class="p">)))</span>
+</code></pre></div>
+
+<p>Before anything is done, we have to tell <a href="https://hypothesis.readthedocs.io/en/latest/">hypothesis</a> how to create an <code>Individual</code> that
+actually fits our implementation. Only then we move onto the tests:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="kn">from</span> <span class="nn">implementation</span> <span class="kn">import</span> <span class="n">Population</span>
+
+<span class="nd">@given</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_crossover</span><span class="p">(</span><span class="n">parent_a</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">:</span> <span class="n">Individual</span><span class="p">):</span>
+  <span class="n">offspring</span> <span class="o">=</span> <span class="n">Population</span><span class="p">()</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span><span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">)</span>
+
+  <span class="n">is_parent_a</span> <span class="o">=</span> <span class="n">is_parent_b</span> <span class="o">=</span> <span class="kc">False</span>
+
+  <span class="k">for</span> <span class="n">gene</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">offspring</span><span class="p">,</span> <span class="n">parent_a</span><span class="p">,</span> <span class="n">parent_b</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">gene</span> <span class="ow">in</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">is_parent_a</span> <span class="o">|=</span> <span class="n">gene</span> <span class="o">==</span> <span class="n">a</span>
+    <span class="n">is_parent_b</span> <span class="o">|=</span> <span class="n">gene</span> <span class="o">==</span> <span class="n">b</span>
+
+  <span class="k">assert</span> <span class="n">is_parent_a</span> <span class="ow">and</span> <span class="n">is_parent_b</span>
+</code></pre></div>
+
+<p>This test tells us everything we need to know about what
+happens in <code>crossover</code> without actually having to check the implementation: We don't care how it's
+done, but we do care that every gene in the offspring comes from one of the parents, and that <em>both</em>
+parents had an input.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="kn">from</span> <span class="nn">implementation</span> <span class="kn">import</span> <span class="n">Niche</span>
+
+
+<span class="nd">@given</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_tournament_selection</span><span class="p">(</span><span class="n">niche</span><span class="p">:</span> <span class="n">Niche</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="n">Population</span><span class="p">):</span>
+  <span class="n">pop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+  <span class="n">winner</span><span class="p">,</span> <span class="n">loser</span> <span class="o">=</span> <span class="n">niche</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+
+  <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">winner</span> <span class="ow">in</span> <span class="n">pop</span>
+
+    <span class="n">pop</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">loser</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">loser</span> <span class="o">=</span> <span class="n">niche</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">winner</span> <span class="o">==</span> <span class="n">loser</span>
+</code></pre></div>
+
+<p>Tournament selection is a bit trickier to test because the calculation for each fittest <em>is</em> an
+implementation detail, but one the whole idea depends upon. We could simply repeat the implementation
+here and assert that the winner and loser were calculated correctly but then the test would no
+longer work if we changed the metric (or changed what an individual is entirely).</p>
+<p>In these cases, we have to step back and think of invariants: what is always true about the tournament
+selection? As long as the winner remains in the population and no other individuals are added, it will <em>always</em> be the winner. And that's what we test: We systematically remove each loser until only one
+individual is left in the population; that individual <em>must</em> still be the original winner!</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:protocols">
+<p>I use protocols because Python's <a href="https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols">structural subtyping</a> is pretty good at
+properly representing a <a href="https://luord.com/2022/04/30/domain/">domain</a>. In simpler terms: we only care about what our objects can <em>do</em>.
+On that note, the code I'll be showing shouldn't throw errors in <a href="https://mypy-lang.org/">mypy</a> or <a href="https://github.com/microsoft/pyright">pyright</a>.&#160;<a class="footnote-backref" href="#fnref:protocols" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:pool">
+<p>If we stick to just the parents' genomes, then the target will never be reached if it requires a
+gene that neither of the parents has.&#160;<a class="footnote-backref" href="#fnref:pool" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:offspring">
+<p>The intermediate class <code>Offspring</code> fulfills two purposes here: to explicitly show
+the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
+on the type system. We'll know we have a real individual only if it was selected from an
+existing population or if it's the result of mutation from the crossover of two parents.&#160;<a class="footnote-backref" href="#fnref:offspring" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:type">
+<p>You might have noticed that an "Individual" is represented only by generic type arguments.
+This is on purpose: the algorithm doesn't need to care what an individual <em>is</em>.&#160;<a class="footnote-backref" href="#fnref:type" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:collection">
+<p>In the type annotation, I used <code>Collection</code> instead of <code>Population</code>
+(which is itself a collection) because the tournament could be done over any group of individuals; it
+doesn't have to be a population specifically, and we gotta be "liberal in what we accept".&#160;<a class="footnote-backref" href="#fnref:collection" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:mate">
+<p><em>How</em> it finds it is an implementation detail, hopefully one that excludes its parents.&#160;<a class="footnote-backref" href="#fnref:mate" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:jokes">
+<p>Since, as we all know, "code is for what, tests are for why, and comments are for jokes".&#160;<a class="footnote-backref" href="#fnref:jokes" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/software/">software</a>
+|    <a href="https://luord.com/tag/algorithms/">algorithms</a>
+|    <a href="https://luord.com/tag/code/">code</a>
+|    <a href="https://luord.com/tag/examples/">examples</a>
+  </footer>
+  <p class="p-summary" style="display: none;">An example of abstraction and analogy.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2023/03/01/genetic/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2023/03/01/genetic/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2022/04/30/domain/">
+      Previous: Domains of engineers and users
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "A genetic algorithm implemented in Python";
+  shareConfig.text = "An example of abstraction and analogy.";
+  shareConfig.url = "https://luord.com/2023/03/01/genetic/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>

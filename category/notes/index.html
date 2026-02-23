@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luis Orduz — Notes</title>
+
+  <meta name="description" content="Luis Orduz — Notes" />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/category/notes/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+<link href="https://luord.com/feed/notes.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Notes Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="Luis Orduz — Notes"/>
+  <meta property="og:url" content="https://luord.com/category/notes/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:description" content="Luis Orduz — Notes" />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com/assets/img/site/image.png" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<header>
+  <h1>Articles in Notes</h1>
+  <p>Random thoughts in short format.</p>
+</header>
+<section class="h-feed" id="dates">
+  <article id="gxemsl2" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/gxemsl2/">
+      <p>2024-12-08</p>
+      <p>00:19 COT</p>
+    </a></header>
+    <section class="e-content"><p>This weekend I finally got done something I probably should have back since I
+got my first computer nearly two decades ago: a script to automate the initial
+setup of a new OS installation. After all, I've been using Linux for most of
+that time and it wasn't even that hard to do. I guess I never felt fully
+confident in my setup itself to bother replicating it.</p>
+<p>The biggest hurdle was that I have also always wanted synchronization
+of my most valuable files across all my devices... Which I finally got done
+this time too in a simple enough way, just how I like it. Sure, it's always
+been possible, but nice tools like <a href="https://rclone.org/">rclone</a> bisync and
+<a href="https://tailscale.com/">tailscale</a> make it significantly easier nowadays.</p>
+<p>The script is <a href="https://github.com/luord/scripts/blob/master/setup.sh">here</a>.
+It ended up being a handy opportunity to practice my Bash too, and it's
+working pretty well for a minimalist like me. Still, suggestions are welcome!</p></section>
+  </article>
+  <article id="gnmokz2" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/gnmokz2/">
+      <p>2023-08-22</p>
+      <p>18:45 COT</p>
+    </a></header>
+    <section class="e-content"><p>I spent a while fixing up the <a href="https://luord.com/2023/03/01/genetic/">genetic</a> algorithm I wrote a while ago; up
+until the version that is up now, I didn't really like how it looked and the reason was
+the type hints. It simply didn't click to me why the classes from the implementation
+weren't compatible with the protocols in the definition and why I had to create the
+type variables (which I find really ugly, and hopefully won't be required anymore in the near
+future). Reading up on how to improve it led me to the concept
+of variance, of which I only had a vague memory from college.</p>
+<p>Writing this note to ensure it doesn't become a vague memory again:</p>
+<ul>
+<li>If something cannot be replaced whatsoever, either by subclass or superclass, it's deemed
+<em>invariant</em> in its context. An example is <abbr title="Being">identity</abbr>: It makes much more sense to compare a movie
+with another movie instead of with a song, even if both cinema and music are considered arts.</li>
+<li>If something can be replaced by a subclass, it's deemed <em>covariant</em> in its context.
+An example is <abbr title="Having">possession</abbr>: If you need something with a camera, then any standalone camera,
+smartphone or tablet will do. A telescope, however, might not.</li>
+<li>If something can be replaced by a superclass, it's deemed <em>contravariant</em> in its context.
+An example is <abbr title="Doing">action</abbr>: If you can run, it follows that you can do something that only
+needs for you to walk. Conversely, just because I see you walking I can't assume you can run
+a marathon.</li>
+</ul></section>
+  </article>
+  <article id="gjc26d2" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/gjc26d2/">
+      <p>2023-01-24</p>
+      <p>11:07 COT</p>
+    </a></header>
+    <section class="e-content"><p>The biggest movie award nominations came out today and to the surprise of nobody, the year's
+mediocre critical darling of choice got the most nods.
+I actually thought it was passable when I first watched it, but quite a few people
+called it awesome enough times to make me watch it a second time, to see if I had
+missed something. It only made me find it even more pointless and boring, and I ended
+up hating it and lowered the original rating I gave it.</p>
+<p>But really, the worst sin of these awards is the total snubbing of "The Northman",
+which deserved at the very least a Best Director nomination. And while I'm very happy
+for "Top Gun: Maverick", "All Quiet on the Western Front", "Elvis" and, specially, "Elvis"'s
+frontman Austin Butler getting the recognition they of course deserve, his nomination
+only reminds me of how Taron Egerton was ignored three years ago for "Rocketman" while
+one of the worst performances I've ever seen (admittedly, by an otherwise good actor)
+not only got nominated but won. Really, it was
+the 2020 Best Actor shenanigans what made me lost what little faith I still had back then
+for awards, so at this point I'm just beating a dead horse.</p>
+<p>All that said, credit where it's due: Certain uncomfortably revisionist movie everyone was calling
+a shoo-in for multiple nominations too was ignored, so that automatically means
+the academy has at the very least a saner head on its shoulders than some other award voters.</p></section>
+  </article>
+  <article id="gjb22t2" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/gjb22t2/">
+      <p>2023-01-22</p>
+      <p>22:35 COT</p>
+    </a></header>
+    <section class="e-content"><p>Well damn, I was tentatively excited about everything going on regarding large language models
+and how they're being used, until today it was brought to my attention how they behave
+when the questions are political in nature. Safe to say, impartial they're not, and the excitement
+I used to feel instantly became dread. The only silver lining I see is the belief
+that the people who would use these models to confirm their biases would already do so in other ways,
+and the people who know better would know not to treat them as source of truth regarding political
+issues.</p>
+<p>Somehow, that thought did not make me feel better.</p></section>
+  </article>
+  <article id="gj7j7k2" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/gj7j7k2/">
+      <p>2023-01-20</p>
+      <p>15:00 COT</p>
+    </a></header>
+    <section class="e-content"><p>As a way to write more in my site, and in general, I've decided to properly set the
+<a href="https://luord.com/category/notes/">notes category</a> of this blog as a microblog "separated" from the
+main blog. Had to create some plugins for <a href="https://getpelican.com/">Pelican</a> to
+accomplish it, and included the cool way to create slugs I read about in
+<cite class="h-cite u-in-reply-to"><a class="u-url p-name" href="https://brandur.org/fragments/base32-slugs">
+this great blog post</a> by <span class="p-author">Brandur Leach</span></cite>.</p>
+<p>To make sure whoever subscribes to the main blog doesn't get this more
+"stream of thought" bite-size content, the posts in this category are excluded from the main
+feed; it has its own feed anyway.</p></section>
+  </article>
+  <article id="g53io62" class="h-entry">
+    <header><a class="u-url" href="https://luord.com/notes/g53io62/">
+      <p>2021-06-10</p>
+      <p>23:44 COT</p>
+    </a></header>
+    <section class="e-content"><p>Added microformats, Webmentions, POSSE, backfeed and WebSub support to my blog. In fact, this note was syndicated automatically by <a href="https://brid.gy">https://brid.gy</a>. Now waiting for Webmentions to display them.</p></section>
+  </article>
+</section>
+<footer>
+You can subscribe to this category <a href="https://luord.com/feed/notes.atom.xml">here</a>.
+</footer>
+</main>
+
+<aside>
+  <div class="h-card">
+    <b>About</b>
+    <p>
+      <span class="p-note">Software engineer, occasional writer, and movie watcher.</span>
+    </p>
+    <p>This blog primarily features essays about software engineering and tutorials on programming concepts or technologies I find interesting.</p>
+    <p>
+      I studied systems engineering/computer science in college and am always eager to learn about software development and operations.
+      Not just because I love it, it's also my job so gotta stay up to date.
+    </p>
+    <p>
+      I can help you with your web applications! <a href="https://luord.com/pages/work/">Here's how</a>.
+      If you want to know more about me, go <a href="https://luord.com/pages/about/">here</a>. If you just want to say hi,
+      <a href="https://luord.com/pages/contact/">here</a>.
+    </p>
+    <p>
+      For short posts about more than software, check my <a href="https://luord.com/category/notes/">Notes</a>.
+    </p>
+  </div>
+  <b>Subscribe</b>
+  <ul>
+      <li><a href="https://luord.com/feed/notes.atom.xml"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+    <li><a href="https://luord.com/pages/newsletter/"><svg><use href="/theme/icons.svg#mail" /></svg>Newsletter</a></li>
+  </ul>
+  <b>Browse content by</b>
+  <ul>
+    <li><a href="https://luord.com/categories/"><svg><use href="/theme/icons.svg#categories" /></svg>Categories</a></li>
+    <li><a href="https://luord.com/tags/"><svg><use href="/theme/icons.svg#tags" /></svg>Tags</a></li>
+    <li><a href="https://luord.com/archives/"><svg><use href="/theme/icons.svg#calendar" /></svg>Dates</a></li>
+  </ul>
+</aside>
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written exclusively by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>
