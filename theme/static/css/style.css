@@ -116,6 +116,7 @@ body > footer nav ul {
   align-items: center;
   justify-content: center;
   gap: 1.5em;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
 }
@@ -232,7 +233,7 @@ form {
   }
 
   main:before {
-    content: "Luis Orduz (contact information at: https://luord.com/pages/contact )"
+    content: "Luis Orduz (contact information at: https://luord.com/pages/contact/ )"
   }
 
   a, a:visited, a:hover, a:active {
