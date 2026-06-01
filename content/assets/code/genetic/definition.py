@@ -1,48 +1,29 @@
 from collections.abc import Collection
+from functools import cmp_to_key
 from typing import Protocol
 
 
-class Offspring[Individual](Protocol):
-    def mutate(self) -> Individual: ...
+class Environment[Individual, Genome](Protocol):
+    def is_viable(self, subject: Individual) -> bool: ...
+
+    def compare_fit(self, first: Individual, second: Individual) -> int: ...
+
+    def find_mate(self, subject: Individual) -> Individual: ...
+
+    def cross(self, fit: Individual, mate: Individual) -> Genome: ...
+
+    def mutate(self, genome: Genome) -> Individual: ...
 
 
-class Population[Individual](Collection, Protocol):
-    def select_random(self) -> Individual: ...
+def find_fittest[Individual, G](
+    population: Collection[Individual], environment: Environment[Individual, G]
+) -> Individual:
+    while (
+        fit := max(population, key=cmp_to_key(environment.compare_fit))
+    ) and not environment.is_viable(fit):
+        mate = environment.find_mate(fit)
 
-    def crossover(self, first: Individual, second: Individual)\
-        -> Offspring[Individual]: ...
+        brood = (environment.cross(fit, mate) for _ in range(len(population)))
+        population = tuple(environment.mutate(gen) for gen in brood)
 
-    def add(self, individual: Individual): ...
-
-    def remove(self, individual: Individual): ...
-
-    def find_mate(self, individual: Individual) -> Individual: ...
-
-
-class Niche[Individual](Protocol):
-    def tournament(self, pop: Collection[Individual])\
-        -> tuple[Individual, Individual]: ...
-
-    def can_thrive(self, individual: Individual) -> bool: ...
-
-
-def algorithm[Individual](
-    population: Population[Individual], niche: Niche[Individual]
-) -> int:
-    parent_a = population.select_random()
-    parent_b = population.select_random()
-
-    generations = 0
-
-    while not niche.can_thrive(parent_a):
-        base_offspring = population.crossover(parent_a, parent_b)
-        real_offspring = base_offspring.mutate()
-        population.add(real_offspring)
-
-        fittest, unfit = niche.tournament(population)
-        population.remove(unfit)
-        parent_a, parent_b = fittest, population.find_mate(fittest)
-
-        generations += 1
-
-    return generations
+    return fit

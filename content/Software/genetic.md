@@ -6,10 +6,10 @@ status: published
 image: assets/img/genetic/genes.jpg
 
 Natural selection is, roughly, the likelihood of a given individual to survive long
-enough to reproduce, and thus continue its species. Factor in mutations—random changes in the
-genes—and the probability a given mutation has to help an individual survive (or not) in its
-environment and the result is that some individuals are more likely to reproduce than others.
-Those fitter individuals are more likely to pass on their mutations to the next generation, which will add
+enough to reproduce, and thus continue its species. Factor in mutations (random changes in the
+genes) and the probability a given mutation has to help an individual survive (or not) in its
+environment, and the result is that some individuals are more likely to reproduce than others.
+Those fitter individuals will pass on their mutations to the next generation, which will add
 mutations of its own, ultimately causing the population to slowly change as these mutations
 accumulate. Repeat this process over multiple generations across millions of years and we
 get evolution.
@@ -17,148 +17,137 @@ get evolution.
 Turns out that implementing these ideas, or at least analogies, in software can be useful to
 solve certain problems, so let's write a simple program that exemplifies the process.
 
-## Seed
+## Population and Environment
 
-There are multiple types of genetic algorithms with multiple different uses, but usually they
-start with a data sample.
+The basis of ecology is populations and environments; how individuals interact with each other
+and their environment, and the feedback loop that emerges as the environment responds.
 
     :::python
     from collections.abc import Collection
     from typing import Protocol
 
 
-    class Population[Individual](Collection, Protocol):
-      def select_random(self) -> Individual: ...
+    class Environment(Protocol):
+        ...
 
 
-    def algorithm[Individual](population: Population[Individual]):
-      parent_a = population.select_random()
-      parent_b = population.select_random()
+    def find_fittest(population: Collection, environment: Environment): ...
 
-To keep things simple, we start with two parents that are selected randomly from the existing
-population, and we'll go from there.[^protocols]
-
-## Crossover
-
-With our first pair in place, we can now produce the next "generation".
-
-    :::python
-    class Offspring[Individual](Protocol):
-      def mutate(self) -> Individual: ...
-
-
-    class Population[Individual](Collection, Protocol):
-      # ...
-      def crossover(self, first: Individual, second: Individual)\
-          -> Offspring[Individual]: ...
-
-      def add(self, individual: Individual): ...
-
-
-    def algorithm[Individual](population: Population[Individual]):
-      # ...
-      base_offspring = population.crossover(parent_a, parent_b)
-      real_offspring = base_offspring.mutate()
-      population.add(real_offspring)
-
-The ***crossover*** in genetic algorithms is the operation used to combine the data of
-the parents to produce offspring. But we can't just stop there, we need genetic variance to ensure
-the population actually evolves over time. One form of variance is of course that the parents
-contribute different characteristics selected at random from each parent, but even that isn't enough as
-it could leave us stuck[^pool].
-
-Actual variance comes from the key element of **mutation**, the random chance that any given
-offspring individual will have genes not present in the parents.[^offspring]
-
-Finally, the new individual is, of course, a new member of the population so we add it[^type].
+There are multiple types of genetic algorithms, commonly used to find good enough
+solutions to certain types of, often trial and error, problems that don't translate
+well to more traditional algorithms. What they tend to have in common is starting with
+a data sample and a set of patterns in the data we want to reach by the end, roughly represented
+here by the population and the environment[^protocols], respectively.
 
 ## Natural Selection
 
-At this point, we have parents and their offspring, what now? It's time to determine the goal.
-Genetic algorithms are commonly used to find a good enough solution to certain types of,
-often trial and error, problems that don't translate well to common normal algorithms.
-Fortunately, the only thing resembling a "goal" in nature is simply thriving, surviving long
-enough to reproduce...
-So let's do that, by introducing a "niche" and determining how well the individuals fit that niche.
+Evolution is what we want to represent; the survive and adapt process is the only
+real "goal" in nature. Here's where Darwin's truth comes into play: Some individuals
+are more likely to reproduce than others; the fitter the individual,
+the more likely it is to pass on its genes.
 
     :::python
+    from functools import cmp_to_key
     # ...
-    class Population[Individual](Collection, Protocol):
-      # ...
-      def remove(self, individual: Individual): ...
+    class Environment[Individual](Protocol):
+        def compare_fit(self, first: Individual, second: Individual) -> int:
+            ...
+
+        def find_mate(self, subject: Individual) -> Individual: ...
 
 
-    class Niche[Individual](Protocol):
-      def tournament(self, pop: Collection[Individual])\
-        -> tuple[Individual, Individual]: ...
-
-
-    def algorithm[Individual](
-      population: Population[Individual], niche: Niche[Individual]
+    def find_fittest[Individual](
+        population: Collection[Individual],
+        environment: Environment[Individual]
     ):
-      # ...
-      fittest, unfit = niche.tournament(population)
-      population.remove(unfit)
+        fit = max(population, key=cmp_to_key(environment.compare_fit))
+        _ = environment.find_mate(fit)
 
 Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
-genes, and in our algorithm, only that individual in a group[^collection] that best fits the niche is the
-one to continue. This is usually called "***tournament selection***" in genetic algorithm jargon.
+genes, and in our algorithm, only the individual[^type] in a given generation that best fits the niche is the
+one to continue. This is usually called "***tournament selection***" in genetic algorithm parlance.
+The typical approach is to select a given number of fit individuals for the next step, but
+to maintain our ecological analogy, we go with two: the fittest individual and a suitable mate
+found in the environment[^mate].
 
-Finally, to maintain our analogy (and really to prevent our population from growing without bound)
-we remove the least fit individual from the population.
+## Crossing
+
+We have the fittest individual, the one most likely to reproduce, and a suitable mate. For evolution
+to happen, they need to do just that: produce new generations when the environment is right.
+
+    :::python hl_lines="12"
+    # ...
+    class Environment[Individual, Genome](Protocol):
+        # ...
+        def cross(self, fit: Individual, mate: Individual) -> Genome: ...
+
+
+    def find_fittest[Individual, G](
+        # ...
+        environment: Environment[Individual, G]
+    ):
+        # ...
+        mate = environment.find_mate(fit)
+
+        _ = (environment.cross(fit, mate) for _ in range(len(population)))
+
+The ***crossover*** in genetic algorithms is the operation used to combine the data of
+the parents to produce some offspring (as many as in the original population in our case, to make
+things easier). But for now it's just the basic data, the "genetic material"; not a true
+individual, because the most important step for evolution (and genetic algorithms) comes next.
+
+## Mutation
+
+As the "X-Men" movie put it well, the key of evolution is mutation. It's not enough to just
+combine the genes of the parents, random changes in the data need to happen for the population to change
+over time.
+
+    :::python hl_lines='6'
+    # class Environment...
+        def mutate(self, genome: Genome) -> Individual: ...
+
+
+    # def find_fittest...
+        brood = (environment.cross(fit, mate) for _ in range(len(population)))
+        population = tuple(environment.mutate(gen) for gen in brood)
+
+In real life, the environment doesn't often cause mutations unless things went really, really,
+_radioactively_ wrong, so in here we're using `environment` as stand-in for "it happens in nature"
+because indeed, mutations happen spontaneously. Anyhow, if things go well, these new
+individuals should be mostly mixes of the parents, each with some small changes to its combined genome[^genome].
+This group is now our next population, to continue our search for the fittest.
 
 ## Generations
 
-We have almost completed the algorithm, but the mere fact that we've found an individual that fits
-the niche better than others doesn't mean we've actually found one that _thrives_ in the niche; the
-likelihood of achieving that in just the first generation is nil. We'll need many generations, so we need
-to repeat the process until we find such individual.
+We have almost everything in place, the only thing missing is... well, to keep on. Evolution takes
+many generations; it goes on forever. In our case, until we find the fittest possible individual
+in the given environment.
 
-    :::python
-    # ...
-    class Population[Individual](Collection, Protocol):
-      # ...
-      def find_mate(self, individual: Individual) -> Individual: ...
+    :::python hl_lines="8 13"
+    # class Environment...
+        def is_viable(self, subject: Individual) -> bool: ...
+        # ...
 
 
-    class Niche[Individual](Protocol):
-      # ...
-      def can_thrive(self, individual: Individual) -> bool: ...
+    def find_fittest[Individual, G](
+        # ...
+    ) -> Individual:
+        while (
+            fit := max(population, key=cmp_to_key(environment.compare_fit))
+        ) and not environment.is_viable(fit):
+            # ...
+        return fit
 
-
-    def algorithm[Individual](
-      population: Population[Individual], niche: Niche[Individual]
-    ) -> int:
-      parent_a = population.select_random()
-      parent_b = population.select_random()
-
-      generations = 0
-
-      while not niche.can_thrive(parent_a):
-        base_offspring = population.crossover(parent_a, parent_b)
-        real_offspring = base_offspring.mutate()
-        population.add(real_offspring)
-
-        fittest, unfit = niche.tournament(population)
-        population.remove(unfit)
-        parent_a, parent_b = fittest, population.find_mate(fittest)
-
-        generations += 1
-
-      return generations
-
-There are several options here, one commonly used in real genetic algorithms is to pick the two
-fittest instead of just one and make those "reproduce", producing an entirely new population
-and continue iterating from there. But to keep our
-natural analogy going, let's instead assume that our fittest finds a "suitable mate"[^mate] in another
-member of the population, which also adds another source of variance.
-
-Ultimately, the point here is iteration: continually doing the crossover and tournament selection until we meet
-our goal.
+The first step of the algorithm was selection, and it still is, but now we also add a loop
+that checks whether the current fittest in the population is, well, fit enough, and to continue
+iterating until it is. By extension, if the current fittest isn't "viable",
+nobody else in the population is. Once we find a viable subject, we return it; after all, in
+a real application, we'd need to reach the goal for a reason, meaning we might have to
+use that optimal data for something else.
 
 ---
 
-And there we have it, that `algorithm` function represents our full genetic algorithm, in a way I hope is self-explanatory
+And there we have it, that `find_fittest` function represents our full genetic algorithm, in a way I hope is self-explanatory
 enough. That function _should_ work without change as long as it receives arguments that actually implement
 the [protocols][] properly.
 
@@ -167,101 +156,118 @@ string-based implementation of the algorithm, along with the function being run.
 
 Now, before finishing, you'll notice that I talked very little about the actual _problems_ that could
 be solved with this type of algorithm... Well that's true, because the point of this post was the
-algorithm itself. That said, I might write a follow up with a practical example.
+algorithm itself.
 
 ## Appendix (On implementation and testing)
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
-of completeness—to fully explain the genetic algorithm—I wanted to go over what happens during
-crossover and tournament selection. However, we can write [tests][] to do that instead
-of explaining the implementations line by line![^jokes]
+of completeness, to fully explain the genetic algorithm, I wanted to go over what happens during
+tournament selection, mutation and crossover. But we don't need to pour over implementation details;
+we can write [tests][] to understand instead![^jokes]
+
+Tournament selection is a bit tricky to test, because we are mostly using python primitives.
+It's pointless to test `max`.
+
+But what we can test is
+invariants, what doesn't change regarding the selection, what is always true? We actually
+already mentioned a useful invariant before: If the fittest individual in a population isn't
+fit enough, then nobody else in the population can be. Or, to put it another way, an individual
+we already know is the fittest possible, will always be a better fit than one we know it's not.
 
     :::python
-    from hypothesis import given, strategies as st
+    #!/usr/bin/env -S uv run -s
+    # /// script
+    # dependencies = ["hypothesis", "pytest"]
+    # ///
+    from hypothesis import assume, given
 
-    from implementation import Individual
-
-
-    st.register_type_strategy(Individual, st.builds(Individual, st.text(
-      alphabet=Individual.POOL,
-      min_size=Individual.LENGTH,
-      max_size=Individual.LENGTH
-    )))
-
-Before anything is done, we have to tell [hypothesis][] how to create an `Individual` that
-actually fits our implementation. Only then we move onto the tests:
-
-    :::python
-    # ...
-    from implementation import Population
-
-    @given(...)
-    def test_crossover(parent_a: Individual, parent_b: Individual):
-      offspring = Population().crossover(parent_a, parent_b)
-
-      is_parent_a = is_parent_b = False
-
-      for gene, a, b in zip(offspring, parent_a, parent_b):
-        assert gene in (a, b)
-        is_parent_a |= gene == a
-        is_parent_b |= gene == b
-
-      assert is_parent_a and is_parent_b
-
-This test tells us everything we need to know about what
-happens in `crossover` without actually having to check the implementation: We don't care how it's
-done, but we do care that every gene in the offspring comes from one of the parents, and that _both_
-parents had an input.
-
-    :::python
-    # ...
-    from implementation import Niche
+    from implementation import Individual, Environment, find_fittest
 
 
     @given(...)
-    def test_tournament_selection(niche: Niche, population: Population):
-      pop = set(population)
-      winner, loser = niche.tournament(pop)
+    def test_tournament(
+        unfit: Individual, population: set[Individual], env: Environment
+    ):
+        assume(not env.is_viable(unfit))
+        assume(len(population) > 0)
+        fit = find_fittest(population, env)
 
-      while len(pop) > 1:
-        assert winner in pop
+        assert env.compare_fit(fit, unfit) == 1
 
-        pop.remove(loser)
-        _, loser = niche.tournament(pop)
-      else:
-        assert winner == loser
+Using property based testing with [hypothesis][], we confirm the invariant: Test only for
+unfit individuals, find the fittest for the environment in a non-empty population, then check that
+such fittest is indeed always better than the initial unfit.
 
-Tournament selection is a bit trickier to test because the calculation for each fittest _is_ an
-implementation detail, but one the whole idea depends upon. We could simply repeat the implementation
-here and assert that the winner and loser were calculated correctly but then the test would no
-longer work if we changed the metric (or changed what an individual is entirely).
+Next is mutation. Now, it's hard to think of an invariant for mutation: a mutation may happen or
+it may not. Luckily, in my code, how often a mutation happens is a configuration detail,
+and we can tune it without having to care how it's used in the actual implementation[^config].
 
-In these cases, we have to step back and think of invariants: what is always true about the tournament
-selection? As long as the winner remains in the population and no other individuals are added, it will _always_ be the winner. And that's what we test: We systematically remove each loser until only one
-individual is left in the population; that individual _must_ still be the original winner!
+    :::python
+    import operator
+    from unittest.mock import patch
+
+    import pytest
+    # ...
+
+    @pytest.mark.parametrize("mutation_rate, comparator", [
+        (1, operator.ne), (0, operator.eq)
+    ])
+    @given(env=..., base=...)
+    def test_mutate(env: Environment, base: Individual, mutation_rate, comparator):
+        with patch.object(Individual, "MUTATION_RATE", new=mutation_rate):
+            mutated = env.mutate(base)
+            assert all(comparator(b, m) for b, m in zip(base, mutated))
+
+Updating the mutation rate, we create two invariants: When the rate is 100%, mutation is total;
+the mutated individual cannot share genes with the base genome. If the rate is 0%, mutation
+can't happen; the individual's genes must be identical to the base genome.
+
+Finally, crossover. This one has a simple invariant: All the offspring genes must come from
+one of the two parents, so we test just that:
+
+    :::python
+    @patch.object(Individual, "LENGTH", new=10)
+    @given(...)
+    def test_crossover(father: Individual, mother: Individual, env: Environment):
+        offspring = env.cross(father, mother)
+
+        assert set(offspring) <= set(father) | set(mother)
+
+Simple enough, each single gene in an offspring must come from the union of all the genes of the
+parents. I made another configuration change: Since by default the length of the string is 50
+and only lowercase characters, the odds are that every individual will have them all, making this
+test trivial. Reducing it to 10 makes it possible for the parents to have at least some
+different "genes". Then the test is meaningful.
 
 [^protocols]: I use protocols because Python's [structural subtyping][protocols] is pretty good at
 properly representing a [domain][]. In simpler terms: we only care about what our objects can _do_.
-On that note, the code I'll be showing shouldn't throw errors in [mypy][] or [pyright][].
-[^pool]: If we stick to just the parents' genomes, then the target will never be reached if it requires a
-gene that neither of the parents has.
-[^offspring]: The intermediate class `Offspring` fulfills two purposes here: to explicitly show
+On that note, the code I'll be showing, at every step, shouldn't throw errors in either type checkers like
+[ty][], [mypy][] or [pyright][], nor linters like [flake8][] or [ruff][].
+[^type]: You might have noticed that "Individual" is represented only by generic
+type arguments. This is on purpose: the algorithm doesn't need to care what an individual
+_is_ and should work on any data type.
+[^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes the rest of the
+population (hence why the population isn't a parameter), as they're intended to be related.
+It'll become clear later.
+[^genome]: The generic type `Genome` fulfills two purposes here: to explicitly show
 the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
-on the type system. We'll know we have a real individual only if it was selected from an
-existing population or if it's the result of mutation from the crossover of two parents.
-[^type]: You might have noticed that an "Individual" is represented only by generic type arguments.
-This is on purpose: the algorithm doesn't need to care what an individual _is_.
-[^collection]: In the type annotation, I used `Collection` instead of `Population`
-(which is itself a collection) because the tournament could be done over any group of individuals; it
-doesn't have to be a population specifically, and we gotta be "liberal in what we accept".
-[^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes its parents.
+on the type system: We'll know we have a real individual only if it was selected from an
+existing population or environment, or if it's the result of mutation from the crossover of two parents.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
+Not to mention that I made every single method body a one liner because I wanted to push the limits
+of how "[cleverly][]" I could write it.
+[^config]: Now, whether configuration is implementation or not, a lot has been written about. I think
+if they are properly separated, then no, configuration is independent and used _by_ the implementation.
 
-[protocols]: https://typing.readthedocs.io/en/latest/spec/protocol.html#protocols
+[protocols]: https://typing.readthedocs.io/en/latest/spec/protocol.html
 [domain]: {filename}/Engineering/domain.md
+[ty]: https://docs.astral.sh/ty/
 [mypy]: https://mypy-lang.org/
-[pyright]: https://github.com/microsoft/pyright
+[pyright]: https://microsoft.github.io/pyright/
+[flake8]: https://flake8.pycqa.org/en/latest/
+[ruff]: https://docs.astral.sh/ruff/
 [hypothesis]: https://hypothesis.readthedocs.io/en/latest/
 [definition]: {static}/assets/code/genetic/definition.py
 [implementation]: {static}/assets/code/genetic/implementation.py
 [tests]: {static}/assets/code/genetic/test.py
+[cleverly]: {filename}/Engineering/refactoring.md

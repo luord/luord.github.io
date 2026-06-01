@@ -1,92 +1,66 @@
-from collections import UserString
-from collections.abc import Collection
 from dataclasses import dataclass, field
 from random import Random
 from string import ascii_lowercase
-from typing import ClassVar, Self
+from typing import Self
 
-from definition import algorithm
+from definition import find_fittest
 
 
-class Individual(UserString):
-    LENGTH: ClassVar[int] = 50
-    POOL: ClassVar[str] = ascii_lowercase
-    MUTATION: ClassVar[int] = 270
-    _random: ClassVar[Random] = Random()
+class Individual(str):
+    LENGTH = 50
+    POOL = frozenset(ascii_lowercase)
+    MUTATION_RATE = 0.03
 
-    def __init__(self, base: UserString | str = ''):
-        super().__init__(
-            base or ''.join(self._random.choices(self.POOL, k=self.LENGTH))
+    _rng = Random()
+
+    def __new__(cls, genome='') -> Self:
+        return super().__new__(cls, ''.join(
+            cls._rng.choice(tuple(cls.POOL - {gene}))
+            if not gene or cls._rng.random() < cls.MUTATION_RATE else gene
+            for gene in genome or ('',) * cls.LENGTH
+        ))
+
+    def __or__(self, other: Self) -> int:
+        return sum(s == o for s, o in zip(self, other))
+
+    def __and__(self, mate: Self) -> str:
+        return ''.join(
+            self._rng.choice(s + m) for s, m in zip(self, mate)
         )
-
-    def __or__(self, other: Self) -> Self:
-        division = self._random.randint(1, self.LENGTH-1)
-        return self[:division] + other[division:]
-
-    def __and__(self, other: Self) -> int:
-        return sum(a == b for a, b in zip(self.data, other.data))
-
-
-class Offspring(Individual):
-    def mutate(self) -> Individual:
-        return Individual(+self)
-
-    def __pos__(self) -> str:
-        return ''.join(self._random.choices(
-            gene + self.POOL,
-            weights=(self.MUTATION,) + (1,) * len(self.POOL)
-        )[0] for gene in self.data)
-
-
-class Population(set[Individual]):
-    SIZE: ClassVar[int] = 10
-    _random: ClassVar[Random] = Random()
-
-    def __init__(self):
-        super().__init__(
-            Individual() for _ in range(self.SIZE)
-        )
-
-    def select_random(self) -> Individual:
-        return self._random.choice(list(self))
-
-    def add(self, individual: Individual):
-        return super().add(individual)
-
-    def remove(self, individual: Individual):
-        if len(self) <= self.SIZE:
-            return
-
-        return super().remove(individual)
-
-    def crossover(self, first: Individual, second: Individual) -> Offspring:
-        pair = [first, second]
-        self._random.shuffle(pair)
-        first, second = pair
-        return Offspring(first | second)
-
-    def find_mate(self, individual: Individual) -> Individual:
-        return min(self, key=lambda ind: ind & individual)
 
 
 @dataclass
-class Niche:
-    THRESHOLD: ClassVar[int] = 45
+class Environment:
+    THRESHOLD = 49
 
     target: Individual = field(default_factory=Individual)
+    cycles: int = field(default=0, init=False)
 
-    def tournament(
-        self,
-        pop: Collection[Individual]
-    ) -> tuple[Individual, Individual]:
+    def is_viable(self, subject: Individual) -> bool:
         return (
-            max(pop, key=lambda ind: (ind & self.target, ind)),
-            min(pop, key=lambda ind: (ind & self.target, ind))
+            self._increment()
+            or subject | self.target >= self.THRESHOLD
         )
 
-    def can_thrive(self, individual: Individual) -> bool:
-        return self.target & individual >= self.THRESHOLD
+    def compare_fit(self, first: Individual, second: Individual) -> int:
+        return (
+            (f := first | self.target) < (s := second | self.target) and -1
+            or f > s
+        )
+
+    def find_mate(self, subject: Individual) -> Individual:
+        return Individual(self.target & subject)
+
+    def cross(self, fit: Individual, mate: Individual) -> str:
+        return fit & mate
+
+    def mutate(self, genome: str) -> Individual:
+        return Individual(genome)
+
+    def _increment(self):
+        self.cycles += 1
 
 
 if __name__ == "__main__":
-    print(algorithm(Population(), Niche()))
+    f = find_fittest({Individual() for _ in range(20)}, n := Environment())
+    print(n, f)

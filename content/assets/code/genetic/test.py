@@ -1,38 +1,54 @@
-from hypothesis import given, strategies as st
+#!/usr/bin/env -S uv run -s
+# /// script
+# dependencies = ["hypothesis", "pytest"]
+# ///
+import operator
+from unittest.mock import patch
 
-from implementation import Individual, Niche, Population
+import pytest
+from hypothesis import assume, given
 
-
-st.register_type_strategy(Individual, st.builds(Individual, st.text(
-    alphabet=Individual.POOL,
-    min_size=Individual.LENGTH,
-    max_size=Individual.LENGTH
-)))
-
-
-@given(...)
-def test_crossover(parent_a: Individual, parent_b: Individual):
-    offspring = Population().crossover(parent_a, parent_b)
-
-    is_parent_a = is_parent_b = False
-
-    for gene, a, b in zip(offspring, parent_a, parent_b):
-        assert gene in (a, b)
-        is_parent_a |= gene == a
-        is_parent_b |= gene == b
-
-    assert is_parent_a and is_parent_b
+from implementation import Individual, Environment, find_fittest
 
 
 @given(...)
-def test_tournament_selection(niche: Niche, population: Population):
-    pop = set(population)
-    winner, loser = niche.tournament(pop)
+def test_tournament(
+    unfit: Individual, population: set[Individual], env: Environment
+):
+    assume(not env.is_viable(unfit))
+    assume(len(population) > 0)
+    fit = find_fittest(population, env)
 
-    while len(pop) > 1:
-        assert winner in pop
+    assert env.compare_fit(fit, unfit) == 1
 
-        pop.remove(loser)
-        _, loser = niche.tournament(pop)
-    else:
-        assert winner == loser
+
+@pytest.mark.parametrize("mutation_rate, comparator", [
+    (1, operator.ne), (0, operator.eq)
+])
+@given(env=..., base=...)
+def test_mutate(env: Environment, base: Individual, mutation_rate, comparator):
+    with patch.object(Individual, "MUTATION_RATE", new=mutation_rate):
+        mutated = env.mutate(base)
+        assert all(comparator(b, m) for b, m in zip(base, mutated))
+
+
+@patch.object(Individual, "LENGTH", new=10)
+@given(...)
+def test_crossover(father: Individual, mother: Individual, env: Environment):
+    offspring = env.cross(father, mother)
+
+    assert set(offspring) <= set(father) | set(mother)
+
+
+if __name__ == "__main__":
+    import sys
+    import subprocess
+
+    subprocess.call([
+        sys.executable,
+        "-m",
+        "pytest",
+        "-W",
+        "ignore::hypothesis.errors.SmallSearchSpaceWarning",
+        __file__
+    ])
