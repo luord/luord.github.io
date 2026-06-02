@@ -22,33 +22,27 @@ def test_tournament(
     assert env.compare_fit(fit, unfit) == 1
 
 
-@pytest.mark.parametrize("mutation_rate, comparator", [
+@pytest.mark.parametrize("do_mutate, matcher", [
     (1, operator.ne), (0, operator.eq)
 ])
 @given(env=..., base=...)
-def test_mutate(env: Environment, base: Individual, mutation_rate, comparator):
-    with patch.object(Individual, "MUTATION_RATE", new=mutation_rate):
+def test_mutation(env: Environment, base: Individual, do_mutate, matcher):
+    with patch.object(Individual, "MUTATION_RATE", new=do_mutate):
         mutated = env.mutate(base)
-        assert all(comparator(b, m) for b, m in zip(base, mutated))
+
+    assert matcher(base, mutated)
 
 
 @patch.object(Individual, "LENGTH", new=10)
 @given(...)
-def test_crossover(father: Individual, mother: Individual, env: Environment):
-    offspring = env.cross(father, mother)
+def test_crossover(f: Individual, m: Individual, env: Environment):
+    offspring = env.cross(f, m)
 
-    assert set(offspring) <= set(father) | set(mother)
+    assert set(offspring) <= set(f) | set(m)
 
 
 if __name__ == "__main__":
     import sys
-    import subprocess
-
-    subprocess.call([
-        sys.executable,
-        "-m",
-        "pytest",
-        "-W",
-        "ignore::hypothesis.errors.SmallSearchSpaceWarning",
-        __file__
-    ])
+    del sys.modules['hypothesis'], sys.modules['_hypothesis_globals']
+    del assume, given
+    pytest.main([__file__])

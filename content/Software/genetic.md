@@ -64,7 +64,7 @@ the more likely it is to pass on its genes.
         _ = environment.find_mate(fit)
 
 Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
-genes, and in our algorithm, only the individual[^type] in a given generation that best fits the niche is the
+genes, and in our algorithm, only the individual in a given generation that best fits the niche is the
 one to continue. This is usually called "***tournament selection***" in genetic algorithm parlance.
 The typical approach is to select a given number of fit individuals for the next step, but
 to maintain our ecological analogy, we go with two: the fittest individual and a suitable mate
@@ -93,8 +93,8 @@ to happen, they need to do just that: produce new generations when the environme
 
 The ***crossover*** in genetic algorithms is the operation used to combine the data of
 the parents to produce some offspring (as many as in the original population in our case, to make
-things easier). But for now it's just the basic data, the "genetic material"; not a true
-individual, because the most important step for evolution (and genetic algorithms) comes next.
+things easier). But for now it's just the basic data, the "genetic material"; not true
+individuals[^type], because the most important step for evolution (and genetic algorithms) comes next.
 
 ## Mutation
 
@@ -141,7 +141,9 @@ in the given environment.
 The first step of the algorithm was selection, and it still is, but now we also add a loop
 that checks whether the current fittest in the population is, well, fit enough, and to continue
 iterating until it is. By extension, if the current fittest isn't "viable",
-nobody else in the population is. Once we find a viable subject, we return it; after all, in
+nobody else in the population is.
+
+Once we find a viable subject, we return it; after all, in
 a real application, we'd need to reach the goal for a reason, meaning we might have to
 use that optimal data for something else.
 
@@ -149,7 +151,7 @@ use that optimal data for something else.
 
 And there we have it, that `find_fittest` function represents our full genetic algorithm, in a way I hope is self-explanatory
 enough. That function _should_ work without change as long as it receives arguments that actually implement
-the [protocols][] properly.
+the [protocols][] properly. Implementation details should always be, well, just details.
 
 [Here's a file][definition] with the complete definition, and [here's a file][implementation] with a
 string-based implementation of the algorithm, along with the function being run.
@@ -162,7 +164,7 @@ algorithm itself.
 
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
 of completeness, to fully explain the genetic algorithm, I wanted to go over what happens during
-tournament selection, mutation and crossover. But we don't need to pour over implementation details;
+tournament selection, mutation and crossover. But we don't need to split hairs over implementation details;
 we can write [tests][] to understand instead![^jokes]
 
 Tournament selection is a bit tricky to test, because we are mostly using python primitives.
@@ -209,18 +211,19 @@ and we can tune it without having to care how it's used in the actual implementa
     import pytest
     # ...
 
-    @pytest.mark.parametrize("mutation_rate, comparator", [
+    @pytest.mark.parametrize("do_mutate, matcher", [
         (1, operator.ne), (0, operator.eq)
     ])
     @given(env=..., base=...)
-    def test_mutate(env: Environment, base: Individual, mutation_rate, comparator):
-        with patch.object(Individual, "MUTATION_RATE", new=mutation_rate):
+    def test_mutation(env: Environment, base: Individual, do_mutate, matcher):
+        with patch.object(Individual, "MUTATION_RATE", new=do_mutate):
             mutated = env.mutate(base)
-            assert all(comparator(b, m) for b, m in zip(base, mutated))
 
-Updating the mutation rate, we create two invariants: When the rate is 100%, mutation is total;
-the mutated individual cannot share genes with the base genome. If the rate is 0%, mutation
-can't happen; the individual's genes must be identical to the base genome.
+        assert matcher(base, mutated)
+
+Updating the mutation rate, we create two invariants: When the rate is 100%, mutation is guaranteed
+to happen, so the mutated individual cannot possibly be identical to the base genome; if the rate is 0%,
+mutation can't happen, so the individual must be identical to the base genome.
 
 Finally, crossover. This one has a simple invariant: All the offspring genes must come from
 one of the two parents, so we test just that:
@@ -228,13 +231,15 @@ one of the two parents, so we test just that:
     :::python
     @patch.object(Individual, "LENGTH", new=10)
     @given(...)
-    def test_crossover(father: Individual, mother: Individual, env: Environment):
-        offspring = env.cross(father, mother)
+    def test_crossover(f: Individual, m: Individual, env: Environment):
+        offspring = env.cross(f, m)
 
-        assert set(offspring) <= set(father) | set(mother)
+        assert set(offspring) <= set(f) | set(m)
 
 Simple enough, each single gene in an offspring must come from the union of all the genes of the
-parents. I made another configuration change: Since by default the length of the string is 50
+parents.
+
+I made another configuration change: Since by default the length of the string is 50
 and only lowercase characters, the odds are that every individual will have them all, making this
 test trivial. Reducing it to 10 makes it possible for the parents to have at least some
 different "genes". Then the test is meaningful.
@@ -243,12 +248,12 @@ different "genes". Then the test is meaningful.
 properly representing a [domain][]. In simpler terms: we only care about what our objects can _do_.
 On that note, the code I'll be showing, at every step, shouldn't throw errors in either type checkers like
 [ty][], [mypy][] or [pyright][], nor linters like [flake8][] or [ruff][].
+[^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes the rest of the
+population (hence the population not being a parameter), as they're intended to be related.
+It'll become clear later.
 [^type]: You might have noticed that "Individual" is represented only by generic
 type arguments. This is on purpose: the algorithm doesn't need to care what an individual
 _is_ and should work on any data type.
-[^mate]: _How_ it finds it is an implementation detail, hopefully one that excludes the rest of the
-population (hence why the population isn't a parameter), as they're intended to be related.
-It'll become clear later.
 [^genome]: The generic type `Genome` fulfills two purposes here: to explicitly show
 the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
 on the type system: We'll know we have a real individual only if it was selected from an
