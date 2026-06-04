@@ -36,7 +36,6 @@ PATH = 'content'
 STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
-  'assets/redirect/resume.html': {'path': 'pages/resume.html'},
   'assets/redirect/email.html': {'path': 'pages/email/index.html', 'url': 'pages/email/'},
 }
 
