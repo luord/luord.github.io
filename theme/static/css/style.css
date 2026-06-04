@@ -224,11 +224,7 @@ form {
 }
 
 @media print {
-  body > header {
-    display: none;
-  }
-
-  footer {
+  body > header, footer, .noprint {
     display: none;
   }
 

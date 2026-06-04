@@ -3,7 +3,8 @@ summary: My experience and education, why I should be hired.
 status: hidden
 order: 3
 
-This is a summary of my experience and education.
+This is a summary of my experience and education[^pdf].
+{ .noprint }
 ___
 ## Profile
 Systems Engineer, by degree, with interest and focus on Software development and Infrastructure management.
@@ -168,7 +169,13 @@ li > ul {
 .low-margin {
   margin-bottom: 0;
 }
+@media print {
+  .footnote {
+    display: none;
+  }
+}
 </style>
 
-[pdf]: {static}/assets/Luis_Orduz_CV.pdf "My CV"
+[^pdf]: Printable to PDF from the browser.
+
 [uis]: https://uis.edu.co "My Alma Mater's home page"
