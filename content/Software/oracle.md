@@ -1,7 +1,7 @@
 title: Oracle in Docker
 tags: operations,development,oracle,docker,guides,tutorials
 summary: Using the official oracle docker images in development
-image: /assets/img/oracle/dorac.jpg
+image: assets/img/oracle/dorac.jpg
 date: 2017-11-13
 status: published
 

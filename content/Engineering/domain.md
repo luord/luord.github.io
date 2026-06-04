@@ -3,7 +3,7 @@ summary: Improving communication by writing code that describes the domain more 
 tags: software,development,engineering,refactoring
 date: 2022-04-30
 status: published
-image: /assets/img/splash/domain.jpg
+image: assets/img/splash/domain.jpg
 
 I finished [my last post][abstracting] by mentioning how refactoring can help us achieve a code base where discussing
 the code and discussing the domain model can be analogous or even entail similar discussions. That's

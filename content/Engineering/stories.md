@@ -3,7 +3,7 @@ tags: architecture,design,model,musings,craftsmanship
 summary: On crafting actionable development stories from requirements
 date: 2020-02-01
 status: published
-image: /assets/img/splash/stories.jpg
+image: assets/img/splash/stories.jpg
 
 A few weeks ago, one of my best friends came to me with an idea for an application. Unlike most (if not all) of my ideas, this one I actually believe to have potential so I asked him to prepare a list of requirements we could use to at least have a rough goal to aim for with this application. He delivered, and I was presented a good enough list... And I did nothing with it, I've been letting it sit there, all unfulfilled potential. But that changes now!
 

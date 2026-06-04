@@ -2,7 +2,7 @@ title: Practical refactoring: Abstractions
 tags: software,development,craftsmanship,engineering
 summary: Improving code by way of writing specific and self-describing abstractions.
 date: 2022-03-31
-image: /assets/img/abstracting/idea.jpg
+image: assets/img/abstracting/idea.jpg
 status: published
 
 In [my last post][refactoring], we did a basic rundown of a very convoluted short algorithm to make
