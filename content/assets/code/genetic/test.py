@@ -6,9 +6,12 @@ import operator
 from unittest.mock import patch
 
 import pytest
-from hypothesis import assume, given
+from hypothesis import assume, given, strategies as st
 
 from implementation import Individual, Environment, find_fittest
+
+
+st.register_type_strategy(Individual, st.text().map(Individual))
 
 
 @given(...)
@@ -25,8 +28,8 @@ def test_tournament(
 @pytest.mark.parametrize("do_mutate, matcher", [
     (1, operator.ne), (0, operator.eq)
 ])
-@given(env=..., base=...)
-def test_mutation(env: Environment, base: Individual, do_mutate, matcher):
+@given(env=..., base=st.from_type(Individual).map(str))
+def test_mutation(env: Environment, base: str, do_mutate, matcher):
     with patch.object(Individual, "MUTATION_RATE", new=do_mutate):
         mutated = env.mutate(base)
 
@@ -44,5 +47,5 @@ def test_crossover(f: Individual, m: Individual, env: Environment):
 if __name__ == "__main__":
     import sys
     del sys.modules['hypothesis'], sys.modules['_hypothesis_globals']
-    del assume, given
+    del assume, given, st
     pytest.main([__file__])

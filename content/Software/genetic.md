@@ -165,7 +165,7 @@ algorithm itself.
 I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
 of completeness, to fully explain the genetic algorithm, I wanted to go over what happens during
 tournament selection, mutation and crossover. But we don't need to split hairs over implementation details;
-we can write [tests][] to understand instead![^jokes]
+we can write tests to understand instead![^jokes]
 
 Tournament selection is a bit tricky to test, because we are mostly using python primitives.
 It's pointless to test `max`.
@@ -177,13 +177,12 @@ fit enough, then nobody else in the population can be. Or, to put it another way
 we already know is the fittest possible, will always be a better fit than one we know it's not.
 
     :::python
-    #!/usr/bin/env -S uv run -s
-    # /// script
-    # dependencies = ["hypothesis", "pytest"]
-    # ///
-    from hypothesis import assume, given
+    from hypothesis import assume, given, strategies as st
 
     from implementation import Individual, Environment, find_fittest
+
+
+    st.register_type_strategy(Individual, st.text().map(Individual))
 
 
     @given(...)
@@ -214,8 +213,8 @@ and we can tune it without having to care how it's used in the actual implementa
     @pytest.mark.parametrize("do_mutate, matcher", [
         (1, operator.ne), (0, operator.eq)
     ])
-    @given(env=..., base=...)
-    def test_mutation(env: Environment, base: Individual, do_mutate, matcher):
+    @given(env=..., base=st.from_type(Individual).map(str))
+    def test_mutation(env: Environment, base: str, do_mutate, matcher):
         with patch.object(Individual, "MUTATION_RATE", new=do_mutate):
             mutated = env.mutate(base)
 
@@ -239,10 +238,17 @@ one of the two parents, so we test just that:
 Simple enough, each single gene in an offspring must come from the union of all the genes of the
 parents.
 
-I made another configuration change: Since by default the length of the string is 50
+I made another configuration change: Since by default the length of the `Individual` string is 50
 and only lowercase characters, the odds are that every individual will have them all, making this
 test trivial. Reducing it to 10 makes it possible for the parents to have at least some
 different "genes". Then the test is meaningful.
+
+And those are the tests I wanted to go over; a file containing all three is [here][tests].
+
+That's it! By learning what we're testing, we get to learn what each step actually _does_: Tournament
+ensures the fittest is chosen, crossover ensures new generations do come from the previous ones,
+and mutation ensures each generation has a chance of differing from the last one. Note we still don't need to know
+how any of this is done in our implementation.
 
 [^protocols]: I use protocols because Python's [structural subtyping][protocols] is pretty good at
 properly representing a [domain][]. In simpler terms: we only care about what our objects can _do_.
@@ -256,7 +262,7 @@ type arguments. This is on purpose: the algorithm doesn't need to care what an i
 _is_ and should work on any data type.
 [^genome]: The generic type `Genome` fulfills two purposes here: to explicitly show
 the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
-on the type system: We'll know we have a real individual only if it was selected from an
+on the type system: We'll know we have a true individual only if it was selected from an
 existing population or environment, or if it's the result of mutation from the crossover of two parents.
 [^jokes]: Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
 Not to mention that I made every single method body a one liner because I wanted to push the limits

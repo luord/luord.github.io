@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from itertools import chain, islice, repeat
 from random import Random
 from string import ascii_lowercase
 from typing import Self
@@ -13,11 +14,11 @@ class Individual(str):
 
     _rng = Random()
 
-    def __new__(cls, genome='') -> Self:
+    def __new__(cls, genome: str = '') -> Self:
         return super().__new__(cls, ''.join(
             cls._rng.choice(tuple(cls.POOL - {gene}))
             if not gene or cls._rng.random() < cls.MUTATION_RATE else gene
-            for gene in genome or ('',) * cls.LENGTH
+            for gene in islice(chain(genome, repeat("")), cls.LENGTH)
         ))
 
     def __or__(self, other: Self) -> int:
