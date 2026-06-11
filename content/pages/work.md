@@ -12,6 +12,18 @@ cycle, low testing coverage, problems with observability or management of deploy
 difficulty with feedback loops in the process, or most other problems related to
 delivering a functional application.
 
+Nowadays, these problems are all exacerbated by the usage of LLM based "agents" during
+development, as while these tools are extremely useful and I use them myself extensively,
+they require a careful supervision as they can and will introduce issues in the codebase:
+whether making the code harder to deliver by ignoring testing paths or testing altogether,
+overly verbose and dense code that ignores principles like DRY or separation of concerns,
+ignoring simpler paths that come from lesser usage (thus less weight in the training data),
+or even just recreating libraries by including their code instead of just including the library.
+For these and many other issues, I've seen vibe coded or agent generated projects hit walls
+rather quickly.
+
+I can help tear down those walls.
+
 I have over ten years of experience (not counting college) primarily with web
 development, and I know a thing or two about writing maintainable code both in
 the backend (mostly Python; Go to a lesser extent) and the frontend in JS/TS.
@@ -20,11 +32,14 @@ to more modern stacks _and_ I've also written applications from scratch and take
 status and beyond. This is to say, I have experience with making decisions on architecture
 and infrastructure, and I've also led and mentored other developers.
 
+Nowadays, thanks to my expertise, I can employ agents to do all these things faster, and by
+careful review, avoid their propensity to introduce tech debt into the code I deliver.
+
 ### Ways I can help:
 
-- **Software Development**: My favorite, I can write clean and maintainable code (and tests) for your application or platform.
+- **Software Development**: My favorite, I deliver clean and maintainable code (and tests) for your application or platform.
+- **Code Review**: I can provide feedback on the work of other developers, as well as mentoring if need be. Can do the same for agent generated code.
 - **Operations**: I can help with the building, testing, deployment, and monitoring of the code, including automating the process for continuous integration.
-- **Code Review**: I can provide feedback on the work of other developers, as well as mentoring if need be.
 - **Architecture**: I can help with initial brainstorming and prototyping options for the structure of new applications, or the target for migrations.
 - **Technical Writing**: I can write articles about the technologies you use or case studies worth sharing from your engineering process.
 
