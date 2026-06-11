@@ -14,7 +14,7 @@ I remember a project I worked on where there was basically no separation of conc
 handling boilerplate, database connection boilerplate and actual business logic; everything was handled
 within the same functions. It was a nightmare. I was hired to create some new APIs, but it took me just a
 week of trying to create new handlers like that to decide that such was no way to live. I took it
-upon myself to refactor that code. It bears reasserting that when refactoring, it's good—and often enough—to first reach for the lowest hanging fruit and in that code the easiest improvement was, of course,
+upon myself to refactor that code. It bears reasserting that when refactoring, it's good, and often enough, to first reach for the lowest hanging fruit and in that code the easiest improvement was, of course,
 separating code that dealt with different things into different functions, and calling those new functions from the old ones.
 
 Now, the small script we're going through does really only one thing, but that doesn't mean we can't
