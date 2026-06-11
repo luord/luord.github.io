@@ -32,7 +32,7 @@ to more modern stacks _and_ I've also written applications from scratch and take
 status and beyond. This is to say, I have experience with making decisions on architecture
 and infrastructure, and I've also led and mentored other developers.
 
-Nowadays, thanks to my expertise, I can employ agents to do all these things faster, and by
+In the current landscape, thanks to my expertise, I can employ agents to do all these things faster, and by
 careful review, avoid their propensity to introduce tech debt into the code I deliver.
 
 ### Ways I can help:
