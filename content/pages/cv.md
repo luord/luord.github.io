@@ -36,12 +36,13 @@ ___
 
 *RGG,               08/24 - Present*
 
-Backend work for a large online store, primarily in Python with Django and Django Rest Framework, using MySQL as the database and deployed to AWS ECS. Features worked
-on include implementation of similarity keywords for documents, migration of the search backend to a new service, and creation of a new recommendation API.
+Backend work, primarily in Python with FastAPI, Django and Django Rest Framework, using MySQL as the database and deployed to AWS ECS.
+Features worked on include improvement of the product tagging process, migration of the search backend to a new service, and creation of a new recommendations API.
 
 * Development of new features and bug fixing in the back-end, primarily Python, using Django and Django Rest Framework.
 * Development and refactoring of client APIs for third party services.
-* Agentic development and review, both to generate new features, but making sure any code the agents I use follows proper standards and avoids tech debt.
+* Contributing to the migration of legacy APIs to a modern FastAPI based stack.
+* Agentic development and review of new features while making sure any code the models generate follows proper standards and avoids tech debt.
 
 ### Software Engineer {: .low-margin }
 
