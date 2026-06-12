@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A genetic algorithm implemented in Python | Luis Orduz</title>
+
+  <meta name="description" content="An example of abstraction and analogy." />
+  <meta name="author" content="Luis Orduz" />
+  <meta name="robots" content="index, follow" />
+
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb" />
+
+  <link rel="canonical" href="https://luord.com/2023/03/01/genetic/" />
+  <link rel="icon" type="image/png" href="https://luord.com/assets/img/site/favicon.png" />
+  <link href="https://luord.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Luis Orduz Atom Feed" />
+
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/normalize.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://luord.com/theme/css/pygment.css" />
+
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+  <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+  <link rel="webmention" href="https://webmention.io/luord.com/webmention" />
+
+  <meta property="og:title" content="A genetic algorithm implemented in Python"/>
+  <meta property="og:url" content="https://luord.com/2023/03/01/genetic/"/>
+  <meta property="og:site_name" content="Luis Orduz"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="An example of abstraction and analogy." />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:image" content="https://luord.com/assets/img/genetic/genes.jpg" />
+  <meta name="twitter:card" content="summary">
+</head>
+
+<body>
+<header>
+  <a href="https://luord.com/">
+  <strong>
+    Luis Orduz
+  </strong>
+  <p>Software engineer, occasional writer, and movie watcher.</p>
+  </a>
+  <nav>
+    <ul>
+      <li><a href="https://luord.com/">Home</a></li>
+        <li><a href="https://luord.com/pages/about/">About</a></li>
+        <li><a href="https://luord.com/pages/work/">Work</a></li>
+        <li><a href="https://luord.com/pages/contact/">Contact</a></li>
+        <li><a href="https://luord.com/category/notes/">Notes</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+<section>
+<article class="h-entry">
+  <header class="post-info">
+    <h1>
+      <a class="u-url" href="https://luord.com/2023/03/01/genetic/" rel="bookmark"
+         title="Permalink to A genetic algorithm implemented in Python"><span class="p-name">A genetic algorithm implemented in Python</span></a></h1>
+<address>
+  <span class="dt-published">2023-03-01</span> |
+  by <a rel="author" class="p-author h-card" href="https://luord.com/">Luis Orduz</a>
+
+  in <a class="p-category" href="https://luord.com/category/software/">Software</a>
+</address>
+
+  </header>
+
+  <section class="e-content">
+    <p>Natural selection is, roughly, the likelihood of a given individual to survive long
+enough to reproduce, and thus continue its species. Factor in mutations (random changes in the
+genes) and the probability a given mutation has to help an individual survive (or not) in its
+environment, and the result is that some individuals are more likely to reproduce than others.
+Those fitter individuals will pass on their mutations to the next generation, which will add
+mutations of its own, ultimately causing the population to slowly change as these mutations
+accumulate. Repeat this process over multiple generations across millions of years and we
+get evolution.</p>
+<p>Turns out that implementing these ideas, or at least analogies, in software can be useful to
+solve certain problems, so let's write a simple program that exemplifies the process.</p>
+<h2>Population and Environment</h2>
+<p>The basis of ecology is populations and environments; how individuals interact with each other
+and their environment, and the feedback loop that emerges as the environment responds.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Environment</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_fittest</span><span class="p">(</span><span class="n">population</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">environment</span><span class="p">:</span> <span class="n">Environment</span><span class="p">):</span> <span class="o">...</span>
+</code></pre></div>
+
+<p>There are multiple types of genetic algorithms, commonly used to find good enough
+solutions to certain types of, often trial and error, problems that don't translate
+well to more traditional algorithms. What they tend to have in common is starting with
+a data sample and a set of patterns in the data we want to reach by the end, roughly represented
+here by the population and the environment<sup id="fnref:protocols"><a class="footnote-ref" href="#fn:protocols">1</a></sup>, respectively.</p>
+<h2>Natural Selection</h2>
+<p>Evolution is what we want to represent; the survive and adapt process is the only
+real "goal" in nature. Here's where Darwin's truth comes into play: Some individuals
+are more likely to reproduce than others; the fitter the individual,
+the more likely it is to pass on its genes.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmp_to_key</span>
+<span class="c1"># ...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Environment</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compare_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">second</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_mate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_fittest</span><span class="p">[</span><span class="n">Individual</span><span class="p">](</span>
+    <span class="n">population</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Individual</span><span class="p">],</span>
+    <span class="n">environment</span><span class="p">:</span> <span class="n">Environment</span><span class="p">[</span><span class="n">Individual</span><span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">fit</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">compare_fit</span><span class="p">))</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">find_mate</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Nature is ruthless, and so is our algorithm. In nature, only the fittest perpetuate their
+genes, and in our algorithm, only the individual in a given generation that best fits the niche is the
+one to continue. This is usually called "<strong><em>tournament selection</em></strong>" in genetic algorithm parlance.
+The typical approach is to select a given number of fit individuals for the next step, but
+to maintain our ecological analogy, we go with two: the fittest individual and a suitable mate
+found in the environment<sup id="fnref:mate"><a class="footnote-ref" href="#fn:mate">2</a></sup>.</p>
+<h2>Crossing</h2>
+<p>We have the fittest individual, the one most likely to reproduce, and a suitable mate. For evolution
+to happen, they need to do just that: produce new generations when the environment is right.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Environment</span><span class="p">[</span><span class="n">Individual</span><span class="p">,</span> <span class="n">Genome</span><span class="p">](</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cross</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">mate</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genome</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_fittest</span><span class="p">[</span><span class="n">Individual</span><span class="p">,</span> <span class="n">G</span><span class="p">](</span>
+    <span class="c1"># ...</span>
+    <span class="n">environment</span><span class="p">:</span> <span class="n">Environment</span><span class="p">[</span><span class="n">Individual</span><span class="p">,</span> <span class="n">G</span><span class="p">]</span>
+<span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="n">mate</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">find_mate</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>The <strong><em>crossover</em></strong> in genetic algorithms is the operation used to combine the data of
+the parents to produce some offspring (as many as in the original population in our case, to make
+things easier). But for now it's just the basic data, the "genetic material"; not true
+individuals<sup id="fnref:type"><a class="footnote-ref" href="#fn:type">3</a></sup>, because the most important step for evolution (and genetic algorithms) comes next.</p>
+<h2>Mutation</h2>
+<p>As the "X-Men" movie put it well, the key of evolution is mutation. It's not enough to just
+combine the genes of the parents, random changes in the data need to happen for the population to change
+over time.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># class Environment...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome</span><span class="p">:</span> <span class="n">Genome</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="c1"># def find_fittest...</span>
+<span class="hll">    <span class="n">brood</span> <span class="o">=</span> <span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)))</span>
+</span>    <span class="n">population</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span> <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">brood</span><span class="p">)</span>
+</code></pre></div>
+
+<p>In real life, the environment doesn't often cause mutations unless things went really, really,
+<em>radioactively</em> wrong, so in here we're using <code>environment</code> as stand-in for "it happens in nature"
+because indeed, mutations happen spontaneously. Anyhow, if things go well, these new
+individuals should be mostly mixes of the parents, each with some small changes to its combined genome<sup id="fnref:genome"><a class="footnote-ref" href="#fn:genome">4</a></sup>.
+This group is now our next population, to continue our search for the fittest.</p>
+<h2>Generations</h2>
+<p>We have almost everything in place, the only thing missing is... well, to keep on. Evolution takes
+many generations; it goes on forever. In our case, until we find the fittest possible individual
+in the given environment.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># class Environment...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_viable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Individual</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+    <span class="c1"># ...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_fittest</span><span class="p">[</span><span class="n">Individual</span><span class="p">,</span> <span class="n">G</span><span class="p">](</span>
+    <span class="c1"># ...</span>
+<span class="hll"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Individual</span><span class="p">:</span>
+</span>    <span class="k">while</span> <span class="p">(</span>
+        <span class="n">fit</span> <span class="o">:=</span> <span class="nb">max</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="n">environment</span><span class="o">.</span><span class="n">compare_fit</span><span class="p">))</span>
+    <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">environment</span><span class="o">.</span><span class="n">is_viable</span><span class="p">(</span><span class="n">fit</span><span class="p">):</span>
+        <span class="c1"># ...</span>
+<span class="hll">    <span class="k">return</span> <span class="n">fit</span>
+</span></code></pre></div>
+
+<p>The first step of the algorithm was selection, and it still is, but now we also add a loop
+that checks whether the current fittest in the population is, well, fit enough, and to continue
+iterating until it is. By extension, if the current fittest isn't "viable",
+nobody else in the population is.</p>
+<p>Once we find a viable subject, we return it; after all, in
+a real application, we'd need to reach the goal for a reason, meaning we might have to
+use that optimal data for something else.</p>
+<hr>
+<p>And there we have it, that <code>find_fittest</code> function represents our full genetic algorithm, in a way I hope is self-explanatory
+enough. That function <em>should</em> work without change as long as it receives arguments that actually implement
+the <a href="https://typing.readthedocs.io/en/latest/spec/protocol.html">protocols</a> properly. Implementation details should always be, well, just details.</p>
+<p><a href="https://luord.com/assets/code/genetic/definition.py">Here's a file</a> with the complete definition, and <a href="https://luord.com/assets/code/genetic/implementation.py">here's a file</a> with a
+string-based implementation of the algorithm, along with the function being run.</p>
+<p>Now, before finishing, you'll notice that I talked very little about the actual <em>problems</em> that could
+be solved with this type of algorithm... Well that's true, because the point of this post was the
+algorithm itself.</p>
+<h2>Appendix (On implementation and testing)</h2>
+<p>I mentioned above that implementation doesn't matter and it indeed doesn't but for the sake
+of completeness, to fully explain the genetic algorithm, I wanted to go over what happens during
+tournament selection, mutation and crossover. But we don't need to split hairs over implementation details;
+we can write tests to understand instead!<sup id="fnref:jokes"><a class="footnote-ref" href="#fn:jokes">5</a></sup></p>
+<p>Tournament selection is a bit tricky to test, because we are mostly using python primitives.
+It's pointless to test <code>max</code>.</p>
+<p>But what we can test is
+invariants, what doesn't change regarding the selection, what is always true? We actually
+already mentioned a useful invariant before: If the fittest individual in a population isn't
+fit enough, then nobody else in the population can be. Or, to put it another way, an individual
+we already know is the fittest possible, will always be a better fit than one we know it's not.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">hypothesis</span><span class="w"> </span><span class="kn">import</span> <span class="n">assume</span><span class="p">,</span> <span class="n">given</span><span class="p">,</span> <span class="n">strategies</span> <span class="k">as</span> <span class="n">st</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">implementation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">find_fittest</span>
+
+
+<span class="n">st</span><span class="o">.</span><span class="n">register_type_strategy</span><span class="p">(</span><span class="n">Individual</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">text</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">Individual</span><span class="p">))</span>
+
+
+<span class="nd">@given</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tournament</span><span class="p">(</span>
+    <span class="n">unfit</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">population</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Individual</span><span class="p">],</span> <span class="n">env</span><span class="p">:</span> <span class="n">Environment</span>
+<span class="p">):</span>
+    <span class="n">assume</span><span class="p">(</span><span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">is_viable</span><span class="p">(</span><span class="n">unfit</span><span class="p">))</span>
+    <span class="n">assume</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">fit</span> <span class="o">=</span> <span class="n">find_fittest</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">env</span><span class="o">.</span><span class="n">compare_fit</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">unfit</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div>
+
+<p>Using property based testing with <a href="https://hypothesis.readthedocs.io/en/latest/">hypothesis</a>, we confirm the invariant: Test only for
+unfit individuals, find the fittest for the environment in a non-empty population, then check that
+such fittest is indeed always better than the initial unfit.</p>
+<p>Next is mutation. Now, it's hard to think of an invariant for mutation: a mutation may happen or
+it may not. Luckily, in my code, how often a mutation happens is a configuration detail,
+and we can tune it without having to care how it's used in the actual implementation<sup id="fnref:config"><a class="footnote-ref" href="#fn:config">6</a></sup>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">patch</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="c1"># ...</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;do_mutate, matcher&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">ne</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">eq</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="nd">@given</span><span class="p">(</span><span class="n">env</span><span class="o">=...</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">from_type</span><span class="p">(</span><span class="n">Individual</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_mutation</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">do_mutate</span><span class="p">,</span> <span class="n">matcher</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">patch</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">Individual</span><span class="p">,</span> <span class="s2">&quot;MUTATION_RATE&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">do_mutate</span><span class="p">):</span>
+        <span class="n">mutated</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">matcher</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">mutated</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Updating the mutation rate, we create two invariants: When the rate is 100%, mutation is guaranteed
+to happen, so the mutated individual cannot possibly be identical to the base genome; if the rate is 0%,
+mutation can't happen, so the individual must be identical to the base genome.</p>
+<p>Finally, crossover. This one has a simple invariant: All the offspring genes must come from
+one of the two parents, so we test just that:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@patch</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">Individual</span><span class="p">,</span> <span class="s2">&quot;LENGTH&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nd">@given</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_crossover</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">Individual</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">Environment</span><span class="p">):</span>
+    <span class="n">offspring</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">offspring</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Simple enough, each single gene in an offspring must come from the union of all the genes of the
+parents.</p>
+<p>I made another configuration change: Since by default the length of the <code>Individual</code> string is 50
+and only lowercase characters, the odds are that every individual will have them all, making this
+test trivial. Reducing it to 10 makes it possible for the parents to have at least some
+different "genes". Then the test is meaningful.</p>
+<p>And those are the tests I wanted to go over; a file containing all three is <a href="https://luord.com/assets/code/genetic/test.py">here</a>.</p>
+<p>That's it! By learning what we're testing, we get to learn what each step actually <em>does</em>: Tournament
+ensures the fittest is chosen, crossover ensures new generations do come from the previous ones,
+and mutation ensures each generation has a chance of differing from the last one. Note we still don't need to know
+how any of this is done in our implementation.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:protocols">
+<p>I use protocols because Python's <a href="https://typing.readthedocs.io/en/latest/spec/protocol.html">structural subtyping</a> is pretty good at
+properly representing a <a href="https://luord.com/2022/04/30/domain/">domain</a>. In simpler terms: we only care about what our objects can <em>do</em>.
+On that note, the code I'll be showing, at every step, shouldn't throw errors in either type checkers like
+<a href="https://docs.astral.sh/ty/">ty</a>, <a href="https://mypy-lang.org/">mypy</a> or <a href="https://microsoft.github.io/pyright/">pyright</a>, nor linters like <a href="https://flake8.pycqa.org/en/latest/">flake8</a> or <a href="https://docs.astral.sh/ruff/">ruff</a>.&#160;<a class="footnote-backref" href="#fnref:protocols" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:mate">
+<p><em>How</em> it finds it is an implementation detail, hopefully one that excludes the rest of the
+population (hence the population not being a parameter), as they're intended to be related.
+It'll become clear later.&#160;<a class="footnote-backref" href="#fnref:mate" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:type">
+<p>You might have noticed that "Individual" is represented only by generic
+type arguments. This is on purpose: the algorithm doesn't need to care what an individual
+<em>is</em> and should work on any data type.&#160;<a class="footnote-backref" href="#fnref:type" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:genome">
+<p>The generic type <code>Genome</code> fulfills two purposes here: to explicitly show
+the mutation step (instead of leaving it as an implementation detail of crossover) and to rely
+on the type system: We'll know we have a true individual only if it was selected from an
+existing population or environment, or if it's the result of mutation from the crossover of two parents.&#160;<a class="footnote-backref" href="#fnref:genome" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:jokes">
+<p>Since, as we all know, "code is for what, tests are for why, and comments are for jokes".
+Not to mention that I made every single method body a one liner because I wanted to push the limits
+of how "<a href="https://luord.com/2022/02/28/refactoring/">cleverly</a>" I could write it.&#160;<a class="footnote-backref" href="#fnref:jokes" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:config">
+<p>Now, whether configuration is implementation or not, a lot has been written about. I think
+if they are properly separated, then no, configuration is independent and used <em>by</em> the implementation.&#160;<a class="footnote-backref" href="#fnref:config" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    <a href="https://fed.brid.gy/"></a>
+  </section>
+  <footer>
+    tags:
+    <a href="https://luord.com/tag/software/">software</a>
+|    <a href="https://luord.com/tag/algorithms/">algorithms</a>
+|    <a href="https://luord.com/tag/code/">code</a>
+|    <a href="https://luord.com/tag/examples/">examples</a>
+  </footer>
+  <p class="p-summary" style="display: none;">An example of abstraction and analogy.</p>
+</article>
+</section>
+<footer>
+  <ul class="navigator">
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url=https://luord.com/2023/03/01/genetic/">Share</a></li>
+    <li><a href="https://luord.com/pages/contact/">Say hi!</a></li>
+  </ul>
+
+  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
+<form action="https://webmention.io/luord.com/webmention" method="post">
+  <input type="hidden" name="target" value="https://luord.com/2023/03/01/genetic/">
+  <input type="url" name="source" placeholder="The URL with the mention" required>
+  <input type="submit" value="Send">
+</form>
+
+  <ul class="navigator">
+
+  <li>
+    <a href="https://luord.com/2022/04/30/domain/">
+      Previous: Domains of engineers and users
+    </a>
+  </li>
+  </ul>
+</footer>
+<script type="text/javascript">
+  var shareConfig = {};
+  shareConfig.title = "A genetic algorithm implemented in Python";
+  shareConfig.text = "An example of abstraction and analogy.";
+  shareConfig.url = "https://luord.com/2023/03/01/genetic/";
+</script>
+<script type="text/javascript" src="https://luord.com/theme/js/share.js"></script>
+</main>
+
+
+<footer>
+  <p>
+  If you want to receive new blog posts directly to your email, <a href="https://luord.com/pages/newsletter/">subscribe here</a>.
+  </p>
+  <nav>
+    Find me on:
+    <ul>
+      <li><a rel="me" href="https://github.com/luord"><svg><title>GitHub profile</title><use href="/theme/icons.svg#github" /></svg></a></li>
+      <li><a rel="me" href="https://gitlab.com/luord"><svg><title>GitLab profile</title><use href="/theme/icons.svg#gitlab" /></svg></a></li>
+      <li><a rel="me" href="https://stackoverflow.com/users/4570188/"><svg><title>Stack Overflow profile</title><use href="/theme/icons.svg#stackoverflow" /></svg></a></li>
+      <li><a rel="me" href="https://twitter.com/luord"><svg><title>Twitter profile</title><use href="/theme/icons.svg#twitter" /></svg></a></li>
+      <li><a rel="me" href="https://linkedin.com/in/luord"><svg><title>LinkedIn profile</title><use href="/theme/icons.svg#linkedin" /></svg></a></li>
+      <li><a rel="me" href="https://news.ycombinator.com/user?id=luord"><svg><title>Hacker News profile</title><use href="/theme/icons.svg#hackernews" /></svg></a></li>
+      <li><a rel="me" href="https://www.criticker.com/profile/luord"><svg><title>Criticker profile</title><use href="/theme/icons.svg#film" /></svg></a></li>
+      <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
+    </ul>
+  </nav>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <small>This blog is written, no generated text here, by <a href="https://luord.com/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
+</footer>
+</body>
+</html>
