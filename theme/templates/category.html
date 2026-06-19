@@ -1,25 +1,24 @@
 {% extends "archives.html" %}
-{% block title %}{{ SITENAME }} — {{ category }}{% endblock %}
-{% block ogtitle %}{{ SITENAME }} — {{ category }}{% endblock %}
-{% block ogdesc %}{{ SITENAME }} — {{ category }}{% endblock %}
-{% block metadesc %}{{ SITENAME }} — {{ category }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/{{ category.url }}{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/{{ category.url }}{% endblock %}
+{% block meta_title %}{{ category|capitalize ~ "|" ~ SITENAME }}{% endblock %}
+{% block meta_url %}{{ SITEURL ~ "/" ~ category.url }}{% endblock %}
+{% block meta_desc %}Posts in {{ category|capitalize }}{% endblock %}
 {% block alternate %}
-<link href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} {{ category }} Atom Feed" />
+<link href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME ~ "|" ~ category|capitalize }}" />
 {% endblock %}
-{% block content_header %}
+
+{% block header %}
 <header>
-  <h1>Articles in {{ category }}</h1>
+  <h1>{{ self.meta_desc() }}</h1>
   {% if category.name in CATEGORY_DESCRIPTIONS %}
   <p>{{ CATEGORY_DESCRIPTIONS[category.name] }}</p>
   {% endif %}
 </header>
 {% endblock %}
-{% block content_footer %}
+
+{% block footer %}
 {% if CATEGORY_FEED_ATOM %}
 <footer>
-You can subscribe to this category <a href="{{ FEED_DOMAIN }}/{{ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">here</a>.
+You can subscribe to this category <a href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}">here</a>.
 </footer>
 {% endif %}
 {% endblock %}

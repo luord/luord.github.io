@@ -1,17 +1,15 @@
 {% extends "index.html" %}
-{% block title %}Tags for {{ SITENAME }}{% endblock %}
-{% block ogtitle %}Tags for {{ SITENAME }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/tags/{% endblock %}
-{% block ogdesc %}{{ SITENAME }} — Tags{% endblock %}
-{% block metadesc %}{{ SITENAME }} — Tags{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/tags/{% endblock %}
-{% block content_header %}<header><h1>Tags for {{ SITENAME }}</h1></header>{% endblock %}
+{% block meta_title %}Tags | {{ SITENAME }}{% endblock %}
+{% block meta_url %}{{ SITEURL ~ "/" ~ TAGS_URL }}{% endblock %}
+{% block meta_desc %}Tags from posts in this blog{% endblock %}
+
+{% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}
 
 {% block content %}
 <section>
   <dl>
   {% for tag, articles in tags|sort %}
-    <dd><a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }} ({{ articles|count }})</a></dd>
+    <dd><a href="{{ SITEURL ~ "/" ~ tag.url }}">{{ tag }} ({{ articles|count }})</a></dd>
   {% endfor %}
   </dl>
 </section>

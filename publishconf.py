@@ -13,11 +13,13 @@ HOSTNAME = 'luord.com'
 SITEURL = f'https://{HOSTNAME}'
 RELATIVE_URLS = False
 
+# TODO: remove unnecessary defaults
 FEED_DOMAIN = SITEURL
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_MAX_ITEMS = 10
 CATEGORY_FEED_ATOM = 'feed/{slug}.atom.xml'
 
+# TODO: Potentially move to pelicanconf, update fragment usage accordingly
 NEWSLETTER_URL = 'pages/newsletter/'
 NEWSLETTER_ENDPOINT = 'https://luord-newsletter.web.val.run/subscribe'
 

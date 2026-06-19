@@ -1,8 +1,6 @@
 {% extends "archives.html" %}
-{% block title %}{{ SITENAME }} — {{ tag }}{% endblock %}
-{% block content_header %}<header><h1>Articles tagged with "{{ tag }}"</h1></header>{% endblock %}
-{% block ogtitle %}{{ SITENAME }} — {{ tag }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/{{ tag.url }}{% endblock %}
-{% block ogdesc %}{{ SITENAME }} — {{ tag }}{% endblock %}
-{% block metadesc %}{{ SITENAME }} — {{ tag }}{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/{{ tag.url }}{% endblock %}
+{% block meta_title %}{{ tag ~ "|" ~ SITENAME }}{% endblock %}
+{% block meta_url %}{{ SITEURL ~ "/" ~ tag.url }}{% endblock %}
+{% block meta_desc %}Posts tagged with "{{ tag }}"{% endblock %}
+
+{% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}

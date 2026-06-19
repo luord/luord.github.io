@@ -1,11 +1,9 @@
 {% extends "index.html" %}
-{% block title %}Archives for {{ SITENAME }}{% endblock %}
-{% block ogtitle %}Archives for {{ SITENAME }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/archives/{% endblock %}
-{% block ogdesc %}{{ SITENAME }} — Archive{% endblock %}
-{% block metadesc %}{{ SITENAME }} — Archive{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/archives/{% endblock %}
-{% block content_header %}<header><h1>Archives for {{ SITENAME }}</h1></header>{% endblock %}
+{% block meta_title %}All Posts | {{ SITENAME }}{% endblock %}
+{% block meta_url %}{{ SITEURL ~ "/" ~ ARCHIVES_URL }}{% endblock %}
+{% block meta_desc %}All posts in this blog{% endblock %}
+
+{% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}
 
 {% block content %}
 <section class="h-feed" id="dates">
@@ -17,10 +15,10 @@
     {% if loop.first or loop.previtem.date.year != article.date.year or loop.previtem.date.month != article.date.month %}
     <h3>{{ article.date.strftime("%b") }}</h3>
     {% endif %}
-    <p class="h-entry">{{ article.date.day }}: <a class="u-url" href="{{ SITEURL }}/{{ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
+    <p class="h-entry">{{ article.date.day }}: <a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
   {% else %}
   <article id="{{ article.ix }}" class="h-entry">
-    <header><a class="u-url" href="{{ SITEURL }}/{{ article.url }}">
+    <header><a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}">
       <p>{{ article.date.strftime("%Y-%m-%d") }}</p>
       <p>{{ article.date.strftime("%H:%M COT") }}</p>
     </a></header>

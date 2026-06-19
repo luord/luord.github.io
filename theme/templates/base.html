@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  <title>{% block meta_title %}{{ SITENAME }}{% endblock %}</title>
 
-  <meta name="description" content="{% block metadesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
+  <link rel="canonical" href="{% block meta_url %}{{ SITEURL }}/{% endblock %}" />
+  <link rel="icon" type="image/png" href="{{ SITEURL ~ "/" ~ USER_LOGO_ICON }}{{ VERSION }}" />
+  <meta name="description" content="{% block meta_desc %}{{ SITEDESCRIPTION }}{% endblock %}" />
   <meta name="author" content="{{ AUTHOR }}" />
+  {% block index_sitemap %}{% endblock %}
   <meta name="robots" content="index, follow" />
 
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#0072bb" />
 
-  <link rel="canonical" href="{% block canonicalurl %}{{ SITEURL }}/{% endblock %}" />
-  <link rel="icon" type="image/png" href="{{ SITEURL }}/{{ USER_LOGO_ICON }}{{ VERSION }}" />
-  {% if output_file == 'index.html' %}
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ SITEURL }}/sitemap.xml" />
-  {% endif %}
   {% block alternate %}
-  <link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
+  <link href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }}" />
   {% endblock %}
 
   <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/normalize.min.css" />
@@ -35,14 +33,14 @@
   <link rel="webmention" href="{{ WEBMENTION_URL }}" />
   {% endif %}
 
-  <meta property="og:title" content="{% block ogtitle %}{{ SITENAME }}{% endblock %}"/>
-  <meta property="og:url" content="{% block ogurl %}{{ SITEURL }}/{% endblock %}"/>
-  <meta property="og:site_name" content="{{ SITENAME }}"/>
-  <meta property="og:type" content="{% block ogtype %}website{% endblock %}"/>
-  <meta property="og:description" content="{% block ogdesc %}{{ SITEDESCRIPTION }}{% endblock %}" />
-  <meta property="og:locale" content="en_US"/>
+  <meta property="og:title" content="{{ self.meta_title() }}" />
+  <meta property="og:url" content="{{ self.meta_url() }}" />
+  <meta property="og:site_name" content="{{ SITENAME }}" />
+  <meta property="og:type" content="{% block ogtype %}website{% endblock %}" />
+  <meta property="og:description" content="{{ self.meta_desc() }}" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="{{ SITEURL }}/{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary" />
 </head>
 
 <body>
@@ -58,24 +56,24 @@
       <li><a href="{{ SITEURL }}/">Home</a></li>
       {% if DISPLAY_PAGES_ON_MENU %}
       {% for pa in pages %}
-        <li><a href="{{ SITEURL }}/{{ pa.url }}">{{ pa.title }}</a></li>
+        <li><a href="{{ SITEURL ~ "/" ~ pa.url }}">{{ pa.title }}</a></li>
       {% endfor %}
       {% endif %}
       {% if DISPLAY_CATEGORIES_ON_MENU %}
       {% for cat, null in categories %}
-        <li><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+        <li><a href="{{ SITEURL ~ "/" ~ cat.url }}">{{ cat }}</a></li>
       {% endfor %}
       {% endif %}
       {% for title, link in MENUITEMS %}
-        <li><a href="{{ SITEURL }}/{{ link }}">{{ title }}</a></li>
+        <li><a href="{{ SITEURL ~ "/" ~ link }}">{{ title }}</a></li>
       {% endfor %}
     </ul>
   </nav>
 </header>
 <main>
-  {% block content_header %}<header><h1>Articles</h1></header>{% endblock %}
+  {% block header %}{% endblock %}
   {% block content %}{% endblock %}
-  {% block content_footer %}{% endblock %}
+  {% block footer %}{% endblock %}
 </main>
 
 {% block sidebar %}{% endblock %}
@@ -83,7 +81,7 @@
 <footer>
   {% if (not page or 'newsletter' not in page.url) and NEWSLETTER_URL %}
   <p>
-  If you want to receive new blog posts directly to your email, <a href="{{ SITEURL }}/{{ NEWSLETTER_URL }}">subscribe here</a>.
+  If you want to receive new blog posts directly to your email, <a href="{{ SITEURL ~ "/" ~ NEWSLETTER_URL }}">subscribe here</a>.
   </p>
   {% endif %}
   <nav>

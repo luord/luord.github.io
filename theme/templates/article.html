@@ -1,25 +1,21 @@
 {% extends "base.html" %}
-{% block title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
-{% block ogtitle %}{{ article.title|striptags }}{% endblock %}
-{% block ogurl %}{{ SITEURL }}/{{ article.url }}{% endblock %}
+{% block meta_title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
+{% block meta_url %}{{ SITEURL ~ "/" ~ article.url }}{% endblock %}
+{% block meta_desc %}{{ article.summary|striptags }}{% endblock %}
 {% block ogimg %}{{ article.image or USER_LOGO_URL }}{% endblock %}
 {% block ogtype %}article{% endblock %}
-{% block ogdesc %}{{ article.summary|striptags }}{% endblock %}
-{% block metadesc %}{{ article.summary|striptags }}{% endblock %}
-{% block canonicalurl %}{{ SITEURL }}/{{ article.url }}{% endblock %}
-{% block content_header %}{% endblock %}
 
 {% block content %}
 <section>
 <article class="h-entry">
   <header class="post-info">
     <h1>
-      <a class="u-url" href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
+      <a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}" rel="bookmark"
          title="Permalink to {{ article.title|striptags }}"><span class="p-name">{{ article.title }}</span></a></h1>
     {% include 'article_address.html' %}
 
     {% if PDF_PROCESSOR %}
-    | <a href="{{ SITEURL }}/pdf/{{ article.slug }}.pdf">Get the pdf</a>
+    | <a href="{{ SITEURL ~ "/pdf/" ~ article.slug }}.pdf">Get the pdf</a>
     {% endif %}
   </header>
 
@@ -31,7 +27,7 @@
   <footer>
     tags:
     {% for tag in article.tags %}
-    <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+    <a href="{{ SITEURL ~ "/" ~ tag.url }}">{{ tag }}</a>
     {% if not loop.last %}|{% endif %}
     {% endfor %}
   </footer>
@@ -40,14 +36,14 @@
 </article>
 </section>
 {% endblock %}
-{% block content_footer %}
+{% block footer %}
 <footer>
   <ul class="navigator">
-    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url={{ SITEURL }}/{{ article.url }}">Share</a></li>
-    <li><a href="{{ SITEURL }}/{{ CONTACT_URL }}">Say hi!</a></li>
+    <li><a id="addtoanylink" href="https://www.addtoany.com/share#url={{ SITEURL ~ "/" ~ article.url }}">Share</a></li>
+    <li><a href="{{ SITEURL ~ "/" ~ CONTACT_URL }}">Say hi!</a></li>
   </ul>
 
-  {% with target_url = SITEURL ~ '/' ~ article.url %}
+  {% with target_url = SITEURL ~ "/" ~ article.url %}
   <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
     {% include 'fragments/webmention.html' %}
   {% endwith %}
@@ -60,16 +56,17 @@
     if article.category not in SKIPPED_CATEGORIES
     else article.next_article_in_category %}
 
+  {# TODO: remove this when the subblog is done #}
   {% if p_art %}
   <li>
-    <a href="{{ SITEURL }}/{{ p_art.url }}">
+    <a href="{{ SITEURL ~ "/" ~ p_art.url }}">
       Previous: {{ p_art.title }}
     </a>
   </li>
   {% endif %}
   {% if n_art %}
   <li {% if not p_art %}style="flex-grow: 1; text-align: right;"{% endif %}>
-    <a href="{{ SITEURL }}/{{ n_art.url }}">
+    <a href="{{ SITEURL ~ "/" ~ n_art.url }}">
       Next: {{ n_art.title }}
     </a>
   </li>
@@ -80,7 +77,7 @@
   var shareConfig = {};
   shareConfig.title = "{{ article.title }}";
   shareConfig.text = "{{ article.summary | striptags }}";
-  shareConfig.url = "{{ SITEURL ~ '/' ~ article.url }}";
+  shareConfig.url = "{{ SITEURL ~ "/" ~ article.url }}";
 </script>
 <script type="text/javascript" src="{{ SITEURL }}/theme/js/share.js"></script>
-{% endblock content_footer %}
+{% endblock %}
