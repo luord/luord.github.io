@@ -1,9 +1,9 @@
 {% extends "archives.html" %}
-{% block meta_title %}{{ category|capitalize ~ "|" ~ SITENAME }}{% endblock %}
+{% block meta_title %}{{ category|capitalize ~ " | " ~ SITENAME }}{% endblock %}
 {% block meta_url %}{{ SITEURL ~ "/" ~ category.url }}{% endblock %}
 {% block meta_desc %}Posts in {{ category|capitalize }}{% endblock %}
 {% block alternate %}
-<link href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME ~ "|" ~ category|capitalize }}" />
+<link href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME ~ " | " ~ category|capitalize }}" />
 {% endblock %}
 
 {% block header %}
