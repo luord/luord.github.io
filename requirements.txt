@@ -1,15 +1,3 @@
-pelican
+pelican[markdown]
 pelican-sitemap
 ghp-import
-markdown
-
-feedparser
-requests
-granary==8.0
-git+https://github.com/capjamesg/indieweb-utils
-
-fire
-
-pook
-flake8
-mypy
