@@ -1,7 +1,5 @@
 {% extends "page.html" %}
 {% block content %}
 {{ super() }}
-{% with target_url = SITEURL ~ '/' %}
-  {% include 'fragments/webmention.html' %}
-{% endwith %}
+{% include 'fragments/webmention.html' %}
 {% endblock %}

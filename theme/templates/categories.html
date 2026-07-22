@@ -1,16 +1,14 @@
 {% extends "index.html" %}
 {% block meta_title %}Categories | {{ SITENAME }}{% endblock %}
 {% block meta_url %}{{ SITEURL ~ "/" ~ CATEGORIES_URL }}{% endblock %}
-{% block meta_desc %}Categories in this blog{% endblock %}
+{% block meta_desc %}Categories covered in this blog{% endblock %}
 
 {% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}
 
 {% block content %}
-<section>
-  <dl>
-  {% for category, articles in categories %}
-      <dd><a href="{{ SITEURL ~ "/" ~ category.url }}">{{ category }} ({{ articles|count }})</a></dd>
-  {% endfor %}
-  </dl>
-</section>
+<nav><ul>
+{% for category, articles in categories %}
+  <li><a href="{{ SITEURL ~ "/" ~ category.url }}">{{ category }} ({{ articles|count }} posts)</a></li>
+{% endfor %}
+</ul></nav>
 {% endblock %}

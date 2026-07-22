@@ -4,14 +4,14 @@
 {% block meta_desc %}{{ article.summary|striptags }}{% endblock %}
 {% block ogimg %}{{ article.image or USER_LOGO_URL }}{% endblock %}
 {% block ogtype %}article{% endblock %}
+{% block styles %}{{ article.style }}{% endblock %}
 
 {% block content %}
-<section>
 <article class="h-entry">
-  <header class="post-info">
+  <header>
     <h1>
-      <a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}" rel="bookmark"
-         title="Permalink to {{ article.title|striptags }}"><span class="p-name">{{ article.title }}</span></a></h1>
+      <a class="u-url p-name" href="{{ SITEURL ~ "/" ~ article.url }}" rel="bookmark"
+         title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></h1>
     {% include 'article_address.html' %}
 
     {% if PDF_PROCESSOR %}
@@ -19,9 +19,9 @@
     {% endif %}
   </header>
 
-  <section class="e-content">
-    {{ article.content }}
-  </section>
+  {# TODO check on microformat extraction if e-content is needed #}
+  {{ article.content }}
+  <p class="p-summary" style="display: none;">{{ article.summary | striptags }}</p>
   {% if article.tags %}
   <footer>
     tags:
@@ -31,23 +31,19 @@
     {% endfor %}
   </footer>
   {% endif %}
-  <p class="p-summary" style="display: none;">{{ article.summary | striptags }}</p>
 </article>
-</section>
 {% endblock %}
 {% block footer %}
+{# TODO: Consider moving what belongs to the article to the article footer, and the rest to the global footer #}
 <footer>
-  <ul class="navigator">
+  <ul>
     <li><a id="addtoanylink" href="https://www.addtoany.com/share#url={{ SITEURL ~ "/" ~ article.url }}">Share</a></li>
     <li><a href="{{ SITEURL ~ "/" ~ CONTACT_URL }}">Say hi!</a></li>
   </ul>
 
-  {% with target_url = SITEURL ~ "/" ~ article.url %}
-  <p class="webmention"><span>Send a <a href="https://indieweb.org/Webmention">webmention</a> to this article:</span></p>
-    {% include 'fragments/webmention.html' %}
-  {% endwith %}
+  {% include 'fragments/webmention.html' %}
 
-  <ul class="navigator">
+  <nav><ul>
   {% set p_art = article.prev_article
     if article.category not in SKIPPED_CATEGORIES
     else article.prev_article_in_category %}
@@ -70,13 +66,14 @@
     </a>
   </li>
   {% endif %}
-  </ul>
+  </ul></nav>
 </footer>
-<script type="text/javascript">
+{# TODO: consider moving these to the head using defer for the linked one #}
+<script>
   var shareConfig = {};
   shareConfig.title = "{{ article.title }}";
   shareConfig.text = "{{ article.summary | striptags }}";
   shareConfig.url = "{{ SITEURL ~ "/" ~ article.url }}";
 </script>
-<script type="text/javascript" src="{{ SITEURL }}/theme/js/share.js"></script>
+<script src="{{ SITEURL }}/theme/js/share.js"></script>
 {% endblock %}

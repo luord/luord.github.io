@@ -1,6 +1,6 @@
 {% extends "archives.html" %}
 {% block meta_title %}{{ tag ~ " | " ~ SITENAME }}{% endblock %}
 {% block meta_url %}{{ SITEURL ~ "/" ~ tag.url }}{% endblock %}
-{% block meta_desc %}Posts tagged with &quot;{{ tag }}&quot;{% endblock %}
+{% block meta_desc %}Posts tagged &quot;{{ tag }}&quot;{% endblock %}
 
 {% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}

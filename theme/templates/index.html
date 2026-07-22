@@ -1,19 +1,14 @@
 {% extends "base.html" %}
 {% block index_sitemap %}
   {# TODO: research linking the sitemap everywhere #}
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ SITEURL }}/sitemap.xml" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ SITEURL }}/sitemap.xml">
 {% endblock %}
 
 {% block header %}<header><h1>Posts</h1></header>{% endblock %}
 
 {% block content %}
-<section id="main" class="h-feed">
-{% if articles %}
+<ol class="h-feed">
 {% for article in articles_page.object_list %}
-{% if loop.length > 0 %}
-{% if loop.first %}
-  <ul>
-{% endif %}
   <li>
     <article class="h-entry summary">
       <h2 class="p-name">
@@ -29,30 +24,18 @@
       </p>
     </article>
   </li>
-{% if loop.last %}
-  </ul>
+{% endfor %}
+</ol>
 {% if articles_page.has_previous() %}
 {% include 'pagination.html' %}
 {% endif %}
-{% endif %}
-{% endif %}
-{% endfor %}
-{% else %}
-  <h2>Pages</h2>
-  {% for page in PAGES %}
-    <li><a href="{{ SITEURL ~ "/" ~ page.url }}">{{ page.title }}</a></li>
-  {% endfor %}
-{% endif %}
-</section>
-{% endblock content %}
+{% endblock %}
 
 {% block sidebar %}
 <aside>
-  <div class="h-card">
-    <b>About</b>
-    <p>
-      <span class="p-note">{{ SITEDESCRIPTION }}</span>
-    </p>
+  <section class="h-card">
+    <h2>About</h2>
+    <p class="p-note">{{ SITEDESCRIPTION }}</p>
     <p>This blog primarily features essays about software engineering and tutorials on programming concepts or technologies I find interesting.</p>
     <p>
       I studied computer science in college and am always eager to learn about software development and operations.
@@ -68,41 +51,45 @@
     <p>
       For short posts about more than software, check my <a href="{{ SITEURL }}/category/notes/">Notes</a>.
     </p>
-  </div>
+  </section>
   {# TODO: consider removing this tag cloud #}
   {% if TAG_CLOUD_STEPS %}
-    <b>Tags</b>
+    <h3>Tags</h3>
     <ul>
     {% for tag in tag_cloud %}
       <li><a href="{{ SITEURL ~ "/" ~ tag.0.url }}">{{ tag.0 }}</a></li>
     {% endfor %}
     </ul>
   {% endif %}
-  <b>Subscribe</b>
-  <ul>
-    {# TODO: consider removing unnecessary ifs #}
-    {% if TAG_FEED_ATOM and tag is defined %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ TAG_FEED_ATOM.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% elif TAG_FEED_RSS and tag is defined %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ TAG_FEED_RSS.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% elif CATEGORY_FEED_ATOM and category is defined %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% elif CATEGORY_FEED_RSS and category is defined %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_RSS.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% elif FEED_ALL_ATOM %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_ATOM }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% elif FEED_ALL_RSS %}
-      <li><a href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_RSS }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
-    {% endif %}
-    {% if NEWSLETTER_URL %}
-    <li><a href="{{ SITEURL ~ "/" ~ NEWSLETTER_URL }}"><svg><use href="/theme/icons.svg#mail" /></svg>Newsletter</a></li>
-    {% endif %}
-  </ul>
-  <b>Browse content by</b>
-  <ul>
-    <li><a href="{{ SITEURL ~ "/" ~ CATEGORIES_URL }}"><svg><use href="/theme/icons.svg#categories" /></svg>Categories</a></li>
-    <li><a href="{{ SITEURL ~ "/" ~ TAGS_URL }}"><svg><use href="/theme/icons.svg#tags" /></svg>Tags</a></li>
-    <li><a href="{{ SITEURL ~ "/" ~ ARCHIVES_URL }}"><svg><use href="/theme/icons.svg#calendar" /></svg>Archive</a></li>
-  </ul>
+  <section>
+    <h3>Subscribe</h3>
+    <nav><ul>
+      {# TODO: consider removing unnecessary ifs #}
+      {% if TAG_FEED_ATOM and tag is defined %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ TAG_FEED_ATOM.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% elif TAG_FEED_RSS and tag is defined %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ TAG_FEED_RSS.format(slug=tag.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% elif CATEGORY_FEED_ATOM and category is defined %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% elif CATEGORY_FEED_RSS and category is defined %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_RSS.format(slug=category.slug) }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% elif FEED_ALL_ATOM %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_ATOM }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% elif FEED_ALL_RSS %}
+        <li><a href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_RSS }}"><svg><use href="/theme/icons.svg#feed" /></svg>Feed</a></li>
+      {% endif %}
+      {% if NEWSLETTER_URL %}
+      <li><a href="{{ SITEURL ~ "/" ~ NEWSLETTER_URL }}"><svg><use href="/theme/icons.svg#mail" /></svg>Newsletter</a></li>
+      {% endif %}
+    </ul></nav>
+  </section>
+  <section>
+    <h3>Browse content by</h3>
+    <nav><ul>
+      <li><a href="{{ SITEURL ~ "/" ~ CATEGORIES_URL }}"><svg><use href="/theme/icons.svg#categories" /></svg>Categories</a></li>
+      <li><a href="{{ SITEURL ~ "/" ~ TAGS_URL }}"><svg><use href="/theme/icons.svg#tags" /></svg>Tags</a></li>
+      <li><a href="{{ SITEURL ~ "/" ~ ARCHIVES_URL }}"><svg><use href="/theme/icons.svg#calendar" /></svg>Archive</a></li>
+    </ul></nav>
+  </section>
 </aside>
 {% endblock %}

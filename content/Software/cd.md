@@ -272,13 +272,6 @@ Things we could do now is setting up automatic local testing on each commit, mul
 
 If you have any questions, let me know in the comments.
 
-<style>
-p > img {
-  width: 100%;
-  display: block;
-}
-</style>
-
 [^gcr]:
   It amazes me how cloud repositories is almost completely isolated
   from all other Google Cloud services. They used to have a Push-to-Deploy feature but that's gone (if it isn't,

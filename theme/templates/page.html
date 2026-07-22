@@ -3,12 +3,11 @@
 {% block meta_url %}{{ SITEURL ~ "/" ~ page.url }}{% endblock %}
 {% block meta_desc %}{{ page.summary | striptags}}{% endblock %}
 {% block ogimg %}{{ page.image or USER_LOGO_URL }}{% endblock %}
+{% block styles %}{{ page.style }}{% endblock %}
 
 {% block header %}<header><h1 class="entry-title">{{ page.title }}</h1></header>{% endblock %}
 
 {% block content %}        
-<section>    
-  {% if PDF_PROCESSOR %}<a href="{{ SITEURL ~ "/pdf/" ~ page.slug }}.pdf">get the pdf</a>{% endif %}
-  {{ page.content }}
-</section>
+{% if PDF_PROCESSOR %}<a href="{{ SITEURL ~ "/pdf/" ~ page.slug }}.pdf">get the pdf</a>{% endif %}
+{{ page.content }}
 {% endblock %}

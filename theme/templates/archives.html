@@ -1,30 +1,34 @@
 {% extends "index.html" %}
 {% block meta_title %}All Posts | {{ SITENAME }}{% endblock %}
 {% block meta_url %}{{ SITEURL ~ "/" ~ ARCHIVES_URL }}{% endblock %}
-{% block meta_desc %}All posts in this blog{% endblock %}
+{% block meta_desc %}All posts in chronological order{% endblock %}
 
 {% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}
 
 {% block content %}
-<section class="h-feed" id="dates">
-  {% for article in articles %}
-  {% if category is not defined or category.name not in HASHED_CATEGORIES %}
-    {% if loop.first or loop.previtem.date.year != article.date.year %}
-    <h2>{{ article.date.year }}</h2>
-    {% endif %}
+<nav>
+<dl class="h-feed">
+  {% for article in dates|reverse %}
+  {% if loop.first or loop.previtem.date.year != article.date.year %}
+  <dt>{{ article.date.year }}</dt>
+  <dd><dl>
+  {% endif %}
     {% if loop.first or loop.previtem.date.year != article.date.year or loop.previtem.date.month != article.date.month %}
-    <h3>{{ article.date.strftime("%b") }}</h3>
+    <dt>{{ article.date.month }}</dt>
+    <dd><dl>
     {% endif %}
-    <p class="h-entry">{{ article.date.day }}: <a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}"><span class="p-name">{{ article.title }}</span></a></p>
-  {% else %}
-  <article id="{{ article.ix }}" class="h-entry">
-    <header><a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}">
-      <p>{{ article.date.strftime("%Y-%m-%d") }}</p>
-      <p>{{ article.date.strftime("%H:%M COT") }}</p>
-    </a></header>
-    <section class="e-content">{{ article.content }}</section>
-  </article>
+      <dt>{{ article.date.day }}</dt>
+      <dd class="h-entry">
+        {% if article.category and article.category in HASHED_CATEGORIES %}(Note){% endif %}
+	<a class="u-url p-name" href="{{ SITEURL ~ "/" ~ article.url }}">{{ article.title }}</a>
+      </dd>
+    {% if loop.last or loop.nextitem.date.year != article.date.year or loop.nextitem.date.month != article.date.month %}
+    </dl></dd>
+    {% endif %}
+  {% if loop.last or loop.nextitem.date.year != article.date.year %}
+  </dl></dd>
   {% endif %}
   {% endfor %}
-</section>
+</dl>
+</nav>
 {% endblock %}

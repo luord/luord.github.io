@@ -2,6 +2,7 @@ title: Experience
 summary: My experience and education, why I should be hired.
 status: hidden
 order: 3
+style: <style>li > ul { margin-bottom: 1em; } .low-margin { margin-bottom: 0; } @media print { .footnote { display: none; } }</style>
 
 This is a summary of my experience and education[^pdf].
 { .noprint }
@@ -187,20 +188,6 @@ Top bracket in every subject in 2012-2 Saber Pro test, outstanding student.
 
 * _Web Development w/ Google's Go (golang) Programming Language_
 July - 2017
-
-<style>
-li > ul {
-    margin-bottom: 1em;
-}
-.low-margin {
-  margin-bottom: 0;
-}
-@media print {
-  .footnote {
-    display: none;
-  }
-}
-</style>
 
 [^pdf]: Printable to PDF from the browser.
 

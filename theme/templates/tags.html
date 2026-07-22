@@ -6,11 +6,9 @@
 {% block header %}<header><h1>{{ self.meta_desc() }}</h1></header>{% endblock %}
 
 {% block content %}
-<section>
-  <dl>
-  {% for tag, articles in tags|sort %}
-    <dd><a href="{{ SITEURL ~ "/" ~ tag.url }}">{{ tag }} ({{ articles|count }})</a></dd>
-  {% endfor %}
-  </dl>
-</section>
+<nav><ul>
+{% for tag, articles in tags|sort %}
+  <li><a href="{{ SITEURL ~ "/" ~ tag.url }}">{{ tag }} ({{ articles|count }} posts)</a></li>
+{% endfor %}
+</ul></nav>
 {% endblock %}

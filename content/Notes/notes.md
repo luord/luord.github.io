@@ -6,8 +6,8 @@ As a way to write more in my site, and in general, I've decided to properly set 
 [notes category]({category}notes) of this blog as a microblog "separated" from the
 main blog. Had to create some plugins for [Pelican](https://getpelican.com/) to
 accomplish it, and included the cool way to create slugs I read about in
-<cite class="h-cite u-in-reply-to"><a class="u-url p-name" href="https://brandur.org/fragments/base32-slugs">
-this great blog post</a> by <span class="p-author">Brandur Leach</span></cite>.
+<cite class="h-cite"><a class="u-url p-name" href="https://brandur.org/fragments/base32-slugs">
+this great blog post</a> by <b class="p-author">Brandur Leach</b></cite>.
 
 To make sure whoever subscribes to the main blog doesn't get this more
 "stream of thought" bite-size content, the posts in this category are excluded from the main

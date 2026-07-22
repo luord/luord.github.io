@@ -3,7 +3,7 @@
 {% block meta_url %}{{ SITEURL ~ "/" ~ category.url }}{% endblock %}
 {% block meta_desc %}Posts in {{ category|capitalize }}{% endblock %}
 {% block alternate %}
-<link href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME ~ " | " ~ category|capitalize }}" />
+<link href="{{ FEED_DOMAIN ~ "/" ~ CATEGORY_FEED_ATOM.format(slug=category.slug) }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME ~ " | " ~ category|capitalize }}">
 {% endblock %}
 
 {% block header %}
@@ -13,6 +13,27 @@
   <p>{{ CATEGORY_DESCRIPTIONS[category.name] }}</p>
   {% endif %}
 </header>
+{% endblock %}
+
+{% block content %}
+{% if category.name in HASHED_CATEGORIES %}
+<ol class="h-feed">
+  {% for article in articles %}
+  <li><article id="{{ article.ix }}" class="h-entry">
+    <header><h2><a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}">
+      {# TODO: perhaps insert address here #}
+      <time class="dt-published" datetime="{{ article.date.isoformat() }}">
+        {{ article.date.strftime("%Y-%m-%d %H:%M COT") }}
+      </time>
+    </a></h2></header>
+    {# TODO check on microformat extraction if e-content is needed #}
+    {{ article.content }}
+  </article></li>
+  {% endfor %}
+</ol>
+{% else %}
+{{ super() }}
+{% endif %}
 {% endblock %}
 
 {% block footer %}

@@ -1,53 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block meta_title %}{{ SITENAME }}{% endblock %}</title>
 
-  <link rel="canonical" href="{% block meta_url %}{{ SITEURL }}/{% endblock %}" />
-  <link rel="icon" type="image/png" href="{{ SITEURL ~ "/" ~ USER_LOGO_ICON }}{{ VERSION }}" />
-  <meta name="description" content="{% block meta_desc %}{{ SITEDESCRIPTION }}{% endblock %}" />
-  <meta name="author" content="{{ AUTHOR }}" />
+  <link rel="canonical" href="{% block meta_url %}{{ SITEURL }}/{% endblock %}">
+  <link rel="icon" type="image/png" href="{{ SITEURL ~ "/" ~ USER_LOGO_ICON }}{{ VERSION }}">
+  <meta name="description" content="{% block meta_desc %}{{ SITEDESCRIPTION }}{% endblock %}">
+  <meta name="author" content="{{ AUTHOR }}">
   {% block index_sitemap %}{% endblock %}
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow">
 
-  <meta name="color-scheme" content="dark light" />
-  <meta name="theme-color" content="#0072bb" />
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0072bb">
 
   {% block alternate %}
-  <link href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }}" />
+  <link href="{{ FEED_DOMAIN ~ "/" ~ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }}">
   {% endblock %}
 
-  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/normalize.min.css" />
-  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css" />
-  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/pygment.css" />
+  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/pygment.css">
+  {% block styles %}{% endblock %}
 
   {% if INDIEAUTH_ENDPOINT %}
-  <link rel="authorization_endpoint" href="{{ INDIEAUTH_ENDPOINT }}" />
+  <link rel="authorization_endpoint" href="{{ INDIEAUTH_ENDPOINT }}">
   {% endif %}
   {% if INDIEAUTH_TOKEN %}
-  <link rel="token_endpoint" href="{{ INDIEAUTH_TOKEN }}" />
+  <link rel="token_endpoint" href="{{ INDIEAUTH_TOKEN }}">
   {% endif %}
   {% if WEBMENTION_URL %}
-  <link rel="webmention" href="{{ WEBMENTION_URL }}" />
+  <link rel="webmention" href="{{ WEBMENTION_URL }}">
   {% endif %}
 
-  <meta property="og:title" content="{{ self.meta_title() }}" />
-  <meta property="og:url" content="{{ self.meta_url() }}" />
-  <meta property="og:site_name" content="{{ SITENAME }}" />
-  <meta property="og:type" content="{% block ogtype %}website{% endblock %}" />
-  <meta property="og:description" content="{{ self.meta_desc() }}" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:image" content="{{ SITEURL }}/{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}" />
+  <meta property="og:title" content="{{ self.meta_title() }}">
+  <meta property="og:url" content="{{ self.meta_url() }}">
+  <meta property="og:site_name" content="{{ SITENAME }}">
+  <meta property="og:type" content="{% block ogtype %}website{% endblock %}">
+  <meta property="og:description" content="{{ self.meta_desc() }}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="{{ SITEURL }}/{% block ogimg %}{{ USER_LOGO_URL }}{% endblock %}">
 </head>
 
 <body>
 <header>
   <a href="{{ SITEURL }}/">
-  <strong>
+  <h2>
     {{ SITENAME }}
-  </strong>
+  </h2>
   <p>{{ SITEDESCRIPTION }}</p>
   </a>
   <nav>
@@ -96,7 +96,7 @@
       <li><a rel="me" href="https://facebook.com/luord"><svg><title>Facebook profile</title><use href="/theme/icons.svg#facebook" /></svg></a></li>
     </ul>
   </nav>
-  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png" /></a>
+  <p><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" src="/theme/ccby.png"></a>
   <small>This blog is written, no generated text here, by <a href="{{ SITEURL }}/">Luis Orduz</a> and is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</small></p>
 </footer>
 </body>
