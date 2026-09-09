@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block meta_title %}{{ article.title|striptags }} | {{ SITENAME }}{% endblock %}
+{% block meta_title %}{{ article.title | striptags }} | {{ SITENAME }}{% endblock %}
 {% block meta_url %}{{ SITEURL ~ "/" ~ article.url }}{% endblock %}
-{% block meta_desc %}{{ article.summary|striptags }}{% endblock %}
+{% block meta_desc %}{{ article.summary | striptags }}{% endblock %}
 {% block ogimg %}{{ article.image or USER_LOGO_URL }}{% endblock %}
 {% block ogtype %}article{% endblock %}
 {% block styles %}{{ article.style }}{% endblock %}
@@ -11,7 +11,7 @@
   <header>
     <h1>
       <a class="u-url p-name" href="{{ SITEURL ~ "/" ~ article.url }}" rel="bookmark"
-         title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></h1>
+         title="Permalink to {{ article.title | striptags }}">{{ article.title }}</a></h1>
     {% include 'article_address.html' %}
 
     {% if PDF_PROCESSOR %}

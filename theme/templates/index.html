@@ -7,10 +7,11 @@
 {% block header %}<header><h1>Posts</h1></header>{% endblock %}
 
 {% block content %}
+<nav>
 <ol class="h-feed">
 {% for article in articles_page.object_list %}
   <li>
-    <article class="h-entry summary">
+    <article class="h-entry">
       <h2 class="p-name">
         {# TODO: Research if the redundant title is necessary #}
         <a class="u-url" href="{{ SITEURL ~ "/" ~ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">
@@ -26,6 +27,7 @@
   </li>
 {% endfor %}
 </ol>
+</nav>
 {% if articles_page.has_previous() %}
 {% include 'pagination.html' %}
 {% endif %}
