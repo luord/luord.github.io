@@ -1,0 +1,33 @@
+Place the styling for the continuous integration article, and the cv page, somewhere correct
+
+Reorganize head for maximum UX
+
+remove pdf stuff
+
+investigate possible category from metadata instead of folder
+Decide on per category feed if subblog
+Consider getting rid of categories entirely
+
+decide on pagination stuff
+
+change theme file type to .jinja
+check if there are reserved blocks in jinja, rename accordingly
+move all fragments to the fragments folder
+
+remove all hardcoded urls (or url fragments) from theme as possible
+
+Consider moving redirects to theme, where contact lives; research static in jinja
+
+Every mention of article, change for post
+
+Consider using topics instead of tags
+
+Research base tag to prevent the proliferation of SITEURL
+
+See where you can use hgroup
+
+Update notification script, perhaps break into separate repo
+
+Make the list of services in work a dl
+
+remove time from notes
