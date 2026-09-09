@@ -1,0 +1,190 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Montserrat, sans-serif;
+  background-color: #212121;
+  color: #f1f1f1;
+}
+
+code, kbd, pre, samp {
+  font-family: "JetBrains Mono", monospace;
+}
+
+body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0;
+
+  > header, > footer {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+main {
+  min-width: 0;
+  max-width: 70ch;
+  padding-inline: 1ch;
+}
+
+aside {
+  min-width: 0;
+  max-width: 30ch;
+}
+
+pre {
+  overflow: auto;
+}
+
+svg {
+  stroke: currentcolor;
+  fill: currentcolor;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  color: #3B8FC0;
+  text-decoration: none;
+
+  &:visited {
+    color: #3F93C4;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+ol, ul, dl {
+  nav &, &:has(> li > article) {
+    padding-left: 0;
+
+    > li {
+      list-style: none;
+    }
+  }
+}
+
+nav li > article {
+  border-bottom: 1px solid;
+}
+
+body > header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2ch;
+
+  a {
+    border: 1px dotted;
+    padding: 1px 2px;
+  }
+}
+
+body > footer nav ul {
+  display: inline flex;
+  flex-wrap: wrap;
+  vertical-align: middle;
+  gap: 1.5em;
+  margin-left: 1ch;
+
+  svg {
+    width: 2em;
+    height: 2em;
+  }
+}
+
+aside li {
+  a {
+    display: inline flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+
+  svg {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+body > footer img {
+  vertical-align: middle;
+}
+
+main > footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+
+  li {
+    list-style: none;
+  }
+}
+
+article p > img {
+  width: 100%;
+  display: block;
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    background-color: #f1f1f1;
+    color: #212121;
+  }
+
+  a {
+    color: #0072bb;
+
+    &:visited {
+      color: #00739a;
+    }
+  }
+}
+
+@media print {
+  body > header, footer, .noprint {
+    display: none;
+  }
+
+  main:before {
+    content: "Luis Orduz (contact information at: https://luord.com/pages/contact/ )"
+  }
+
+  a, a:visited, a:hover, a:active {
+    color: inherit;
+  }
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 100 900;
+  src: url('/theme/fonts/main/Montserrat-Italic.ttf');
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 100 900;
+  src: url('/theme/fonts/main/Montserrat.ttf');
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  src: url('/theme/fonts/mono/JetBrainsMono-Italic.ttf');
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 100 800;
+  src: url('/theme/fonts/mono/JetBrainsMono.ttf');
+}
